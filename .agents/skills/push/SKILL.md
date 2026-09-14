@@ -37,14 +37,16 @@ Push previously finished work to remote. This command is push-only.
    - Check whether local branch is behind its remote counterpart
    - If behind, STOP and sync first (rebase or merge) before pushing
 5. **App-specific changes**: ensure remote points to app repo, not the plate-harness template repo
-6. Ask user for explicit confirmation: "Ready to push these already-committed changes?"
-7. Execute push only after confirmation.
+6. **Fast local lint parity (mandatory, cheap — do not skip):** run the exact CI command `pnpm lint` (full repo, not staged-only). Pre-commit's `lint-staged` only lints files matched by its globs with their configured tasks — some file types (e.g. config `.cjs` files) may be routed through a non-lint task and never see `eslint --fix`, so a clean pre-commit does **not** guarantee `pnpm lint` is clean. If it fails, fix (protected files still need approval per `agent-behavior/RULE.mdc`) or stop — do not tell the user push succeeded/report the commit as done until this passes.
+7. Ask user for explicit confirmation: "Ready to push these already-committed changes?"
+8. Execute push only after confirmation.
 
 ## Merge gate (tests)
 
 - **Pre-push does not run Vitest or type-check** — see `documentation/DOC_AGENT_WORKFLOW_LAYERS.md` § Local git.
 - **Authoritative merge gate:** green CI `test` job on `develop` (full `pnpm test:classify`, `pnpm test:run`, `pnpm type-check`).
 - Local pre-commit may run **related** tests only — related green is **not** sufficient to skip waiting for CI.
+- **Lint is the exception:** unlike the full test suite, `pnpm lint` is cheap (seconds) — run it locally before push (§ Push Safety Flow step 6) rather than deferring to CI. Deferring the *expensive* suite to CI does not license deferring the *cheap* one; conflating the two caused a push that reported success but broke CI lint.
 
 ## Relationship with `finish`
 
