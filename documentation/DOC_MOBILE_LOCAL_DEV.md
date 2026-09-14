@@ -1,6 +1,6 @@
 # Mobile local development (physical device)
 
-> **SSOT:** This file is the **only** place this boilerplate documents how to open **local dev on a real phone** with working auth redirects. README Quick Start, `start` skill, debug patterns, and feature READMEs **link here** — they do not duplicate adb or IdP steps.
+> **SSOT:** This file is the **only** place this harness documents how to open **local dev on a real phone** with working auth redirects. README Quick Start, `start` skill, debug patterns, and feature READMEs **link here** — they do not duplicate adb or IdP steps.
 
 **Cross-repo porting:** [handoffs/MOBILE_LOCAL_DEV_ADOPTION_GUIDE.md](./handoffs/MOBILE_LOCAL_DEV_ADOPTION_GUIDE.md)
 
@@ -78,7 +78,7 @@ When Supabase and Google allow **`http://localhost`** but **reject private LAN I
 | **HTTPS tunnel** (`ngrok`, Cloudflare Tunnel, `localtunnel`, …) | Local code + OAuth: add the tunnel origin (e.g. `https://abc.ngrok-free.app`) to Supabase **Redirect URLs** and Google **Authorized JavaScript origins** |
 | **Email/password only** | Layout checks on tunnel or staging without configuring SSO |
 
-There is no first-party preview URL in this boilerplate — use your own hosting (Firebase, Vercel, etc.) or a tunnel.
+There is no first-party preview URL in this harness — use your own hosting (Firebase, Vercel, etc.) or a tunnel.
 
 ---
 

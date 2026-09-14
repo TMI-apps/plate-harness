@@ -26,7 +26,7 @@ export const Topbar = () => {
               },
             }}
           >
-            React app starterkit
+            plate-harness
           </Box>
         </Typography>
 

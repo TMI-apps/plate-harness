@@ -1,6 +1,6 @@
 # Architecture Guide
 
-This document explains the architectural decisions and rules enforced in this boilerplate.
+This document explains the architectural decisions and rules enforced in this harness.
 
 **SSOT:** `.cursor/rules/architecture/RULE.mdc` is the canonical source for architecture rules. This guide is the user-facing overview. Structure enforcement: `projectStructure.config.cjs` and `.dependency-cruiser.cjs`. Feature-local `README.md` policy and validation commands: `documentation/DOC_FEATURE_LOCAL_README.md`.
 
@@ -372,7 +372,7 @@ These rules are defined in `eslint.config.js` using GTS's flat config format.
 
 ## API Integration
 
-The boilerplate supports connecting to external APIs:
+This harness supports connecting to external APIs:
 
 - **Supabase**: For authentication (configure via `.env` — see README and dev task backlog)
 - **Airtable**: For data storage (optional — configure via `.env`)
@@ -407,7 +407,7 @@ Fresh clones ship onboarding tasks (Supabase, Hosting, App vision, Airtable opti
 2. Create subfolders: `components/`, `hooks/`, `services/`, `types/`
 3. Start with types, then services, then hooks, then components
 4. Create page in `src/pages/[FeatureName]Page.tsx`
-5. Register the route in `src/App.tsx` (this boilerplate defines `<Routes>` there)
+5. Register the route in `src/App.tsx` (this harness defines `<Routes>` there)
 6. Write tests alongside your code — see `documentation/DOC_TESTING.md`
 
 ## Example: Adding a "Notes" Feature

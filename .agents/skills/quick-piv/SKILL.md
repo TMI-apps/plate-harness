@@ -88,6 +88,7 @@ If unclear, **ask** which branch applies.
 3. Follow `.cursor/rules/architecture/RULE.mdc`, `.cursor/rules/file-placement/RULE.mdc`, `.cursor/rules/code-style/RULE.mdc`, and `.cursor/rules/security/RULE.mdc` when relevant.
 4. Run the **gate** from the quick plan (browser MCP when UI is involved; tests or manual checks as appropriate).
 5. **Branch A:** Update the plan (phase status, Notes, Decisions) as you go.
+6. Before `finish`, if this pass created a `src/features/` folder or added a UI/data vendor: run [`.agents/skills/modularity-review/SKILL.md`](../modularity-review/SKILL.md).
 
 ---
 

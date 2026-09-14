@@ -5,7 +5,7 @@ This document provides step-by-step instructions for copying the full architectu
 
 ## Prerequisites
 - Both repositories are on the same machine (replace `[PROJECT_ROOT]` with your base path, e.g. `C:\Users\you\Documents\` or `/home/you/projects/`)
-- Source repository: this boilerplate (`boilerplate-vite-supabase-mui-cursor`)
+- Source repository: this harness (`plate-harness`)
 - Target repository: `[TARGET_REPO_NAME]` (to be specified)
 - Both repositories use Node.js/pnpm
 - Target repository has TypeScript configured
@@ -30,25 +30,25 @@ This document provides step-by-step instructions for copying the full architectu
 Copy these files from source to target repository:
 
 ### 2.1 ESLint Configuration
-**Source:** `[PROJECT_ROOT]boilerplate-vite-supabase-mui-cursor/eslint.config.js`  
+**Source:** `[PROJECT_ROOT]plate-harness/eslint.config.js`  
 **Destination:** `[PROJECT_ROOT][TARGET_REPO_NAME]/eslint.config.js`
 
-**Note:** This boilerplate uses ESLint flat config (`eslint.config.js`). If target repo uses legacy `.eslintrc.*`, migrate to flat config or merge rules accordingly.
+**Note:** This harness uses ESLint flat config (`eslint.config.js`). If target repo uses legacy `.eslintrc.*`, migrate to flat config or merge rules accordingly.
 
 ### 2.2 Project Structure Configuration
-**Source:** `[PROJECT_ROOT]boilerplate-vite-supabase-mui-cursor/projectStructure.config.cjs`  
+**Source:** `[PROJECT_ROOT]plate-harness/projectStructure.config.cjs`  
 **Destination:** `[PROJECT_ROOT][TARGET_REPO_NAME]/projectStructure.config.cjs`
 
 **Action Required:** This file MUST be customized for the target repository's folder structure (see Step 4).
 
 ### 2.3 Dependency Cruiser Configuration
-**Source:** `[PROJECT_ROOT]boilerplate-vite-supabase-mui-cursor/.dependency-cruiser.cjs`  
+**Source:** `[PROJECT_ROOT]plate-harness/.dependency-cruiser.cjs`  
 **Destination:** `[PROJECT_ROOT][TARGET_REPO_NAME]/.dependency-cruiser.cjs`
 
 **Action Required:** Update path patterns to match target repository structure (see Step 5).
 
 ### 2.4 TypeScript Configuration (Update Existing)
-**Source:** `[PROJECT_ROOT]boilerplate-vite-supabase-mui-cursor/tsconfig.json`  
+**Source:** `[PROJECT_ROOT]plate-harness/tsconfig.json`  
 **Destination:** `[PROJECT_ROOT][TARGET_REPO_NAME]/tsconfig.json`
 
 **Action Required:** Merge path aliases into existing `tsconfig.json` (see Step 6).
@@ -209,7 +209,7 @@ module.exports = {
 
 **File:** `eslint.config.js` (flat config)
 
-**Action:** Update layer element patterns to match target repository structure. This boilerplate uses ESLint flat config; adjust boundaries and import resolver to match target paths.
+**Action:** Update layer element patterns to match target repository structure. This harness uses ESLint flat config; adjust boundaries and import resolver to match target paths.
 
 ---
 
@@ -242,19 +242,19 @@ module.exports = {
 ## Step 9: Copy Documentation Files (Optional but Recommended)
 
 ### 9.1 Architecture Rules Documentation
-**Source:** `[PROJECT_ROOT]boilerplate-vite-supabase-mui-cursor/.cursor/rules/architecture/RULE.mdc`  
+**Source:** `[PROJECT_ROOT]plate-harness/.cursor/rules/architecture/RULE.mdc`  
 **Destination:** `[PROJECT_ROOT][TARGET_REPO_NAME]/.cursor/rules/architecture/RULE.mdc`
 
 **Action:** Create `.cursor/rules/architecture/` directory if it doesn't exist.
 
 ### 9.2 Architecture Guide
-**Source:** `[PROJECT_ROOT]boilerplate-vite-supabase-mui-cursor/ARCHITECTURE.md`  
+**Source:** `[PROJECT_ROOT]plate-harness/ARCHITECTURE.md`  
 **Destination:** `[PROJECT_ROOT][TARGET_REPO_NAME]/ARCHITECTURE.md` (root)
 
 **Action:** Keep `ARCHITECTURE.md` in project root (required by architecture rules).
 
 ### 9.3 Complexity Reduction Guide (Optional)
-**Source:** `[PROJECT_ROOT]boilerplate-vite-supabase-mui-cursor/.cursor/rules/architecture/RULE.mdc` (complexity section)  
+**Source:** `[PROJECT_ROOT]plate-harness/.cursor/rules/architecture/RULE.mdc` (complexity section)  
 **Destination:** `[PROJECT_ROOT][TARGET_REPO_NAME]/.cursor/rules/architecture/RULE.mdc`
 
 ---
@@ -391,9 +391,9 @@ Before considering migration complete:
 
 ## Quick Reference: File Locations
 
-### Source Repository (boilerplate-vite-supabase-mui-cursor)
+### Source Repository (plate-harness)
 ```
-[PROJECT_ROOT]boilerplate-vite-supabase-mui-cursor/
+[PROJECT_ROOT]plate-harness/
 ├── eslint.config.js
 ├── .dependency-cruiser.cjs
 ├── projectStructure.config.cjs
@@ -440,6 +440,6 @@ If issues arise during migration:
 ---
 
 **Last Updated:** 2026-02-22  
-**Source Repository:** boilerplate-vite-supabase-mui-cursor  
+**Source Repository:** plate-harness  
 **Target Repository:** [To be specified]
 

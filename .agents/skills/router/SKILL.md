@@ -195,6 +195,7 @@ While inside **plan corridor** (`I`), product/scope forks use **`plan-grill` rai
 | Plan written; qualitative critique before implementation (especially Complexity M/L) | `.agents/skills/review-dev-plan/SKILL.md` |
 | Industry standard / best practice / “is this how products usually do it?” on a **plan or proposal** | `.agents/skills/pattern-review/SKILL.md` |
 | Nontrivial generic subsystem (auth, queues, parsers, webhooks, protocol clients, …) — reuse a package/pattern vs build custom | `.agents/skills/dont-reinvent-the-wheel/SKILL.md` |
+| New `src/features/` folder, new UI/data vendor, or “how hard to replace MUI/Vite/Supabase / modularity / stack leakage” | `.agents/skills/modularity-review/SKILL.md` |
 | Ambiguous “improve / clean up / make better” on an existing area; `/improve` | `.agents/skills/improve/SKILL.md` |
 | Should we align [existing product/feature/component] with industry standards? / how to align? | `.agents/skills/standards-align/SKILL.md` |
 | Delete / remove / rip out / `/purge` a named feature/module/path/engine with multi-asset cleanup; leftover engine after a flag-off or replacement phase; "is the old path gone?" | `.agents/skills/purge-skill/SKILL.md` |
@@ -427,6 +428,15 @@ Do **not** run standalone **`pattern-review`** `scan` in the same session if **`
 
 **Tiebreak:** User asks “which library / don’t build this ourselves” → **`dont-reinvent-the-wheel`**. “Is this how products usually do it?” → **`pattern-review`**. “How does this vendor’s API work?” → **`api-integrate`**.
 
+### `modularity-review` vs `validate` vs `review-dev-plan` vs `layer-consistency-check`
+
+- **`modularity-review`:** Explain **replaceability** (Score A features / Score B stack) and whether a **new stack-port cruiser rule** is needed. Run `pnpm arch:check` + `pnpm modularity:report`. Do not unwrap production imports unless asked.
+- **`validate`:** Pass/fail of **all** repo rules, including `stack-port-*`. Not a replaceability readout.
+- **`review-dev-plan` “modularity” lens:** Critique of a **plan document**, not live `src/` scores.
+- **`layer-consistency-check`:** Before writing a **workaround**. This skill **after** a module or vendor exists.
+
+**Order:** `dont-reinvent-the-wheel` first when adding a package → install/plan → **`modularity-review`**. `layer-consistency-check` first when changing existing behavior. `validate` after implement (includes the ratchet).
+
 ### `pattern-review` vs `layer-consistency-check`
 
 - **`pattern-review`:** Does this design match **external industry / product precedent** for the capability?
@@ -564,6 +574,7 @@ Do **not** run standalone **`pattern-review`** `scan` in the same session if **`
 - `.agents/skills/plan-grill/SKILL.md`
 - `.agents/skills/pattern-review/SKILL.md`
 - `.agents/skills/dont-reinvent-the-wheel/SKILL.md`
+- `.agents/skills/modularity-review/SKILL.md`
 - `.agents/skills/improve/SKILL.md`
 - `.agents/skills/standards-align/SKILL.md`
 - `.agents/skills/purge-skill/SKILL.md`

@@ -1,7 +1,7 @@
 import { QueryClient } from "@tanstack/react-query";
 
 /**
- * Creates a QueryClient with boilerplate defaults.
+ * Creates a QueryClient with shared defaults.
  * Override per query when needed (e.g. staleTime: 0 for realtime data).
  */
 export const createQueryClient = (): QueryClient =>

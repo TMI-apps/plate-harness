@@ -255,6 +255,40 @@ module.exports = {
       to: { path: "^src/(shared|features)/.*/services" },
     },
 
+    // === STACK PORTS (replaceability ratchet) ===
+    // New vendor imports outside nominated adapters fail. Existing edges are
+    // grandfathered in .dependency-cruiser-baseline.json (`pnpm arch:baseline`).
+    {
+      name: "stack-port-mui",
+      severity: "error",
+      comment:
+        "MUI is a stack secret. New imports from features/pages/layouts must go through src/components/common or src/shared/theme.",
+      from: {path: "^src/(features|pages|layouts)/"},
+      to: {path: "node_modules/@mui/"},
+    },
+    {
+      name: "stack-port-supabase",
+      severity: "error",
+      comment:
+        "Supabase client is a stack secret. New imports must go through src/shared/services/supabaseService.ts.",
+      from: {
+        pathNot:
+          "(^src/shared/services/supabaseService\\.ts$)|(\\.test\\.[jt]sx?$)",
+      },
+      to: {path: "node_modules/@supabase/"},
+    },
+    {
+      name: "stack-port-airtable",
+      severity: "error",
+      comment:
+        "Airtable is a stack secret. New imports must go through src/shared/services/airtableService.ts.",
+      from: {
+        pathNot:
+          "(^src/shared/services/airtableService\\.ts$)|(\\.test\\.[jt]sx?$)",
+      },
+      to: {path: "node_modules/airtable"},
+    },
+
     // === EXTERNAL DEPENDENCY RULES ===
     {
       name: "no-deprecated-packages",
@@ -281,7 +315,6 @@ module.exports = {
     },
     exclude: {
       path: [
-        "node_modules",
         "dist",
         "build",
         "coverage",
@@ -350,10 +383,7 @@ module.exports = {
         },
       },
     },
-    cache: {
-      strategy: "content",
-      folder: "node_modules/.cache/dependency-cruiser",
-    },
-    progress: { type: "performance-log" },
+    cache: false,
+    progress: {type: "none"},
   },
 };

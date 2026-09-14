@@ -12,6 +12,7 @@ description: >-
   Not for industry-precedent forks (pattern-review). Not for package/pattern
   reuse vs custom (dont-reinvent-the-wheel). Not for gate-2 acceptance
   examples alone. plan must run the rail at every phase — not only Create.
+  One grill question per turn, always — never batch two forks in one ask.
 disable-model-invocation: false
 ---
 
@@ -96,7 +97,7 @@ Create the file only when logging the first decision. No empty stubs.
 2. **Investigate** — ride vs new, neighbor absorption, greenfield, architecture boundary.
 3. **Create** — every product/scope pick about to enter phases/steps.
 
-Loop shape: **ask (if tie) → write DECISIONS.md → continue the same phase.**
+Loop shape: **ask one question (if tie) → write DECISIONS.md → continue the same phase.** One fork, one question, one turn — even when the next tie is already known, resolve and log the current one first; re-check it still applies before asking the next.
 
 ## Ask vs log
 
@@ -109,7 +110,7 @@ Loop shape: **ask (if tie) → write DECISIONS.md → continue the same phase.**
 | Package/pattern reuse vs custom | `dont-reinvent-the-wheel` |
 | Pure mechanism, no product/boundary edge | Agent decides (see “Not a fork”) |
 
-Question style: `.agents/skills/grill-me/SKILL.md` § Question style — do not fork a second format.
+Question style: `.agents/skills/grill-me/SKILL.md` § Question style — do not fork a second format. Same **turn contract** applies: one grill question per turn, think/re-ground on `DECISIONS.md` before the next.
 
 ## Flow
 

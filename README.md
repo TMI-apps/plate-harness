@@ -1,6 +1,6 @@
-# Vite MUI Supabase Starter
+# plate-harness
 
-A modern, production-ready boilerplate for building React applications with TypeScript, Vite, Material-UI, and Supabase. This starter enforces strict architectural rules and includes authentication as an example feature.
+A production-ready harness (boilerplate + agent harness) for building React applications with TypeScript, Vite, Material-UI, and Supabase. It enforces strict architectural rules and includes authentication as an example feature.
 
 ## Features
 
@@ -129,7 +129,7 @@ When using Cursor's AI agent to make commits, you may encounter permission issue
 
 This guide uses **Option B (fork + clone)** so your project starts in your own GitHub repo.
 
-### Step 1: Fork this boilerplate
+### Step 1: Fork this harness
 
 1. Open this repository on GitHub.
 2. Click **Fork**.
@@ -172,10 +172,10 @@ git switch -c feature/<name>
 
 **Model B:** stay on `develop` after creating it; do not create `feature/*` for daily work.
 
-Optional (to pull future boilerplate updates):
+Optional (to pull future plate-harness updates):
 
 ```bash
-git remote add upstream https://github.com/TMI-apps/boilerplate-vite-supabase-mui-cursor.git
+git remote add upstream https://github.com/TMI-apps/plate-harness.git
 git fetch upstream
 ```
 

@@ -1,6 +1,6 @@
 # Sign in with Google (Supabase)
 
-> **SSOT:** This file is the **only** place this boilerplate maintains step-by-step **dashboard** setup for Google OAuth with Supabase. The README Quick Start, `start` skill, and setup wizard UI **link here** instead of copying these steps.
+> **SSOT:** This file is the **only** place this harness maintains step-by-step **dashboard** setup for Google OAuth with Supabase. The README Quick Start, `start` skill, and setup wizard UI **link here** instead of copying these steps.
 
 Runtime behavior (for example `signInWithOAuth`) lives in code and feature docs; keep procedural onboarding here so wording stays in sync.
 

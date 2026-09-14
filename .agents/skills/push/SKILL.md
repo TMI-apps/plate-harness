@@ -36,7 +36,7 @@ Push previously finished work to remote. This command is push-only.
    - Run `git fetch origin`
    - Check whether local branch is behind its remote counterpart
    - If behind, STOP and sync first (rebase or merge) before pushing
-5. **App-specific changes**: ensure remote points to app repo, not boilerplate repo
+5. **App-specific changes**: ensure remote points to app repo, not the plate-harness template repo
 6. Ask user for explicit confirmation: "Ready to push these already-committed changes?"
 7. Execute push only after confirmation.
 

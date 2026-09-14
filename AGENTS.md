@@ -4,7 +4,7 @@ Project memory for coding agents (Cursor, Claude Code, Codex, and other AGENTS.m
 
 ## Project
 
-**vite-mui-supabase-starter** — Vite + React 19 + TypeScript + MUI + Supabase + TanStack Query starter with strict, enforced architecture.
+**plate-harness** — Vite + React 19 + TypeScript + MUI + Supabase + TanStack Query harness (boilerplate + agent harness) with strict, enforced architecture.
 
 - **Stack:** Vite 8, React 19, TypeScript 6 (strict), MUI 9, TanStack Query 5, Supabase 2, Airtable, React Router 7, Vitest 4, ESLint 10 + GTS + Prettier, Husky + lint-staged, dependency-cruiser, eslint-plugin-boundaries. Pin versions in `package.json`.
 - **Package manager:** `pnpm@9.15.4` (enforced via `packageManager` field — do **not** use npm or yarn).

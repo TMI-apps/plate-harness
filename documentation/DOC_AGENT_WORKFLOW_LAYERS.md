@@ -1,4 +1,4 @@
-# Agent workflow layers (boilerplate)
+# Agent workflow layers (plate-harness)
 
 How **skills**, **rules**, **documentation**, and **scripts/hooks** fit together. Use this when adding or changing agent guidance so layers stay aligned.
 

@@ -67,6 +67,7 @@ For features involving external APIs, database changes, auth, or novel logic, ga
 
 - [ ] Search the codebase for existing functionality to reuse (features under `src/features/`, shared under `src/shared/`, `src/components/common/`).
 - [ ] **Reuse vs custom:** If the remaining work is a generic subsystem (auth, webhooks, parsers, queues, protocol clients, complex widgets, …) and current deps do not obviously cover it, run [`.agents/skills/dont-reinvent-the-wheel/SKILL.md`](../dont-reinvent-the-wheel/SKILL.md) **before** locking a from-scratch approach. Record the compact rec in Conflict & compliance. Skip when the work is bespoke/business-specific.
+- [ ] **Replaceability:** If this work adds a `src/features/` module or a new UI/data vendor, schedule [`.agents/skills/modularity-review/SKILL.md`](../modularity-review/SKILL.md) after implement (or run now if the folder already exists). After a package is added, ask whether a `stack-port-*` cruiser rule is needed.
 - [ ] Identify relevant rules from `.cursor/rules/` (start at `.cursor/rules/INDEX.md`).
 - [ ] Align narrative with **`documentation/DOC_APP_VISION.md`** when the plan changes user-facing behavior (problem, persona, app role); if **`DRAFT`**, pause for fill or explicit deferral.
 - [ ] For server-cached data, check `documentation/DOC_TANSTACK_QUERY.md` and existing `api/keys.ts` patterns in features.

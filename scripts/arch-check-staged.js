@@ -5,6 +5,7 @@
  *
  * @relatedFiles
  * - .dependency-cruiser.cjs
+ * - .dependency-cruiser-baseline.json
  * - scripts/validate-staged.js
  */
 
@@ -72,10 +73,23 @@ try {
     process.exit(0);
   }
 
+  const depcruiseArgs = [
+    '--config',
+    '.dependency-cruiser.cjs',
+    '--ignore-known',
+    '.dependency-cruiser-baseline.json',
+    ...relevantFiles,
+  ];
+  // Windows: `depcruise` resolves to a .CMD shim that execFileSync cannot
+  // spawn directly without a shell. `shell: true` requires callers to quote
+  // args themselves (Node does not escape them) — every arg here is a
+  // static flag or a repo-relative path from `git diff --name-only`, so
+  // wrapping in double quotes is safe.
+  const useShell = process.platform === 'win32';
   execFileSync(
     'depcruise',
-    ['--config', '.dependency-cruiser.cjs', ...relevantFiles],
-    { stdio: 'inherit' },
+    useShell ? depcruiseArgs.map((arg) => `"${arg}"`) : depcruiseArgs,
+    { stdio: 'inherit', shell: useShell },
   );
 } catch (error) {
   process.exit(error.status || 1);

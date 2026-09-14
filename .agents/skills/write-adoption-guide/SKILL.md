@@ -26,7 +26,7 @@ ADOPTION_GUIDE_OUTPUT_FOLDER = documentation/handoffs
 ADOPTION_GUIDE_FILENAME_SUFFIX = _ADOPTION_GUIDE.md
 # Output path: {ADOPTION_GUIDE_OUTPUT_FOLDER}/{SLUG}{ADOPTION_GUIDE_FILENAME_SUFFIX}
 # Example: documentation/handoffs/MOBILE_LOCAL_DEV_ADOPTION_GUIDE.md
-SOURCE_REPO_DISPLAY_NAME         = vite-mui-supabase-starter (boilerplate)
+SOURCE_REPO_DISPLAY_NAME         = plate-harness
 WORKFLOW_LAYERS_DOC              = documentation/DOC_AGENT_WORKFLOW_LAYERS.md
 ```
 
@@ -42,7 +42,7 @@ Adoption guides are read by **agents implementing the learning in another reposi
 
 | Rule | Requirement |
 |------|-------------|
-| **Repo name** | `SOURCE_REPO_DISPLAY_NAME` **at most once** — in the purpose block only, e.g. `> **Reference implementation (vite-mui-supabase-starter):** …` |
+| **Repo name** | `SOURCE_REPO_DISPLAY_NAME` **at most once** — in the purpose block only, e.g. `> **Reference implementation (plate-harness):** …` |
 | **§3** | Title `Illustrative wiring (home repository only)` + blockquote: paths/URLs are **not** copy-paste specs |
 | **§4–§7, §9** | **Zero** repetitions of the home-repo product name |
 | **§5** | Blockquote: teaching example is **illustrative only** |
@@ -143,7 +143,7 @@ Then in the target project’s `SKILL.md`:
 3. Add slug to that repo’s router skill index / meta list (here: `.agents/skills/router/SKILL.md`)
 4. Point `layer-mapping.md` “source example” column at the new home repo
 
-**No dependency** on `learn`, `pattern-review`, or other boilerplate-specific skills.
+**No dependency** on `learn`, `pattern-review`, or other plate-harness-specific skills.
 
 ---
 

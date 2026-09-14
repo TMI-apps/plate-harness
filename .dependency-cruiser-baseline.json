@@ -1,370 +1,892 @@
 [
   {
-    "type": "cycle",
-    "from": "src/components/common/EditableAccordionList/EditableAccordionList.tsx",
-    "to": "src/components/common/index.ts",
+    "type": "dependency",
+    "from": "src/features/auth/components/authViewLayout.ts",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/styles/index.mjs",
+    "unresolvedTo": "@mui/material/styles",
+    "dependencyTypes": [
+      "npm",
+      "type-only",
+      "import"
+    ],
     "rule": {
       "severity": "error",
-      "name": "no-circular"
-    },
-    "cycle": [
-      {
-        "name": "src/components/common/index.ts",
-        "dependencyTypes": [
-          "local",
-          "import"
-        ]
-      },
-      {
-        "name": "src/components/common/EditableAccordionList/index.ts",
-        "dependencyTypes": [
-          "local",
-          "export"
-        ]
-      },
-      {
-        "name": "src/components/common/EditableAccordionList/EditableAccordionList.tsx",
-        "dependencyTypes": [
-          "local",
-          "export"
-        ]
-      }
-    ]
+      "name": "stack-port-mui"
+    }
   },
   {
-    "type": "cycle",
-    "from": "src/components/common/ImageModal/ImageModal.tsx",
-    "to": "src/components/common/index.ts",
+    "type": "dependency",
+    "from": "src/features/auth/components/EmailAuthForm.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Alert/index.mjs",
+    "unresolvedTo": "@mui/material/Alert",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
     "rule": {
       "severity": "error",
-      "name": "no-circular"
-    },
-    "cycle": [
-      {
-        "name": "src/components/common/index.ts",
-        "dependencyTypes": [
-          "local",
-          "import"
-        ]
-      },
-      {
-        "name": "src/components/common/ImageModal/ImageModal.tsx",
-        "dependencyTypes": [
-          "local",
-          "export"
-        ]
-      }
-    ]
+      "name": "stack-port-mui"
+    }
   },
   {
-    "type": "cycle",
-    "from": "src/shared/services/supabaseService.ts",
-    "to": "src/shared/utils/creditSystem.ts",
+    "type": "dependency",
+    "from": "src/features/auth/components/EmailAuthForm.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Box/index.mjs",
+    "unresolvedTo": "@mui/material/Box",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
     "rule": {
       "severity": "error",
-      "name": "no-circular"
-    },
-    "cycle": [
-      {
-        "name": "src/shared/utils/creditSystem.ts",
-        "dependencyTypes": [
-          "local",
-          "dynamic-import"
-        ]
-      },
-      {
-        "name": "src/shared/services/supabaseService.ts",
-        "dependencyTypes": [
-          "local",
-          "type-only",
-          "import"
-        ]
-      }
-    ]
+      "name": "stack-port-mui"
+    }
   },
   {
     "type": "dependency",
-    "from": "src/shared/utils/creditSystem.ts",
-    "to": "src/shared/services/roleCreditLimitsService.ts",
+    "from": "src/features/auth/components/EmailAuthForm.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Link/index.mjs",
+    "unresolvedTo": "@mui/material/Link",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
     "rule": {
       "severity": "error",
-      "name": "no-services-in-utils"
+      "name": "stack-port-mui"
     }
   },
   {
     "type": "dependency",
-    "from": "src/shared/utils/creditSystem.ts",
-    "to": "src/shared/services/supabaseService.ts",
+    "from": "src/features/auth/components/EmailAuthForm.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/ToggleButton/index.mjs",
+    "unresolvedTo": "@mui/material/ToggleButton",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
     "rule": {
       "severity": "error",
-      "name": "no-services-in-utils"
+      "name": "stack-port-mui"
     }
   },
   {
     "type": "dependency",
-    "from": "src/shared/utils/fileCreationUtils.ts",
-    "to": "src/shared/services/filesService.ts",
+    "from": "src/features/auth/components/EmailAuthForm.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/ToggleButtonGroup/index.mjs",
+    "unresolvedTo": "@mui/material/ToggleButtonGroup",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
     "rule": {
       "severity": "error",
-      "name": "no-services-in-utils"
+      "name": "stack-port-mui"
     }
   },
   {
     "type": "dependency",
-    "from": "src/shared/utils/permissionCheck.ts",
-    "to": "src/shared/services/assistantToolsService.ts",
+    "from": "src/features/auth/components/EmailAuthForm.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Typography/index.mjs",
+    "unresolvedTo": "@mui/material/Typography",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
     "rule": {
       "severity": "error",
-      "name": "no-services-in-utils"
+      "name": "stack-port-mui"
     }
   },
   {
     "type": "dependency",
-    "from": "src/shared/utils/usageTracking.ts",
-    "to": "src/shared/services/supabaseService.ts",
+    "from": "src/features/auth/components/GoogleIcon.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/SvgIcon/index.mjs",
+    "unresolvedTo": "@mui/material/SvgIcon",
+    "dependencyTypes": [
+      "npm",
+      "type-only",
+      "import"
+    ],
     "rule": {
       "severity": "error",
-      "name": "no-services-in-utils"
+      "name": "stack-port-mui"
     }
   },
   {
     "type": "dependency",
-    "from": "src/components/assistants/AssistantsList/AssistantForm.tsx",
-    "to": "src/shared/services/supabaseService.ts",
+    "from": "src/features/auth/components/SignInPanel.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Alert/index.mjs",
+    "unresolvedTo": "@mui/material/Alert",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
     "rule": {
-      "severity": "warn",
-      "name": "no-direct-service-in-components"
+      "severity": "error",
+      "name": "stack-port-mui"
     }
   },
   {
     "type": "dependency",
-    "from": "src/components/assistants/AssistantsList/AssistantItem.tsx",
-    "to": "src/shared/services/supabaseService.ts",
+    "from": "src/features/auth/components/SignInPanel.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Box/index.mjs",
+    "unresolvedTo": "@mui/material/Box",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
     "rule": {
-      "severity": "warn",
-      "name": "no-direct-service-in-components"
+      "severity": "error",
+      "name": "stack-port-mui"
     }
   },
   {
     "type": "dependency",
-    "from": "src/components/assistants/AssistantsList/AssistantsList.tsx",
-    "to": "src/shared/services/assistantToolsService.ts",
+    "from": "src/features/auth/components/SignInPanel.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Divider/index.mjs",
+    "unresolvedTo": "@mui/material/Divider",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
     "rule": {
-      "severity": "warn",
-      "name": "no-direct-service-in-components"
+      "severity": "error",
+      "name": "stack-port-mui"
     }
   },
   {
     "type": "dependency",
-    "from": "src/components/assistants/AssistantsList/AssistantsList.tsx",
-    "to": "src/shared/services/supabaseService.ts",
+    "from": "src/features/auth/components/SignInPanel.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Link/index.mjs",
+    "unresolvedTo": "@mui/material/Link",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
     "rule": {
-      "severity": "warn",
-      "name": "no-direct-service-in-components"
+      "severity": "error",
+      "name": "stack-port-mui"
     }
   },
   {
     "type": "dependency",
-    "from": "src/components/chat/ChatContainer.tsx",
-    "to": "src/shared/services/userSettingsServiceSupabase.ts",
+    "from": "src/features/auth/components/SignInPanel.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Typography/index.mjs",
+    "unresolvedTo": "@mui/material/Typography",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
     "rule": {
-      "severity": "warn",
-      "name": "no-direct-service-in-components"
+      "severity": "error",
+      "name": "stack-port-mui"
     }
   },
   {
     "type": "dependency",
-    "from": "src/components/chat/ChatInput/ChatInput.tsx",
-    "to": "src/shared/services/roleCreditLimitsService.ts",
+    "from": "src/features/tasks/components/ActiveTaskList.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Stack/index.mjs",
+    "unresolvedTo": "@mui/material/Stack",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
     "rule": {
-      "severity": "warn",
-      "name": "no-direct-service-in-components"
+      "severity": "error",
+      "name": "stack-port-mui"
     }
   },
   {
     "type": "dependency",
-    "from": "src/components/chat/MarkdownEditor/MarkdownEditor.tsx",
-    "to": "src/shared/services/messageMetadataService.ts",
+    "from": "src/features/tasks/components/ActiveTaskRow.tsx",
+    "to": "node_modules/.pnpm/@mui+icons-material@9.0.1_@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_rea_q6j66kvuasnxr7ebgsorkeqypy/node_modules/@mui/icons-material/Delete.js",
+    "unresolvedTo": "@mui/icons-material/Delete",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
     "rule": {
-      "severity": "warn",
-      "name": "no-direct-service-in-components"
+      "severity": "error",
+      "name": "stack-port-mui"
     }
   },
   {
     "type": "dependency",
-    "from": "src/components/chat/MarkdownEditor/useMarkdownLoad.ts",
-    "to": "src/shared/services/supabaseService.ts",
+    "from": "src/features/tasks/components/ActiveTaskRow.tsx",
+    "to": "node_modules/.pnpm/@mui+icons-material@9.0.1_@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_rea_q6j66kvuasnxr7ebgsorkeqypy/node_modules/@mui/icons-material/DragIndicator.js",
+    "unresolvedTo": "@mui/icons-material/DragIndicator",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
     "rule": {
-      "severity": "warn",
-      "name": "no-direct-service-in-components"
+      "severity": "error",
+      "name": "stack-port-mui"
     }
   },
   {
     "type": "dependency",
-    "from": "src/components/chat/MarkdownEditor/useMarkdownSave.ts",
-    "to": "src/shared/services/filesService.ts",
+    "from": "src/features/tasks/components/ActiveTaskRow.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Box/index.mjs",
+    "unresolvedTo": "@mui/material/Box",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
     "rule": {
-      "severity": "warn",
-      "name": "no-direct-service-in-components"
+      "severity": "error",
+      "name": "stack-port-mui"
     }
   },
   {
     "type": "dependency",
-    "from": "src/components/chat/MarkdownEditor/useMarkdownSave.ts",
-    "to": "src/shared/services/messageMetadataService.ts",
+    "from": "src/features/tasks/components/ActiveTaskRow.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Collapse/index.mjs",
+    "unresolvedTo": "@mui/material/Collapse",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
     "rule": {
-      "severity": "warn",
-      "name": "no-direct-service-in-components"
+      "severity": "error",
+      "name": "stack-port-mui"
     }
   },
   {
     "type": "dependency",
-    "from": "src/components/chat/MarkdownEditor/useMarkdownSave.ts",
-    "to": "src/shared/services/supabaseService.ts",
+    "from": "src/features/tasks/components/ActiveTaskRow.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/IconButton/index.mjs",
+    "unresolvedTo": "@mui/material/IconButton",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
     "rule": {
-      "severity": "warn",
-      "name": "no-direct-service-in-components"
+      "severity": "error",
+      "name": "stack-port-mui"
     }
   },
   {
     "type": "dependency",
-    "from": "src/components/chat/MessageList/MessageList.tsx",
-    "to": "src/shared/services/filesService.ts",
+    "from": "src/features/tasks/components/ActiveTaskRow.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/MenuItem/index.mjs",
+    "unresolvedTo": "@mui/material/MenuItem",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
     "rule": {
-      "severity": "warn",
-      "name": "no-direct-service-in-components"
+      "severity": "error",
+      "name": "stack-port-mui"
     }
   },
   {
     "type": "dependency",
-    "from": "src/components/chat/MessageList/MessageList.tsx",
-    "to": "src/shared/services/messageMetadataService.ts",
+    "from": "src/features/tasks/components/ActiveTaskRow.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Paper/index.mjs",
+    "unresolvedTo": "@mui/material/Paper",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
     "rule": {
-      "severity": "warn",
-      "name": "no-direct-service-in-components"
+      "severity": "error",
+      "name": "stack-port-mui"
     }
   },
   {
     "type": "dependency",
-    "from": "src/components/chat/MessageList/MessageList.tsx",
-    "to": "src/shared/services/roleCreditLimitsService.ts",
+    "from": "src/features/tasks/components/ActiveTaskRow.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Select/index.mjs",
+    "unresolvedTo": "@mui/material/Select",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
     "rule": {
-      "severity": "warn",
-      "name": "no-direct-service-in-components"
+      "severity": "error",
+      "name": "stack-port-mui"
     }
   },
   {
     "type": "dependency",
-    "from": "src/components/chat/TopBar/TopBar.tsx",
-    "to": "src/shared/services/roleCreditLimitsService.ts",
+    "from": "src/features/tasks/components/ActiveTaskRow.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/TextField/index.mjs",
+    "unresolvedTo": "@mui/material/TextField",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
     "rule": {
-      "severity": "warn",
-      "name": "no-direct-service-in-components"
+      "severity": "error",
+      "name": "stack-port-mui"
     }
   },
   {
     "type": "dependency",
-    "from": "src/components/common/DynamicInstructionsSelector.tsx",
-    "to": "src/shared/services/supabaseService.ts",
+    "from": "src/features/tasks/components/ActiveTaskRow.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Typography/index.mjs",
+    "unresolvedTo": "@mui/material/Typography",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
     "rule": {
-      "severity": "warn",
-      "name": "no-direct-service-in-components"
+      "severity": "error",
+      "name": "stack-port-mui"
     }
   },
   {
     "type": "dependency",
-    "from": "src/components/common/FileDetailsModal/FileDetailsModal.tsx",
-    "to": "src/shared/services/filesService.ts",
+    "from": "src/features/tasks/components/ArchiveTaskList.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Stack/index.mjs",
+    "unresolvedTo": "@mui/material/Stack",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
     "rule": {
-      "severity": "warn",
-      "name": "no-direct-service-in-components"
+      "severity": "error",
+      "name": "stack-port-mui"
     }
   },
   {
     "type": "dependency",
-    "from": "src/components/common/GammaPresentationModal/GammaPresentationModal.tsx",
-    "to": "src/shared/services/roleCreditLimitsService.ts",
+    "from": "src/features/tasks/components/ArchiveTaskRow.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Box/index.mjs",
+    "unresolvedTo": "@mui/material/Box",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
     "rule": {
-      "severity": "warn",
-      "name": "no-direct-service-in-components"
+      "severity": "error",
+      "name": "stack-port-mui"
     }
   },
   {
     "type": "dependency",
-    "from": "src/components/common/SystemPromptKeysEditor.tsx",
-    "to": "src/shared/services/supabaseService.ts",
+    "from": "src/features/tasks/components/ArchiveTaskRow.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Chip/index.mjs",
+    "unresolvedTo": "@mui/material/Chip",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
     "rule": {
-      "severity": "warn",
-      "name": "no-direct-service-in-components"
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/features/tasks/components/ArchiveTaskRow.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Collapse/index.mjs",
+    "unresolvedTo": "@mui/material/Collapse",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/features/tasks/components/ArchiveTaskRow.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/MenuItem/index.mjs",
+    "unresolvedTo": "@mui/material/MenuItem",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/features/tasks/components/ArchiveTaskRow.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Paper/index.mjs",
+    "unresolvedTo": "@mui/material/Paper",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/features/tasks/components/ArchiveTaskRow.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Select/index.mjs",
+    "unresolvedTo": "@mui/material/Select",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/features/tasks/components/ArchiveTaskRow.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Typography/index.mjs",
+    "unresolvedTo": "@mui/material/Typography",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/features/tasks/components/TasksAutosaveIndicator.tsx",
+    "to": "node_modules/.pnpm/@mui+icons-material@9.0.1_@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_rea_q6j66kvuasnxr7ebgsorkeqypy/node_modules/@mui/icons-material/CheckCircleOutlined.js",
+    "unresolvedTo": "@mui/icons-material/CheckCircleOutlined",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/features/tasks/components/TasksAutosaveIndicator.tsx",
+    "to": "node_modules/.pnpm/@mui+icons-material@9.0.1_@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_rea_q6j66kvuasnxr7ebgsorkeqypy/node_modules/@mui/icons-material/Sync.js",
+    "unresolvedTo": "@mui/icons-material/Sync",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/features/tasks/components/TasksAutosaveIndicator.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Chip/index.mjs",
+    "unresolvedTo": "@mui/material/Chip",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/features/tasks/components/TasksBacklogPanel.tsx",
+    "to": "node_modules/.pnpm/@mui+icons-material@9.0.1_@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_rea_q6j66kvuasnxr7ebgsorkeqypy/node_modules/@mui/icons-material/Add.js",
+    "unresolvedTo": "@mui/icons-material/Add",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/features/tasks/components/TasksBacklogPanel.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Box/index.mjs",
+    "unresolvedTo": "@mui/material/Box",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/features/tasks/components/TasksBacklogPanel.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Button/index.mjs",
+    "unresolvedTo": "@mui/material/Button",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/features/tasks/components/TasksBacklogPanel.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Stack/index.mjs",
+    "unresolvedTo": "@mui/material/Stack",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/features/tasks/components/TasksBacklogPanel.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Tab/index.mjs",
+    "unresolvedTo": "@mui/material/Tab",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/features/tasks/components/TasksBacklogPanel.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Tabs/index.mjs",
+    "unresolvedTo": "@mui/material/Tabs",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/features/tasks/components/TasksFeedback.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Alert/index.mjs",
+    "unresolvedTo": "@mui/material/Alert",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/features/tasks/components/TasksFeedback.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Snackbar/index.mjs",
+    "unresolvedTo": "@mui/material/Snackbar",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/features/tasks/components/TasksListEmptyState.tsx",
+    "to": "node_modules/.pnpm/@mui+icons-material@9.0.1_@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_rea_q6j66kvuasnxr7ebgsorkeqypy/node_modules/@mui/icons-material/ArchiveOutlined.js",
+    "unresolvedTo": "@mui/icons-material/ArchiveOutlined",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/features/tasks/components/TasksListEmptyState.tsx",
+    "to": "node_modules/.pnpm/@mui+icons-material@9.0.1_@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_rea_q6j66kvuasnxr7ebgsorkeqypy/node_modules/@mui/icons-material/AssignmentOutlined.js",
+    "unresolvedTo": "@mui/icons-material/AssignmentOutlined",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/features/tasks/components/TasksListEmptyState.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Box/index.mjs",
+    "unresolvedTo": "@mui/material/Box",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/features/tasks/components/TasksListEmptyState.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Typography/index.mjs",
+    "unresolvedTo": "@mui/material/Typography",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/layouts/MainLayout/MainLayout.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Box/index.mjs",
+    "unresolvedTo": "@mui/material/Box",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/layouts/MainLayout/MainLayout.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Container/index.mjs",
+    "unresolvedTo": "@mui/material/Container",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/pages/HomePage.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Alert/index.mjs",
+    "unresolvedTo": "@mui/material/Alert",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/pages/HomePage.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Box/index.mjs",
+    "unresolvedTo": "@mui/material/Box",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/pages/HomePage.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Typography/index.mjs",
+    "unresolvedTo": "@mui/material/Typography",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/pages/LoginPage.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Box/index.mjs",
+    "unresolvedTo": "@mui/material/Box",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/pages/ResetPasswordPage.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Alert/index.mjs",
+    "unresolvedTo": "@mui/material/Alert",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/pages/ResetPasswordPage.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Box/index.mjs",
+    "unresolvedTo": "@mui/material/Box",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/pages/ResetPasswordPage.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Typography/index.mjs",
+    "unresolvedTo": "@mui/material/Typography",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/pages/tasks/TasksPage.tsx",
+    "to": "node_modules/.pnpm/@mui+icons-material@9.0.1_@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_rea_q6j66kvuasnxr7ebgsorkeqypy/node_modules/@mui/icons-material/ArrowBack.js",
+    "unresolvedTo": "@mui/icons-material/ArrowBack",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/pages/tasks/TasksPage.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Alert/index.mjs",
+    "unresolvedTo": "@mui/material/Alert",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/pages/tasks/TasksPage.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Box/index.mjs",
+    "unresolvedTo": "@mui/material/Box",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/pages/tasks/TasksPage.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Button/index.mjs",
+    "unresolvedTo": "@mui/material/Button",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/pages/tasks/TasksPage.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Container/index.mjs",
+    "unresolvedTo": "@mui/material/Container",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/pages/tasks/TasksPage.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Paper/index.mjs",
+    "unresolvedTo": "@mui/material/Paper",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/pages/tasks/TasksPage.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Typography/index.mjs",
+    "unresolvedTo": "@mui/material/Typography",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
     }
   },
   {
     "type": "module",
-    "from": "src/_reference/migrateToAnalyzer.ts",
-    "to": "src/_reference/migrateToAnalyzer.ts",
-    "rule": {
-      "severity": "info",
-      "name": "no-orphan-modules"
-    }
-  },
-  {
-    "type": "module",
-    "from": "src/components/common/FadeInImage.tsx",
-    "to": "src/components/common/FadeInImage.tsx",
-    "rule": {
-      "severity": "info",
-      "name": "no-orphan-modules"
-    }
-  },
-  {
-    "type": "module",
-    "from": "src/setupProxy.js",
-    "to": "src/setupProxy.js",
-    "rule": {
-      "severity": "info",
-      "name": "no-orphan-modules"
-    }
-  },
-  {
-    "type": "module",
-    "from": "src/setupTests.js",
-    "to": "src/setupTests.js",
-    "rule": {
-      "severity": "info",
-      "name": "no-orphan-modules"
-    }
-  },
-  {
-    "type": "module",
-    "from": "src/shared/config/openai.ts",
-    "to": "src/shared/config/openai.ts",
-    "rule": {
-      "severity": "info",
-      "name": "no-orphan-modules"
-    }
-  },
-  {
-    "type": "module",
-    "from": "src/shared/hooks/useAbortController.ts",
-    "to": "src/shared/hooks/useAbortController.ts",
-    "rule": {
-      "severity": "info",
-      "name": "no-orphan-modules"
-    }
-  },
-  {
-    "type": "module",
-    "from": "src/shared/utils/environment.ts",
-    "to": "src/shared/utils/environment.ts",
-    "rule": {
-      "severity": "info",
-      "name": "no-orphan-modules"
-    }
-  },
-  {
-    "type": "module",
-    "from": "src/utils/error.ts",
-    "to": "src/utils/error.ts",
+    "from": "src/shared/utils/dateFormatters.ts",
+    "to": "src/shared/utils/dateFormatters.ts",
     "rule": {
       "severity": "info",
       "name": "no-orphan-modules"

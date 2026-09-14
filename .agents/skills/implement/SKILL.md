@@ -46,6 +46,7 @@ Execute a development plan phase by phase. Use `DEVELOPMENT_PLAN.md` as the guid
 - [ ] If **Plan review** is `Required: pending`, **stop** and route to `.agents/skills/review-dev-plan/SKILL.md` (or record waiver in **Decisions made**).
 - [ ] If **Pattern & precedent** is `Non-standard — waiver recommended` without an explicit waiver in **Decisions made**, **stop** and ask the owner.
 - [ ] Find the first phase in the overview that is not done (e.g. status `Pending`, empty, or not marked ✅).
+- [ ] After a phase **creates** a `src/features/` folder or adds a UI/data vendor: run [`.agents/skills/modularity-review/SKILL.md`](../modularity-review/SKILL.md) before marking that phase done (do not unwrap unless the job asked).
 
 ### 2. Per phase: execute
 

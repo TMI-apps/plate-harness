@@ -1,6 +1,6 @@
 # Documentation Index
 
-Central navigation for boilerplate documentation. For authoritative rules and process, see the SSOT locations below.
+Central navigation for plate-harness documentation. For authoritative rules and process, see the SSOT locations below.
 
 ## Quick Links
 

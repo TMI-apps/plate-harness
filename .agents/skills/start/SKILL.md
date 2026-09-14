@@ -8,7 +8,7 @@ description: >-
 
 # start
 
-Guide a new user through first-time setup of this boilerplate by following the README flow end-to-end, working through the dev task backlog, validating each step, and only moving forward when each gate passes.
+Guide a new user through first-time setup of this harness by following the README flow end-to-end, working through the dev task backlog, validating each step, and only moving forward when each gate passes.
 
 ## Core behavior
 
@@ -21,7 +21,7 @@ Guide a new user through first-time setup of this boilerplate by following the R
 
 ## Template repo vs fork (read first)
 
-**Working on this boilerplate template** (improving the starter itself — not building an app from a fork):
+**Working on this plate-harness template** (improving the harness itself — not building an app from a fork):
 
 - **Skip Supabase (task #1)** and **Cloudflare hosting (task #2)**. No project, no Workers Builds link, no `.env` required for most template work. The app runs locally without auth configured.
 - **Skip Airtable (task #4)** unless you are testing that integration.
@@ -30,7 +30,7 @@ Guide a new user through first-time setup of this boilerplate by following the R
 
 **Working on a fork** (someone cloned this to build their own app): full backlog applies — Supabase, hosting, vision **`ACTIVE`**, etc.
 
-When the user says they are on the **template** (or context is clearly boilerplate maintenance), default to the skip list above. Only walk Supabase/Cloudflare gates when they are onboarding a fork or explicitly ask to wire up services.
+When the user says they are on the **template** (or context is clearly harness maintenance), default to the skip list above. Only walk Supabase/Cloudflare gates when they are onboarding a fork or explicitly ask to wire up services.
 
 ## Dev task backlog (onboarding SSOT)
 
@@ -112,7 +112,7 @@ If assistant cannot perform the fork UI step, instruct user exactly what to clic
 
 ### 5) Branch workflow gate
 
-**Template repo (boilerplate maintenance):** stay **`model-a`**. Do **not** offer Model B. Create `feature/<name>` from `develop` as usual for template PRs.
+**Template repo (harness maintenance):** stay **`model-a`**. Do **not** offer Model B. Create `feature/<name>` from `develop` as usual for template PRs.
 
 **Fork:** create `develop` from `main` once (`git push origin main:develop`). Then ask:
 

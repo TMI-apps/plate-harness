@@ -9,7 +9,7 @@ description: >-
 
 # prime
 
-Load project context at the start of a new session. Build an understanding of this boilerplate’s structure, governance, and active state before tackling tasks.
+Load project context at the start of a new session. Build an understanding of this harness’s structure, governance, and active state before tackling tasks.
 
 **When to use:** New chat, ambiguous task, or before larger refactors.  
 **Related:** For architecture/quality gate, use `.agents/skills/validate/SKILL.md` (auto-selects gate depth). For planning features, use `.agents/skills/plan/SKILL.md`. For onboarding a human, use `.agents/skills/start/SKILL.md`.
@@ -29,7 +29,7 @@ Align with project rules and architecture so work does not violate enforced boun
 - **Doc index:** Read `documentation/DOC_INDEX.md` (SSOT map, quick links).
 - **Testing guide:** Skim `documentation/DOC_TESTING.md` when the task adds or changes tests (runners, colocation, `tests/test-utils`).
 - **App vision (product SSOT):** Read `documentation/DOC_APP_VISION.md`. If the vision status line is still **`DRAFT`**, state in **Actionable insights** that feature/plan ambiguity should be resolved by filling that file (or running `.agents/skills/start/SKILL.md` § App vision) before major product decisions.
-- **Features (discover, do not assume):** List `src/features/` — this boilerplate ships with **`auth`** and **`setup`** only; forks may add more. Do not use a fixed feature list from another repo.
+- **Features (discover, do not assume):** List `src/features/` — this harness ships with **`auth`** and **`setup`** only; forks may add more. Do not use a fixed feature list from another repo.
 - **Entry points:** Read `index.html`, `src/main.tsx`, `src/App.tsx` (provider order: `QueryProvider` → `AuthProvider` → `BrowserRouter`).
 
 ### 2. Governance and rules

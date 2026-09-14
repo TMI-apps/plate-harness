@@ -8,6 +8,7 @@ description: >-
   this skill before or beside planning. IF gate 2 fails (acceptance/APIs) THEN
   `plan` § Refine only. IF already inside the plan corridor THEN product/scope
   forks use `plan-grill` (rail + fork checklist), not a second full grill-me.
+  One question per turn, always — answer first, re-ground, then ask the next.
 disable-model-invocation: false
 ---
 
@@ -90,7 +91,13 @@ Share findings plainly ("the app already does X via Y") or uncertainty ("no noti
 
 ## Question style
 
-Ask **one boundary question at a time**; a turn may include grounding prose plus the question. Use a question tool call when available; prefer multiple-choice when branches are clear.
+### Turn contract (mandatory — no exceptions)
+
+- **One question per turn.** One `AskQuestion` call, one entry in its `questions` array. Never queue a second question, preview upcoming questions, or merge two boundary questions into one form "for efficiency" — even when both are already known.
+- **Stop and think before the next ask.** After the user answers: update `DECISIONS.md`, re-check the answer against the hook map / perimeter / non-goals, and only then decide the next single question. An earlier answer can change which question is next, or make one unnecessary — decide that in this thinking step, not by asking anyway.
+- A turn may include grounding prose (evidence, cost sketch) **plus the one question** — never plus a second question.
+
+Use a question tool call when available; prefer multiple-choice when branches are clear.
 
 **Offer Pareto-optimal options only** — each choice wins on a **distinct** axis. When one choice dominates every axis with acceptable costs on the rest, state it, **enumerate the alternatives you rejected**, **log as clear-winner** in `DECISIONS.md`, and move on — do not invent fake tradeoffs and do not skip enumeration.
 

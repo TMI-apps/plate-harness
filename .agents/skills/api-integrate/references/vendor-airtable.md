@@ -4,10 +4,10 @@ No Airtable MCP server exists in this workspace today — this vendor uses the R
 
 Requires `VITE_AIRTABLE_API_KEY` and `VITE_AIRTABLE_BASE_ID` in `.env` or `.env.local` (loaded by `scripts/load-airtable-env.js`).
 
-## Layers (boilerplate vs fork)
+## Layers (harness vs fork)
 
 1. **Airtable-agnostic:** Meta API `GET /v0/meta/bases/{baseId}/tables`; Data API field ids vs display names.
-2. **This boilerplate:** Env `VITE_AIRTABLE_*`; runtime Meta usage and types in `src/shared/services/airtableService.ts`; onboarding task in dev backlog (`src/config/app-tasks.json`).
+2. **This harness:** Env `VITE_AIRTABLE_*`; runtime Meta usage and types in `src/shared/services/airtableService.ts`; onboarding task in dev backlog (`src/config/app-tasks.json`).
 3. **Fork / product:** If you need a single SSOT for many `tbl`*/`fld`* constants, add a small module under `src/shared/` following `.cursor/rules/file-placement/RULE.mdc` and `.cursor/rules/architecture/RULE.mdc` (this repo does not ship one).
 
 ## Phase 1 — Schema commands
@@ -17,7 +17,7 @@ Requires `VITE_AIRTABLE_API_KEY` and `VITE_AIRTABLE_BASE_ID` in `.env` or `.env.
 | `pnpm airtable:meta-dump` | Same as `node scripts/airtable-meta-dump.js` — full base tables + fields |
 | `node scripts/airtable-meta-dump.js --pretty --out meta.json` | Pretty JSON to a file (prefer a path outside git) |
 
-Forks may add their own drift-check script (compare a checked-in constants module to a saved Meta dump); this boilerplate does not ship one.
+Forks may add their own drift-check script (compare a checked-in constants module to a saved Meta dump); this harness does not ship one.
 
 **Workflow:**
 
