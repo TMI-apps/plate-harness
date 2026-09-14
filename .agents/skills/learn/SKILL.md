@@ -4,6 +4,8 @@ description: >-
   Turns recent code changes, failures, and conversation mistakes into durable guidance.
   Use when the user runs /learn, asks for a retrospective or to sharpen rules, or after
   resolving a multi-turn struggle (e.g. 3+ failed attempts, critical CI fix).
+  IF the user invokes /learn (or attaches this skill) THEN run it in this same turn —
+  persist the lesson before git commit/push. Do not defer behind a CI/code fix.
 ---
 
 # Learn from changes and sharpen rules
@@ -29,6 +31,15 @@ Durable, discoverable guidance that a blank capable model would **not** already 
 - **Manual:** User invokes learn, asks for a retrospective, or “sharpen rules.”
 - **Proactive:** After a loop (3+ failed attempts), a critical CI fix, or a non-obvious repo discovery — only when the user **confirms** debugging is resolved. **Never** run as primary in parallel with active **`debug`**.
 - **Finish pipeline:** `finish` § Lesson check offers `/learn` when plan § Notes contain a mistake signal.
+
+### Turn contract (manual `/learn` — no deferral)
+
+**Manual invocation is blocking.** Attached or slash `/learn` is not a wrap-up after the fire. Do not wait for CI green, a code fix, or `finish` § Lesson check.
+
+- **Same turn:** Run Steps 0–5 in this turn (audit → lesson → persist → report).
+- **Before commit:** If a commit or push is also in flight, persist the lesson **before** `git commit`. Repair may continue after the Report (or after the skill/rule edit is on disk).
+- **Do not misread Proactive:** “Never as primary in parallel with `debug`” and “only when debugging is resolved” apply to **proactive** learn only. They do **not** override a **manual** `/learn` on an incident message.
+- **Salience:** A long CI log or red check in the same message is **not** a reason to skip this skill. Fixing the check does not complete `/learn`.
 
 ### Mistake shape (capture in plan § Notes during `implement` / `debug`)
 

@@ -322,7 +322,7 @@ Choose by **primary outcome** (what must be true when done). If two outcomes are
 ### `debug` vs `learn`
 
 - **`debug`:** Active incident; hypotheses; runtime evidence; possibly temporary instrumentation.
-- **`learn`:** After resolution or struggle — **capture durable** rule/skill/debug-pattern updates.
+- **`learn`:** Capture durable rule/skill/debug-pattern updates. **Proactive** learn waits until the struggle is resolved (not as primary beside active `debug`). **Manual** `/learn` (user invoked or skill attached) runs **in that turn**, including on a still-red CI/incident message — do not defer behind the fix. Procedure: `.agents/skills/learn/SKILL.md` § Turn contract.
 
 ### `rule-quality` vs `learn`
 
