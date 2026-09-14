@@ -263,8 +263,8 @@ module.exports = {
       severity: "error",
       comment:
         "MUI is a stack secret. New imports from features/pages/layouts must go through src/components/common or src/shared/theme.",
-      from: {path: "^src/(features|pages|layouts)/"},
-      to: {path: "node_modules/@mui/"},
+      from: { path: "^src/(features|pages|layouts)/" },
+      to: { path: "node_modules/@mui/" },
     },
     {
       name: "stack-port-supabase",
@@ -272,10 +272,9 @@ module.exports = {
       comment:
         "Supabase client is a stack secret. New imports must go through src/shared/services/supabaseService.ts.",
       from: {
-        pathNot:
-          "(^src/shared/services/supabaseService\\.ts$)|(\\.test\\.[jt]sx?$)",
+        pathNot: "(^src/shared/services/supabaseService\\.ts$)|(\\.test\\.[jt]sx?$)",
       },
-      to: {path: "node_modules/@supabase/"},
+      to: { path: "node_modules/@supabase/" },
     },
     {
       name: "stack-port-airtable",
@@ -283,10 +282,9 @@ module.exports = {
       comment:
         "Airtable is a stack secret. New imports must go through src/shared/services/airtableService.ts.",
       from: {
-        pathNot:
-          "(^src/shared/services/airtableService\\.ts$)|(\\.test\\.[jt]sx?$)",
+        pathNot: "(^src/shared/services/airtableService\\.ts$)|(\\.test\\.[jt]sx?$)",
       },
-      to: {path: "node_modules/airtable"},
+      to: { path: "node_modules/airtable" },
     },
 
     // === EXTERNAL DEPENDENCY RULES ===
@@ -384,6 +382,6 @@ module.exports = {
       },
     },
     cache: false,
-    progress: {type: "none"},
+    progress: { type: "none" },
   },
 };
