@@ -118,7 +118,7 @@ Map the chosen finding → skill. **Read that skill’s `SKILL.md` and execute i
 |---------------|--------|---------------------|
 | Simplify steps | [`challenge`](../challenge/SKILL.md) | Full challenge unless arriving mid-options |
 | Match how other apps do it | [`standards-align`](../standards-align/SKILL.md) | Full loop |
-| Remove repeated work | [`consolidate`](../consolidate/SKILL.md) | Full audit scoped to target |
+| Remove repeated work | [`consolidate`](../consolidate/SKILL.md) | Pass Target; child sweeps `src/`, focuses Target ∪ 1-hop neighborhood |
 | Fix a one-off exception | [`layer-consistency-check`](../layer-consistency-check/SKILL.md) | Finding + target = proactive cue |
 | Safety check before ship | [`validate`](../validate/SKILL.md) | Pass scope paths and/or active `DEVELOPMENT_PLAN.md` before invoke |
 | Score this screen’s quality | [`review`](../review/SKILL.md) | Only when a **component path** is identified; else re-pick |

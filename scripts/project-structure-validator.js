@@ -61,6 +61,7 @@ const DEFAULT_IGNORE_PATTERNS = [
   'supabase/.temp',
   '.wrangler/**', // Wrangler local state (Cloudflare Workers)
   '.wrangler',
+  '.agents/*.zip', // local skill zips; not a package artifact (D24)
   // Removed: 'backup/**', 'backup', 'backups/**', 'backups' - want to catch these as violations
   // Removed: '**/temp-*' - want to catch temp files as violations
   // Removed: '**/*-check.*' - want to catch check files as violations

@@ -1,32 +1,40 @@
 ---
 name: consolidate
 description: >-
-  Systematically audit the codebase for consolidation, abstraction, and redundancy
-  removal opportunities across features. Use when the user asks to find duplication,
-  consolidate code, audit for redundancy, reduce repetition, or identify shared
-  patterns that should be unified.
+  Systematically audit a named target (folder, feature, layer, glob, or whole src/)
+  for consolidation, abstraction, and redundancy. Sweeps src/ for copies; focuses
+  report and execute on Target plus 1-hop import neighborhood. Use when the user
+  asks to find duplication, consolidate code, audit for redundancy, reduce repetition,
+  identify shared patterns, audit a path/feature for overlap, asks what would warrant
+  consolidation, or asks for a consolidation rubric. Default is audit-then-stop.
+  Never invent a chat-only warrant rubric — use references/warrant-rubric.md.
 ---
 
 # Consolidate - Cross-Codebase Redundancy Audit
 
 ## Purpose
 
-Discover, classify, and prioritize opportunities to unify repeated code patterns across the codebase. This skill owns the **discovery** phase - systematically finding what is duplicated - and produces an actionable consolidation plan.
+Discover, classify, and prioritize opportunities to unify repeated code patterns **around a named Target**. This skill owns the **discovery** phase - systematically finding what is duplicated - and produces an actionable consolidation plan. Default outcome is an **audit report** (Phase 5). Execute (Phase 6) only after the user chooses candidates.
 
-**Scope:** Repo-wide pattern analysis. For per-hotspot optimization use `optimize2`. For single-feature simplification use `challenge`. For **semantic placement / wrong-layer repair** (after tooling is green), use this skill's **Semantic placement mode** below. For **proactive workaround detection during implementation**, use [`layer-consistency-check`](../layer-consistency-check/SKILL.md) (always-on via `architecture/RULE.mdc` § Layer consistency).
+**Scope:** **Broad sweep** of `src/` for copies; **focus** = Target ∪ 1-hop import neighborhood (not whole `src/` as the Target unless asked). For per-hotspot optimization use `optimize2`. For single-feature simplification use `challenge`. For **semantic placement / wrong-layer repair** (after tooling is green), use this skill's **Semantic placement mode** below. For **proactive workaround detection during implementation**, use [`layer-consistency-check`](../layer-consistency-check/SKILL.md) (always-on via `architecture/RULE.mdc` § Layer consistency).
 
 ## Modes
 
-- **Default — Redundancy audit:** the discovery → classify → prioritize → present → execute workflow below (what repeats?).
-- **Semantic placement repair:** is code in the **wrong layer/feature**, or does it mix concerns? Moves and refactors behind a gate, **after** `validate` (gate depth)/tooling is green. Full procedure: [`references/semantic-placement.md`](references/semantic-placement.md). (Formerly the `architecture-repair2` skill.)
+- **Default — Redundancy audit:** the discovery → classify → prioritize → present workflow below (what repeats **around** the Target?). Stop after present unless the user already approved execute.
+- **Semantic placement repair:** is code in the **wrong layer/feature**, or does it mix concerns? Moves and refactors behind a gate, **after** `validate` (gate depth)/tooling is green. Full procedure: [`references/semantic-placement.md`](references/semantic-placement.md). (Formerly the `architecture-repair2` skill.) Apply to the **same Target** when that is the ask.
 
 ## Triggers
 
 - User asks to "find duplication", "consolidate code", "audit for redundancy", "reduce repetition"
 - User asks "what can be shared/unified/abstracted?"
+- User points at a **broad target** (folder, feature, layer, glob, `src/`) and wants an overlap/redundancy **audit**
+- User asks what would **warrant** consolidation, or asks for a consolidation **rubric**
 - User names a refactor/cleanup that is about shared patterns across features
+- `improve` / router handoff: “Remove repeated work” with a Target
 
-Do not auto-trigger solely because “a major refactor is coming” or “features grew organically” without an explicit duplication/unify ask.
+Do not auto-trigger solely because “a major refactor is coming” or “features grew organically” without an explicit duplication/unify/audit ask.
+
+If the ask is only “what warrants consolidation / make a rubric,” read [`references/warrant-rubric.md`](references/warrant-rubric.md), answer from it, and do not invent a parallel scoring table in chat.
 
 ---
 
@@ -46,6 +54,10 @@ Not every repeated pattern needs a shared abstraction. Sometimes the right answe
 
 Always prefer the lowest-cost option that solves the actual problem.
 
+### Warrant SSOT
+
+Go/no-go, hard gates, and scoring: [`references/warrant-rubric.md`](references/warrant-rubric.md). Never invent a parallel chat-only rubric.
+
 ### Indirection Budget
 
 Every extraction adds indirection. Before proposing consolidation, answer:
@@ -57,15 +69,47 @@ If any answer is "no", reconsider.
 
 ---
 
+## Required Input — Target
+
+Resolve **before Phase 1**. Target is the **focus root**, not the exclusive search root. Do not treat whole `src/` as the Target unless the user asked for a full audit.
+
+| Kind | Example | When |
+|------|---------|------|
+| **Path / glob** | `src/features/auth`, `src/features/**/hooks` | User named a folder or pattern |
+| **Feature / pair** | `auth`, `auth` + `billing` | After copying a feature or comparing two |
+| **Layer** | all hooks, all services, all components **under Target** | Standardizing one layer |
+| **Pattern** | “table models” inside Target | Known repeated shape |
+| **Full `src/`** | entire application tree as Target **and** focus | User said full / repo-wide / all features |
+
+**Default:** named subtree, feature, layer, or glob from the message or from `improve`/router handoff.
+
+**Whole repo as Target:** only if the user (or handoff) explicitly asks for full / `src/` / all features.
+
+If Target is missing, ask **once** and wait. Do not start with “Target = `src/`” to fill the gap.
+
+**Focus set (D6, D8):** Target files ∪ 1-hop **callers** (other `src/` files that import a Target file) ∪ 1-hop **callees** (`src/` files a Target file imports via `@/` or project paths). Exclude `node_modules`. **Not transitive** — do not walk callers-of-callers.
+
+**Sweep vs focus (D5, D9):** After Target is set, **sweep `src/`** for more copies of patterns found in Target. Report and (if approved) execute **in-focus** hits. List **out-of-focus** hits as “also exists”; do not migrate them unless the user expands Target.
+
+**Audit vs execute:** “audit / find duplication / what overlaps” → stop after Phase 5. Phase 6 only when the user picks candidates (or the opening message already said implement those).
+
+---
+
 ## Workflow
 
 ```
-DISCOVER -> CLASSIFY -> ANALYZE -> PRIORITIZE -> PRESENT -> (USER CHOOSES) -> EXECUTE
+RESOLVE TARGET -> DISCOVER -> CLASSIFY -> ANALYZE -> PRIORITIZE -> PRESENT -> (USER CHOOSES) -> EXECUTE
 ```
 
 ### Phase 1: Discovery
 
-Systematically scan the codebase using multiple lenses. Run all applicable scans - do not stop after finding the first pattern.
+Build the **Focus set**, then run all applicable lenses. Do not stop after the first pattern.
+
+1. List Target files.
+2. Add 1-hop callers and callees under `src/` (Focus set).
+3. Derive candidate **shapes** from Target (names, signatures, import clusters).
+4. **Broad sweep:** search those shapes across `src/` (not only Target). Tag each hit **in-focus** (path in Focus set) or **out-of-focus**.
+5. Phase 3D still checks existing `src/shared/`, `src/components/common/`, `src/lib/` (those files are in-focus if they are 1-hop callees; otherwise still valid shared-home candidates).
 
 #### 1A. Structural Similarity Scan
 
@@ -73,7 +117,7 @@ Find files with similar names or roles across features:
 
 ```bash
 # PowerShell example: similar file names across feature folders
-Get-ChildItem -Path src/features -Recurse -File | Where-Object { $_.FullName -match "\\(components|hooks|services)\\" }
+Get-ChildItem -Path <Target> -Recurse -File | Where-Object { $_.FullName -match "\\(components|hooks|services)\\" }
 ```
 
 **What to look for:**
@@ -87,7 +131,7 @@ Find groups of imports that appear together repeatedly:
 
 ```bash
 # Find files that import the same set of dependencies
-rg "^import.*from" src/ --type ts --type tsx
+rg "^import.*from" <Target> --type ts --type tsx
 ```
 
 **What to look for:**
@@ -99,10 +143,12 @@ rg "^import.*from" src/ --type ts --type tsx
 Search for repeated code shapes:
 
 ```bash
-# Repeated function signatures
+# Derive shapes from Target, then sweep src/ (Frequency = all hits)
+rg "export (const|function) (use|create|build|get|format|parse|transform)" <Target> --type ts
 rg "export (const|function) (use|create|build|get|format|parse|transform)" src/ --type ts
 
 # Repeated hook patterns (fetch + state + error)
+rg "useQuery|useMutation|useState.*loading|useState.*error" <Target> --type ts
 rg "useQuery|useMutation|useState.*loading|useState.*error" src/ --type ts
 ```
 
@@ -152,9 +198,9 @@ Categorize every finding into one of four redundancy types:
 
 **For each finding, record:**
 1. **What:** Description of the repeated pattern
-2. **Where:** File paths (all occurrences)
+2. **Where:** File paths (all occurrences), each tagged in-focus / out-of-focus
 3. **Type:** Literal / Structural / Conceptual / Inconsistent usage
-4. **Frequency:** How many occurrences
+4. **Frequency:** Count of **all** same-pattern hits from the `src/` sweep (in-focus + out-of-focus)
 5. **Variance:** What differs between occurrences (the parameterizable parts)
 
 ---
@@ -208,29 +254,22 @@ If a recommendation would preserve or introduce a standards diversion, ask wheth
 
 ### Phase 4: Prioritization
 
-Score each candidate using this framework:
+**SSOT:** [`references/warrant-rubric.md`](references/warrant-rubric.md) — wrong-tool routing, hard gates, scoring, do-not list.
+
+Always apply **hard gates** from that file before scoring. Fail a gate → accepted duplication; do not invent a chat-only rubric.
 
 ```
-Score = (Frequency x 2) + (Stability x 2) + (Simplicity x 2) - (Divergence x 3) - (Coupling x 2)
+Score = 2×Frequency + 2×Stability + 2×Simplicity + 3×Sameness + 2×SharedBoundary
 ```
 
-| Factor | 0 (bad for consolidation) | 1 | 2 (good for consolidation) |
-|--------|--------------------------|---|---------------------------|
-| **Frequency** | 2 occurrences | 3-4 occurrences | 5+ occurrences |
-| **Stability** | Code is changing rapidly | Moderate churn | Code is stable |
-| **Simplicity** | Needs complex abstraction | Parameterized utility | Simple extraction |
-| **Divergence** | Will definitely diverge | Might diverge | Truly the same concern |
-| **Coupling** | Couples unrelated features | Some coupling | Natural shared boundary |
+Each factor is **0–2** where **2 = good for sharing**. Range **0–22**. Factor table, boosters, and verdict bands: warrant rubric.
 
 **Priority tiers:**
-- **Score 6+:** Strong candidate - consolidate
-- **Score 3-5:** Moderate candidate - consolidate if convenient, otherwise document
-- **Score 0-2:** Weak candidate - accept duplication, document as intentional
+- **Score ≥12:** Strong candidate — consolidate
+- **Score 8–11:** Moderate — consolidate if extraction is simple, otherwise document
+- **Score ≤7:** Weak — accept duplication, document as intentional
 
-**Additional priority boosters:**
-- Bug found in one copy but not another -> +3 (proves divergence is harmful)
-- Blocks other work (e.g., cannot add a feature to all tables without touching N files) -> +2
-- Part of a critical user-facing path -> +1
+Never score with `− (Divergence × 3) − (Coupling × 2)` while treating those columns’ **2** as “good for consolidation.”
 
 ---
 
@@ -244,7 +283,7 @@ Present the audit as a consolidation map, organized by priority tier.
 
 ```
 ===============================================================
-CONSOLIDATION AUDIT - [scope description]
+CONSOLIDATION AUDIT - [Target]
 ===============================================================
 
 Summary: X findings across Y files
@@ -253,16 +292,18 @@ Summary: X findings across Y files
 - Accepted duplication: N
 
 ---------------------------------------------------------------
-STRONG CANDIDATES (Score 6+)
+STRONG CANDIDATES (Score ≥12)
 ---------------------------------------------------------------
 
 #1. [Pattern Name] - [Type: Literal/Structural/Conceptual/Inconsistent]
     Score: X | Frequency: N files | Variance: [what differs]
 
-    Occurrences:
-    - `path/to/file1.ts` (lines X-Y)
-    - `path/to/file2.ts` (lines X-Y)
-    - `path/to/file3.ts` (lines X-Y)
+    Occurrences (in-focus):
+    - `path/to/file1.ts` (lines X-Y) [Target]
+    - `path/to/file2.ts` (lines X-Y) [1-hop]
+
+    Also exists (out-of-focus — not migrated unless you expand):
+    - `path/to/other.ts` (lines X-Y)
 
     What is repeated:
     [Concise description of the shared pattern]
@@ -283,13 +324,13 @@ STRONG CANDIDATES (Score 6+)
     - Path alias: [the @/ import path]
 
 ---------------------------------------------------------------
-MODERATE CANDIDATES (Score 3-5)
+MODERATE CANDIDATES (Score 8–11)
 ---------------------------------------------------------------
 
 [Same format, briefer]
 
 ---------------------------------------------------------------
-ACCEPTED DUPLICATION (Score 0-2)
+ACCEPTED DUPLICATION (Score ≤7)
 ---------------------------------------------------------------
 
 [Brief list with reason for acceptance]
@@ -304,7 +345,7 @@ RECOMMENDED EXECUTION ORDER:
 Which candidates should I implement? (e.g., "#1, #3, #5" or "all strong")
 ```
 
-**Decision gate:** Wait for user to choose which consolidations to execute.
+**Decision gate:** Wait for user to choose which consolidations to execute. This is the **default stop** for a broad-target audit.
 
 If any finding has unresolved usage ambiguity or an unconfirmed standards diversion, ask that question before asking which candidates to implement.
 
@@ -312,7 +353,7 @@ If any finding has unresolved usage ambiguity or an unconfirmed standards divers
 
 ### Phase 6: Execute
 
-For each approved consolidation:
+Skip this phase on audit-only invocations. For each **user-approved** consolidation, migrate **in-focus files that contain the pattern** (Target ∪ 1-hop neighborhood). Do not rewrite out-of-focus copies unless the user expands Target.
 
 #### 6.1 Pre-flight
 
@@ -353,12 +394,13 @@ The user may request different scopes:
 
 | Scope | What to scan | When to use |
 |-------|-------------|-------------|
-| **Full audit** | Entire `src/` | Major cleanup, tech debt sprint |
+| **Path / glob** | Named folder or glob | Default when user points at an area |
+| **Full audit** | Entire `src/` | User asked repo-wide / all features |
 | **Feature pair** | Two specific features | After copying a feature as template |
-| **Layer audit** | All hooks, all services, or all components | Standardizing one layer |
-| **Pattern audit** | One specific pattern (e.g., "table models") | Known repeated pattern |
+| **Layer audit** | All hooks, all services, or all components under Target | Standardizing one layer |
+| **Pattern audit** | One specific pattern (e.g., "table models") inside Target | Known repeated pattern |
 
-Default to **full audit** unless user specifies otherwise.
+Default to the **named Target**. Use **Full audit** (`src/`) only when the user or handoff explicitly asks for repo-wide.
 
 ---
 
@@ -372,7 +414,7 @@ This skill is independently complete but works best in concert with sibling skil
 | **Semantic placement mode** | After consolidation creates new shared code, the [semantic placement mode](references/semantic-placement.md) verifies it is in the correct location. This skill's Phase 6 pre-flight uses those placement rules inline. |
 | **`challenge`** | Challenge simplifies a single feature's implementation. Consolidate finds patterns *across* features. Run challenge first to simplify each feature, then consolidate to unify what is left. |
 | **`standards-align`** | When the question is industry should/how (not only redundancy), run standards-align first; consolidate after align if cross-feature duplication remains. |
-| **`review`** | Review Section F3 scores "Reuse and duplication" per component. Consolidate provides the repo-wide perspective that review lacks. |
+| **`review`** | Review Section F3 scores "Reuse and duplication" per component. Consolidate provides the **Target-wide** perspective that review lacks. |
 
 **Recommended workflow for major cleanup:**
 1. `standards-align` when industry alignment is in scope; else `challenge` individual features (simplify each)
@@ -389,13 +431,17 @@ This skill is independently complete but works best in concert with sibling skil
 - **Abstraction for abstraction's sake:** If the shared version is harder to understand than the copies, keep the copies
 - **Ignoring variance:** Forcing different things into one abstraction by adding flags/modes - creates complexity
 - **Big-bang consolidation:** Migrating all consumers at once - migrate one at a time, verify each step
-- **Skipping the discovery phase:** Jumping to "let me extract this" without scanning for all occurrences first
+- **Target = whole `src/`:** Starting with Target = `src/` because the user named one folder
+- **Exclusive Target scan:** Never sweeping `src/` for extra copies (blinds Rule of Three)
+- **Transitive neighborhood:** Walking callers-of-callers until the audit is the whole app
+- **Silent out-of-focus migrate:** Rewriting files outside the Focus set without expanding Target
+- **Skipping the discovery phase:** Jumping to "let me extract this" without sweeping for all occurrences first
 
 ---
 
 ## Boundaries
 
-- After user approval, **Phase 6 executes** approved consolidations in this skill (migrate one consumer at a time). Do not also invent a parallel `implement` pass for the same approved items.
+- Default stop after Phase 5 for audit asks. **Phase 6** only after the user picks candidates (migrate in-focus consumers one at a time). Do not invent a parallel `implement` pass for the same items.
 - This skill does not run broad performance optimization (use `optimize2`).
 - For architectural *location* correctness beyond placement of new shared code, use this skill's **Semantic placement mode** (`references/semantic-placement.md`).
 - This skill does not simplify individual feature workflows (use `challenge`).

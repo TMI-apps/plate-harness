@@ -46,7 +46,7 @@ Create a development plan for a feature or job. Research how best to implement i
 | **Gate 2 — engineering acceptance** (concrete examples, API shapes, schemas, RLS needs, interactive states) | Stay in § Refine (table below). Do **not** use `plan-grill` for these alone. |
 
 - If product ambiguity remains and `DOC_APP_VISION.md` answers **who** / **why**: read it first; if still **`DRAFT`**, pause for fill or deferral before locking scope.
-- **Before leaving Refine:** run plan-grill fork checklist on every open scope/non-goal/success topic; loop is ask → write `DECISIONS.md` → **continue Refine** until clear. Then finish gate-2 questions.
+- **Before leaving Refine:** run plan-grill fork checklist on every open scope/non-goal/success/**generality** topic; loop is ask → write `DECISIONS.md` → **continue Refine** until clear. Then finish gate-2 questions.
 - Only proceed to investigation once product scope is clear **and** gate-2 acceptance is concrete enough to investigate.
 
 #### Optional: Requirements depth (complex or unfamiliar features)
@@ -72,7 +72,7 @@ For features involving external APIs, database changes, auth, or novel logic, ga
 - [ ] Align narrative with **`documentation/DOC_APP_VISION.md`** when the plan changes user-facing behavior (problem, persona, app role); if **`DRAFT`**, pause for fill or explicit deferral.
 - [ ] For server-cached data, check `documentation/DOC_TANSTACK_QUERY.md` and existing `api/keys.ts` patterns in features.
 - [ ] Determine scope and boundaries (in-scope vs out-of-scope).
-- [ ] **plan-grill rail:** Before locking ride-vs-new, neighbor absorption, greenfield, or architecture-boundary choices — run [`.agents/skills/plan-grill/SKILL.md`](../plan-grill/SKILL.md) **mandatory fork checklist** (enumerate ≥2 options or justify sole option; ask on ties; log clear-winners; anti-dup). Loop: ask → `DECISIONS.md` → **continue Investigate**. Industry/precedent → `pattern-review`. Package/pattern reuse vs custom → `dont-reinvent-the-wheel` (already run above when Step 1 applies).
+- [ ] **plan-grill rail:** Before locking ride-vs-new, neighbor absorption, greenfield, architecture-boundary, or **generality** (instance vs feature vs rewirable — SSOT `plan-grill` § Generality) — run [`.agents/skills/plan-grill/SKILL.md`](../plan-grill/SKILL.md) **mandatory fork checklist** (enumerate ≥2 options or justify sole option; ask on ties; log clear-winners; anti-dup). Loop: ask → `DECISIONS.md` → **continue Investigate**. Industry/precedent → `pattern-review`. Package/pattern reuse vs custom → `dont-reinvent-the-wheel` (already run above when Step 1 applies).
 - [ ] **Feature decomposition self-check (mandatory):** Enumerate distinct domain concepts this work introduces. If more than one cohesive bounded context applies, or projected file count exceeds `featureBudgets.config.cjs` defaults, plan multiple features under `src/features/` before writing steps. Do not wait for the user to request architecture. See `.cursor/rules/architecture/RULE.mdc` § Feature granularity.
 
 #### Optional: Foundation validation (high-risk features)

@@ -53,7 +53,7 @@ Execute a development plan phase by phase. Use `DEVELOPMENT_PLAN.md` as the guid
 For each phase **in order** (one phase at a time unless the plan explicitly allows parallel work):
 
 1. **Read** the phase: Goal, Steps, Gate.
-2. **Execute** the steps; match file layers, aliases, and patterns in `.cursor/rules/architecture/RULE.mdc` and `ARCHITECTURE.md`.
+2. **Execute** the steps; match file layers, aliases, and patterns in `.cursor/rules/architecture/RULE.mdc` and `ARCHITECTURE.md`. **New identifiers** (function, hook, component, type, file, feature folder): follow `.cursor/rules/code-style/RULE.mdc` § Category, not instance — name the capability, not the first caller/SKU/page.
 3. **Run** the gate (see below). It must pass before continuing.
 4. **Update** `DEVELOPMENT_PLAN.md`:
    - **Phase overview:** set this phase’s status to `Done` or `✅` (use the wording/style already used in the table).

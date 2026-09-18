@@ -7,7 +7,7 @@ Canonical paths for `.cursor/rules/` when skills need a rules table. Full descri
 | Overview / index | `.cursor/rules/INDEX.md` |
 | Architecture | `.cursor/rules/architecture/RULE.mdc` — layers, import direction, path aliases, structure whitelist |
 | File placement | `.cursor/rules/file-placement/RULE.mdc` and `projectStructure.config.cjs` |
-| Code style | `.cursor/rules/code-style/RULE.mdc` — naming, complexity limits |
+| Code style | `.cursor/rules/code-style/RULE.mdc` — naming (category, not first instance), complexity limits |
 | Database | `.cursor/rules/database/RULE.mdc` — migrations, idempotent patterns |
 | Security | `.cursor/rules/security/RULE.mdc` — auth, RLS, validation, secrets |
 | Testing | `.cursor/rules/testing/RULE.mdc` |

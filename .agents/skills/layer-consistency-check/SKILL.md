@@ -71,7 +71,7 @@ Full domain variety is in the shapes rubric. Illustrative cases:
 
 - **Fluid sim:** "can waves just splash over that wall?" on a shallow-water solver → disconnected particle burst vs different representation.
 - **Game design:** double-jump in one level → level-specific ability flag vs reach invariant redesign.
-- **TypeScript UI:** `BreadBuyButton` with no product category → instance-encoded component vs `BuyButton` with a product prop.
+- **TypeScript UI:** `BreadBuyButton` with no product category → instance-encoded component vs `BuyButton` with a product prop. Same for a **new** function named after the first ticket — first use is when the name locks; do not skip as a one-off.
 - **Design systems:** one-off modal corners → inline override vs token change.
 - **Backend/schema:** `discount_percent` for one promo → UI subtraction vs pricing-engine extension.
 
@@ -90,6 +90,7 @@ Full domain variety is in the shapes rubric. Illustrative cases:
 | Simplify an overbuilt feature workflow | [`challenge`](../challenge/SKILL.md) |
 | Should we / how to align existing scope with industry standards | [`standards-align`](../standards-align/SKILL.md) |
 | Hotspot refactor / Rule of Three | [`optimize2`](../optimize2/SKILL.md) |
+| How to name new symbols (category vs instance) | `code-style/RULE.mdc` § Category, not instance — this skill only **stops** if the name is still instance-encoded |
 
 **When both `pattern-review` and this skill apply:** run **layer-consistency-check first** (cheaper one-beat check). If the user picks a structural path that changes UX/API contracts, run `pattern-review` before implementing.
 

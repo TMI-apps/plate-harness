@@ -648,6 +648,27 @@ module.exports = {
           ],
         },
         {
+          name: "advisor-package",
+          children: [
+            { name: "*.md" },
+            {
+              name: "skills",
+              children: [
+                {
+                  name: "*",
+                  children: [
+                    { name: "SKILL.md" },
+                    {
+                      name: "references",
+                      children: [{ name: "*.md" }],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        {
           name: "skills",
           children: [
             {

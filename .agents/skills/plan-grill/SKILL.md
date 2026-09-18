@@ -11,7 +11,9 @@ description: >-
   enumerating alternatives THEN log clear-winner (no Q). Not for XS/quick-piv.
   Not for industry-precedent forks (pattern-review). Not for package/pattern
   reuse vs custom (dont-reinvent-the-wheel). Not for gate-2 acceptance
-  examples alone. plan must run the rail at every phase — not only Create.
+  examples alone. IF a new capability could be a one-off instance OR a
+  rewirable system THEN run the generality fork before locking the plan.
+  plan must run the rail at every phase — not only Create.
   One grill question per turn, always — never batch two forks in one ask.
 disable-model-invocation: false
 ---
@@ -37,7 +39,7 @@ disable-model-invocation: false
 
 | Store | Path | Holds |
 |-------|------|--------|
-| **Product / scope ledger** | `documentation/jobs/temp_job_<name>/DECISIONS.md` | Perimeter, non-goals, ride-vs-new, design/architecture-boundary ties |
+| **Product / scope ledger** | `documentation/jobs/temp_job_<name>/DECISIONS.md` | Perimeter, non-goals, ride-vs-new, generality, design/architecture-boundary ties |
 | **Impl decisions** | `DEVELOPMENT_PLAN.md` § **Decisions made** | Choices made **while implementing** — `implement` fills |
 
 ## When a grill question is needed (explicit triggers)
@@ -51,6 +53,7 @@ A **fork** exists when **any** of these is true for a topic **not** already in `
 | **Neighbor absorption** | Ride existing loop vs new path; which feature owns the data |
 | **User-visible behavior** | Which outcome, error, or empty state the user sees |
 | **Architecture boundary** | Feature split, layer ownership, sync vs async user-visible contract — when the choice changes product feel, coupling, or what neighbors are touched |
+| **Generality** | Instance vs feature module vs rewirable port — how reusable vs specific this capability is (see § Generality) |
 | **About to write it down** | Phase/step text would pick A over B as if decided |
 
 **Not a plan-grill fork** (do not ask here):
@@ -60,7 +63,34 @@ A **fork** exists when **any** of these is true for a topic **not** already in `
 | Concrete API example, schema field list, RLS policy text | `plan` § Refine gate-2 |
 | Industry “is this standard?” A/B/C | `pattern-review` |
 | Package/pattern reuse vs custom (library search) | `dont-reinvent-the-wheel` |
-| Pure code mechanism with **no** product/scope/boundary effect (helper name, local refactor shape) | Agent decides — still prefer a one-line note in plan Notes if non-obvious |
+| Helper extract / Rule of Three | `optimize2` — not this cue |
+| Stack/feature replaceability scores after a folder exists | `modularity-review` |
+| Pure code mechanism with **no** product/scope/boundary effect (local refactor shape) | Agent decides — still prefer a one-line note in plan Notes if non-obvious. **Names** are not a product fork: follow `code-style/RULE.mdc` § Category, not instance (do not bake the ticket into the identifier) |
+
+### Generality (instance vs rewirable)
+
+**SSOT for this fork.** Run the mandatory checklist on this topic before phases/steps assume a platform or a one-off. Do not silently over-build or under-build.
+
+**Three levels** (later options stronger / more modular):
+
+| Level | Meaning | When |
+|-------|---------|------|
+| **Instance** | One UI/path for the known job (a buy button on this page; this SKU) | Default when only one consumer is known now |
+| **Feature** | One bounded domain with a public API (checkout start/confirm/fail); thin UIs call it | The work is a domain even with one screen |
+| **Rewirable** | Ports for “what is bought / how paid / what success means” so other products plug in | ≥2 product kinds are **in scope now**, or the owner picks future expansion *and* names the second consumer |
+
+**Default:** specific enough to ship the known job. Modular only where a second real consumer already exists or is a Closed row.
+
+| Situation | Classify |
+|-----------|----------|
+| One known use; second use is a guess | **Clear-winner → instance** (or **feature** if it is already a domain). Log deferred second use as a non-goal. Do **not** ask. |
+| Two known uses, same verbs | **Clear-winner → feature** (one public API, two thin UIs) unless product kinds differ |
+| Two known uses, different verbs | **Tie or clear-winner → split features**; share only what both need. Ask if which concepts belong together is Pareto-fair |
+| Owner wants a platform “just in case” | **Ask** — `[Wins: least code]` instance vs `[Wins: reusability]` rewirable, with explicit pay lines |
+
+Guessed future use stays a **deferred non-goal** in `DECISIONS.md`. Do not code the unused hook.
+
+**Not this cue:** npm/package reuse (`dont-reinvent-the-wheel`); extracting a shared helper with <3 call sites (`optimize2`); scoring how hard a shipped feature is to swap (`modularity-review`).
 
 ### Mandatory fork checklist (before locking)
 
@@ -93,9 +123,9 @@ Create the file only when logging the first decision. No empty stubs.
 
 `plan` runs this skill’s checklist at **each** corridor phase — not only when “something feels fuzzy”:
 
-1. **Refine** — scope, non-goals, success meaning.
-2. **Investigate** — ride vs new, neighbor absorption, greenfield, architecture boundary.
-3. **Create** — every product/scope pick about to enter phases/steps.
+1. **Refine** — scope, non-goals, success meaning, **generality** (instance vs feature vs rewirable).
+2. **Investigate** — ride vs new, neighbor absorption, greenfield, architecture boundary, generality if still unlocked.
+3. **Create** — every product/scope pick about to enter phases/steps (including assumed platforms).
 
 Loop shape: **ask one question (if tie) → write DECISIONS.md → continue the same phase.** One fork, one question, one turn — even when the next tie is already known, resolve and log the current one first; re-check it still applies before asking the next.
 
@@ -108,6 +138,7 @@ Loop shape: **ask one question (if tie) → write DECISIONS.md → continue the 
 | Already in Closed / Open | Skip (anti-dup) |
 | Industry/precedent only | `pattern-review` |
 | Package/pattern reuse vs custom | `dont-reinvent-the-wheel` |
+| Helper extract / Rule of Three | `optimize2` |
 | Pure mechanism, no product/boundary edge | Agent decides (see “Not a fork”) |
 
 Question style: `.agents/skills/grill-me/SKILL.md` § Question style — do not fork a second format. Same **turn contract** applies: one grill question per turn, think/re-ground on `DECISIONS.md` before the next.
@@ -131,6 +162,8 @@ Question style: `.agents/skills/grill-me/SKILL.md` § Question style — do not 
 | Gate-1 / standalone stress-test | `grill-me` |
 | Precedent / non-standard industry path | `pattern-review` |
 | Package/pattern reuse vs custom | `dont-reinvent-the-wheel` |
+| Helper extract / Rule of Three | `optimize2` |
+| Replaceability scores after a module exists | `modularity-review` |
 | XS work | `quick-piv` |
 
 **SSOT note:** Plan-time forks live in `DECISIONS.md`; `DEVELOPMENT_PLAN.md` is how to build. `implement` soft-warns on open rows (no hard block). Relationship diagram: [`.agents/skills/router/references/skill-relationship-flow.md`](../router/references/skill-relationship-flow.md).

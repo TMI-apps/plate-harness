@@ -61,8 +61,9 @@ Resolve in this order; a branch may open another. Treat integration hooks as **e
 2. **Perimeter (in scope)** — smallest set of capabilities that counts as this feature.
 3. **Non-goals (out of scope)** — will NOT do / NOT touch (see below).
 4. **Neighbor + hook map** — per neighbor: name, traced loop (or not found), provisional hook point, then **ride vs new**.
-5. **Edge decisions** — one question per boundary: handoff, ownership, atomicity, precedence vs observed behavior.
-6. **Interior** — only where an edge choice already constrains it.
+5. **Generality** — instance vs feature vs rewirable. SSOT [`.agents/skills/plan-grill/SKILL.md`](../plan-grill/SKILL.md) § Generality. If the topic is not in `DECISIONS.md`, treat it as an edge: one known consumer → log clear-winner (do not ask); ask only on a real tie (two consumers, or owner wants a platform “just in case”).
+6. **Edge decisions** — one question per boundary: handoff, ownership, atomicity, precedence vs observed behavior.
+7. **Interior** — only where an edge choice already constrains it.
 
 ### Ride vs new (default-greenfield check)
 

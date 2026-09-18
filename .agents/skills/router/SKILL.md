@@ -226,7 +226,7 @@ While inside **plan corridor** (`I`), product/scope forks use **`plan-grill` rai
 | Stress-test product/design when gates 1–2 already pass (not gate-1 ambiguity); optional warm start before plan | `.agents/skills/grill-me/SKILL.md` |
 | Product/scope fork during plan corridor (Refine/Investigate/Create); `/plan-grill`; **rail invoked by `plan`** — mandatory checklist | `.agents/skills/plan-grill/SKILL.md` |
 | Simplify **one** concrete feature (flows + code), reduce steps/complexity | `.agents/skills/challenge/SKILL.md` |
-| Find cross-feature duplication, consolidation candidates, or semantic placement repair (after tooling is green) | `.agents/skills/consolidate/SKILL.md` |
+| Find duplication in a **named target** (folder, feature, layer, glob) or whole `src/` if asked; consolidation candidates; semantic placement (after tooling is green) | `.agents/skills/consolidate/SKILL.md` |
 | Optimize hotspots: design → approach → efficiency → complexity | `.agents/skills/optimize2/SKILL.md` |
 | React perf patterns (bundle, waterfalls, re-renders) for Vite SPA | `.agents/skills/react-perf-vite/SKILL.md` |
 | Retro from failures/diffs; persist lessons into rules or skills | `.agents/skills/learn/SKILL.md` |
@@ -300,12 +300,12 @@ Choose by **primary outcome** (what must be true when done). If two outcomes are
 
 ### `consolidate` vs `optimize2`
 
-- **`consolidate`:** **Repo-wide** redundancy audit and prioritization (discovery of shared patterns).
-- **`optimize2`:** **Targeted** optimization at four levels for chosen code; Rule of Three for extractions. Use for **hot paths** or known-complex modules.
+- **`consolidate`:** Redundancy **audit of a Target** (folder / feature / layer / glob; whole `src/` only if asked). **Sweep `src/`** for copies; **focus** report/execute on Target ∪ 1-hop callers/callees. Prioritize with `references/warrant-rubric.md`. Default: report then stop.
+- **`optimize2`:** **Hotspot** optimization at four levels for chosen code; Rule of Three for extractions. Use for **hot paths** or known-complex modules.
 
 ### `consolidate` — Redundancy audit vs Semantic placement mode
 
-- **Redundancy audit (default):** “What repeats?” → unify abstractly (may stay duplicated by decision).
+- **Redundancy audit (default):** “What repeats **around this Target**?” Sweep `src/`; focus Target ∪ 1-hop. Unify abstractly (may stay duplicated by decision). Report then stop unless execute was requested.
 - **Semantic placement mode:** “Is code in the **wrong** layer/feature?” → move/refactor for boundaries (after tooling is green).
 
 ### `challenge` vs `optimize2`

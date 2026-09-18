@@ -18,14 +18,34 @@ alwaysApply: true
 - **Variables**: Use `const`/`let` (never `var`)
 - **No `any`**: Explicit types required
 - **Complexity**: Functions ≤ 10 cyclomatic, ≤ 15 cognitive, ≤ 100 lines, ≤ 4 nesting
+- **Names**: category, not first caller/SKU/page (see § Naming)
 
 See detailed sections below for complete guidance.
 
 ## Naming Conventions
 
+**SSOT** for identifier and file names in `src/` (and the same idea for new symbols elsewhere). Syntax below; **category vs instance** is the growth rule.
+
+### Category, not instance (mandatory)
+
+Name the **domain verb/noun** (what this always does), not the first ticket, caller, SKU, page, role, or season.
+
+**Test (always, including the first caller):** if a second instance shows up next month, does this identifier still make sense **unmodified**? If you would rename it → you named the instance. Put the instance in a **parameter**, **caller**, or a **thin wrapper** next to that use — not in the shared name.
+
+| ❌ Instance-encoded | ✅ Category |
+|--------------------|-------------|
+| `BreadBuyButton`, `submitGovernorAttendanceQ1Report` | `BuyButton`, `submitReport` |
+| `handleWelcomeEmailClick`, `useCheckoutForCourseSku` | `sendLifecycleEmail`, `useCheckout` |
+
+Still **descriptive**: `handleData`, `processItem`, `ThingManager`, `api-call-1` are too vague. Category names state the capability (`submitReport`, `BuyButton`), not the current customer.
+
+This is the same test as `layer-consistency-check` shape **instance-encoded naming**. Style owns how to name; that skill **stops** if the name is still a workaround.
+
+Applies to: functions, hooks, components, types, feature folders, services, Edge Function folder names. Test titles may name the scenario (`should … when …`); production symbols must not.
+
 ### Variables and Functions
 - Use camelCase for variables and functions
-- Use descriptive names that indicate purpose
+- Use descriptive names that indicate **category purpose** (not the first caller)
 - Avoid abbreviations unless widely understood
 
 ### Constants
@@ -35,7 +55,7 @@ See detailed sections below for complete guidance.
 ### Types and Interfaces
 - Use PascalCase for types and interfaces
 - Prefix interfaces with `I` only if it adds clarity
-- Use descriptive names that indicate structure
+- Use descriptive names that indicate **category** structure
 - **Interfaces for objects, types for unions**
 
 ### File Naming
@@ -43,6 +63,7 @@ See detailed sections below for complete guidance.
 - Hooks: `useTodos.ts` (camelCase, `use` prefix)
 - Services: `todoService.ts` (camelCase)
 - Types: `todo.types.ts` (camelCase, `.types.ts` suffix)
+- Do not encode a one-off screen or SKU in a shared file name (`BreadBuyButton.tsx` → `BuyButton.tsx`)
 
 ## Formatting
 
@@ -342,6 +363,7 @@ When working with TypeScript and React:
 - `testing/RULE.mdc` - May reference code style for test files
 - `workflow/RULE.mdc` - May reference formatting standards in review process
 - `.agents/skills/optimize2/SKILL.md` - Detailed complexity reduction / optimization workflow
+- `.agents/skills/layer-consistency-check/SKILL.md` — instance-encoded naming as a workaround stop; this file owns the naming rule itself
 
 **Rules that reference this rule:**
 - All other rules may reference code style standards

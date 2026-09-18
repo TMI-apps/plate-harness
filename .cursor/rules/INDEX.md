@@ -5,7 +5,7 @@ Quick reference guide to all rules and their relationships.
 ## Rule Categories
 
 ### Code Style (`code-style/RULE.mdc`)
-- Naming conventions
+- Naming conventions (category, not first instance/SKU/page)
 - Formatting standards
 - Documentation requirements
 - Code organization
@@ -33,7 +33,7 @@ Quick reference guide to all rules and their relationships.
 - **Pattern risk (industry precedent)** — pointer to `.agents/skills/pattern-review/` (plans/proposals; not repo lint)
 - **Don't reinvent the wheel (package / pattern reuse)** — pointer to `.agents/skills/dont-reinvent-the-wheel/` (before custom generic subsystems; not pattern-review)
 - **Performance cost risk (heavy DB/UI ops)** — detect heavy operations, propose leaner alternatives, ask user before implementing
-- **Layer consistency (workaround guard)** — pointer to `.agents/skills/layer-consistency-check/` (verify assumptions about existing behavior; catch internal layer mismatches before shipping workarounds)
+- **Layer consistency (workaround guard)** — pointer to `.agents/skills/layer-consistency-check/` (verify assumptions; catch workarounds including instance-encoded names). Identifier naming SSOT: `code-style` § Category, not instance
 
 **Related to:** code-style, testing, security, workflow
 

@@ -166,6 +166,7 @@ Use product-owner language first, technical mapping second:
 - Map the chosen priority back to the corresponding concrete approach
 - **WAIT** for user's explicit choice
 - Document chosen priority and mapped approach before proceeding
+- If generality is not yet in `DECISIONS.md`: “easiest future expansion” maps to **rewirable** only when a second consumer is named now. Otherwise log a deferred non-goal and keep **instance** or **feature**. SSOT: `plan-grill` § Generality — do not invent a platform from this pick alone.
 
 ### 2.5 Decision Point Matrix
 Identify **subjective** choices requiring user input.

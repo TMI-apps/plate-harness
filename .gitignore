@@ -46,6 +46,9 @@ build
 .agents/harness-inbox/*
 !.agents/harness-inbox/README.md
 
+# Local skill zips (not committed; zip at distribution time)
+.agents/*.zip
+
 # Python
 __pycache__/
 *.py[cod]
