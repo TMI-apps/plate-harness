@@ -31,7 +31,8 @@ disable-model-invocation: false
 | Plan-time fork detection + tie asks + clear-winner logs | Pre-plan / gate-1 stress-test → `grill-me` |
 | Anti-dup via `DECISIONS.md` | Industry/precedent A/B/C → `pattern-review`; package/pattern reuse → `dont-reinvent-the-wheel` |
 | Mandatory fork checklist before locking a choice | Gate-2 acceptance/API examples alone → `plan` § Refine |
-| Shared ledger format (with `grill-me` / `feature`) | Writing `DEVELOPMENT_PLAN.md` body → `plan` |
+| Shared ledger format (with `grill-me` / `feature` / `plan-grill-auto`) | Writing `DEVELOPMENT_PLAN.md` body → `plan` |
+| Tie asks + Present wait (default) | User forbids questions → [`plan-grill-auto`](../plan-grill-auto/SKILL.md) (same checklist; agent picks) |
 
 **Skip gate:** XS / `quick-piv` — do not run.
 
@@ -115,7 +116,7 @@ Before treating an approach as decided in the current plan phase, run this check
 
 **Template:** [`references/decisions-template.md`](references/decisions-template.md)
 
-**First writer** (`grill-me`, `plan-grill`, or `feature`) creates the job folder + file on the first product decision. Derive `<name>` kebab-case; if ambiguous, ask once for the slug.
+**First writer** (`grill-me`, `plan-grill`, `plan-grill-auto`, or `feature`) creates the job folder + file on the first product decision. Derive `<name>` kebab-case; if ambiguous, ask once for the slug. `plan-grill-auto` picks the slug and logs it — no ask.
 
 Create the file only when logging the first decision. No empty stubs.
 

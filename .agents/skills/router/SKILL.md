@@ -54,7 +54,7 @@ Pick **one** primary by the **most blocking** row that applies (top wins). Then 
 |--------------|------------|
 | Active `debug` incident; root cause unknown | `debug` |
 | `feature` phase incomplete | `feature` |
-| Gates 1–2 still fail **on the current job** | `grill-me` (gate 1 / optional warm start) or `plan` § Refine (gate 2). IF already inside `plan` corridor THEN product/scope forks → `plan-grill` rail (not a new standalone `grill-me`). |
+| Gates 1–2 still fail **on the current job** | `grill-me` (gate 1 / optional warm start) or `plan` § Refine (gate 2). IF already inside `plan` corridor THEN product/scope forks → `plan-grill` rail (not a new standalone `grill-me`). IF user forbids questions THEN `plan-grill-auto` (not `grill-me`). |
 | Plan exists; **Plan review** pending (M/L) | `review-dev-plan` |
 | Plan exists; **Pattern & precedent** missing when required | `pattern-review` (`plan-section`) or resume `plan` |
 | Plan exists; pending phase(s) | `implement` |
@@ -62,7 +62,7 @@ Pick **one** primary by the **most blocking** row that applies (top wins). Then 
 | No plan file; quick plan in chat; implement/validate incomplete | `quick-piv` |
 | All planned phases done; full audit not yet run | `validate` |
 | Validated; user/thread signaled landing | `finish` (only when wrap-up is the clear next step — not the default for bare `/router` on new work) |
-| Pushed; CI status unknown | Read `src/config/git-workflow.json`. **Model A:** PR to `develop` open → `babysit`. **Model B:** push to `develop` → watch branch `test` run (`gh run watch`) |
+| Pushed; CI status unknown | Read `src/config/git-workflow.json`. **Model A:** PR to `develop` open → `babysit`. **Model B:** push to `develop`/`main` → report the commit URL and stop. Do not `gh run watch`. CI is GitHub Actions after the push |
 
 Align with [dev-cycle matrix](references/dev-cycle-matrix.md). IF active job AND repo/branch context unknown THEN run **`prime`** once, then continue with the chosen skill — do not replace thread continuation with backlog intake.
 
@@ -120,8 +120,8 @@ Pick by **what is missing**:
 
 | Missing | Prefer |
 |---------|--------|
-| Vision, priorities, tradeoffs, UX intent **before** planning | `.agents/skills/grill-me/SKILL.md` (optional warm start → `DECISIONS.md`); ask app-usage questions until ambiguity is removed |
-| Product/scope/architecture-boundary fork **during** Refine / Investigate / Create | `.agents/skills/plan-grill/SKILL.md` via `plan` — mandatory fork checklist; anti-dup via `DECISIONS.md` |
+| Vision, priorities, tradeoffs, UX intent **before** planning | `.agents/skills/grill-me/SKILL.md` (optional warm start → `DECISIONS.md`); ask app-usage questions until ambiguity is removed. IF user forbids questions → `.agents/skills/plan-grill-auto/SKILL.md` instead (no `grill-me`) |
+| Product/scope/architecture-boundary fork **during** Refine / Investigate / Create | `.agents/skills/plan-grill/SKILL.md` via `plan` — mandatory fork checklist; anti-dup via `DECISIONS.md`. IF user forbids questions → `.agents/skills/plan-grill-auto/SKILL.md` |
 | Concrete behavior, APIs, data, acceptance examples (gate 2) | Follow **Refine** in `.agents/skills/plan/SKILL.md` (gate-2 tables — stop before **Investigate** until gates pass); frame around intended app usage when product meaning is unclear |
 | You lack repo grounding while clarifying | `.agents/skills/prime/SKILL.md` **before or mixed with** clarification |
 
@@ -135,12 +135,12 @@ Canonical shape (do not draw `plan-grill` as a Create-only side quest):
 
 1. **Optional warm start:** IF idea is fuzzy / gate 1 fails on vision-tradeoffs THEN `grill-me` → log Closed rows to `DECISIONS.md`. Skip when the user already has a sharp perimeter.
 2. **Plan corridor:** `plan` runs Refine → Investigate → Create.
-3. **`plan-grill` rail:** beside **every** corridor phase — before locking a product/scope/architecture-boundary choice, run the fork checklist (enumerate ≥2 options or justify sole option; ask on ties; log clear-winners; never invent-one-and-stamp-winner). Loop: **ask → write `DECISIONS.md` → continue the same phase**.
-4. **Artifacts:** `DECISIONS.md` = product/scope locks; `DEVELOPMENT_PLAN.md` = how to build. Impl-time picks go in plan § Decisions made during `implement`.
+3. **`plan-grill` rail:** beside **every** corridor phase — before locking a product/scope/architecture-boundary choice, run the fork checklist (enumerate ≥2 options or justify sole option; ask on ties; log clear-winners; never invent-one-and-stamp-winner). Loop: **ask → write `DECISIONS.md` → continue the same phase**. IF user forbids questions → **`plan-grill-auto`** (same checklist; agent-pick; no Present wait; then implement).
+4. **Artifacts:** `DECISIONS.md` = product/scope locks (`plan-grill` / `plan-grill-auto` / `feature`); `DEVELOPMENT_PLAN.md` = how to build. Impl-time picks go in plan § Decisions made during `implement`.
 5. **M/L:** before Present, ledger must cover every product/scope lock (or explicit `no product forks — <reason>`).
 6. **XS / `quick-piv`:** no `plan-grill`.
 
-Skill SSOT for checklist/cues: `.agents/skills/plan-grill/SKILL.md`.
+Skill SSOT for checklist/cues: `.agents/skills/plan-grill/SKILL.md`. Auto-answer variant: `.agents/skills/plan-grill-auto/SKILL.md`.
 
 ### Matrix (compact)
 
@@ -170,14 +170,14 @@ flowchart TD
   L --> K[Re-check gates 1 to 2]
   E --> K
   K --> B
-  I --> R[plan-grill rail each phase]
+  I --> R[plan-grill or plan-grill-auto rail]
   R --> L
   J --> L
 ```
 
 Optional: run **`prime`** once when the codebase or branch context is unfamiliar — it does not replace gates 1–2.
 
-While inside **plan corridor** (`I`), product/scope forks use **`plan-grill` rail** (checklist → ask/log → same phase) — not a separate pre-plan `grill-me` unless the user leaves plan to re-open gate 1.
+While inside **plan corridor** (`I`), product/scope forks use **`plan-grill` rail** (checklist → ask/log → same phase) — or **`plan-grill-auto`** when the user forbids questions (checklist → agent-pick → same phase → no Present wait). Not a separate pre-plan `grill-me` unless the user leaves plan to re-open gate 1 and is willing to answer.
 
 **Dev-cycle (SSOT):** [`.agents/skills/router/references/dev-cycle-matrix.md`](references/dev-cycle-matrix.md) — full happy path, M/L gates, and plan depth. Do not duplicate that matrix here.
 
@@ -202,7 +202,7 @@ While inside **plan corridor** (`I`), product/scope forks use **`plan-grill` rai
 | Author or refine one project skill under `.agents/skills/` (`/create-skill`) | `.agents/skills/create-skill/SKILL.md` |
 | Change existing behavior / unverified system assumption / workaround / “just this one” exception during implementation | `.agents/skills/layer-consistency-check/SKILL.md` (also always-on via `architecture/RULE.mdc` § Layer consistency) |
 | Write a cross-repo adoption guide from an implemented pattern | `.agents/skills/write-adoption-guide/SKILL.md` |
-| Goal or scope **not** ready — clarify only (no `DEVELOPMENT_PLAN.md` yet); **one** primary by missing dimension (see **Clarification-first routing**) | Product/vision → `grill-me`; acceptance/APIs → `plan` **§ Refine** only |
+| Goal or scope **not** ready — clarify only (no `DEVELOPMENT_PLAN.md` yet); **one** primary by missing dimension (see **Clarification-first routing**) | Product/vision → `grill-me`; user forbids questions → `plan-grill-auto`; acceptance/APIs → `plan` **§ Refine** only |
 | Execute an existing `DEVELOPMENT_PLAN.md` phase by phase | `.agents/skills/implement/SKILL.md` |
 | Small scoped change; plan+implement+validate in one pass | `.agents/skills/quick-piv/SKILL.md` |
 | Review plan or implementation **without** editing by default; pre-merge / post-refactor gate (auto-selects plan-review / impl-full / gate depth) | `.agents/skills/validate/SKILL.md` |
@@ -225,6 +225,7 @@ While inside **plan corridor** (`I`), product/scope forks use **`plan-grill` rai
 | Ultra-compressed communication (`/caveman`, "be brief", "less tokens") | `.agents/skills/caveman/SKILL.md` (overlay — not a workflow step) |
 | Stress-test product/design when gates 1–2 already pass (not gate-1 ambiguity); optional warm start before plan | `.agents/skills/grill-me/SKILL.md` |
 | Product/scope fork during plan corridor (Refine/Investigate/Create); `/plan-grill`; **rail invoked by `plan`** — mandatory checklist | `.agents/skills/plan-grill/SKILL.md` |
+| Same rail, user forbids questions (`/plan-grill-auto`, "answer yourself", "don't ask me", "I won't check, only test") | `.agents/skills/plan-grill-auto/SKILL.md` — agent picks; writes `DECISIONS.md`; no Present wait |
 | Simplify **one** concrete feature (flows + code), reduce steps/complexity | `.agents/skills/challenge/SKILL.md` |
 | Find duplication in a **named target** (folder, feature, layer, glob) or whole `src/` if asked; consolidation candidates; semantic placement (after tooling is green) | `.agents/skills/consolidate/SKILL.md` |
 | Optimize hotspots: design → approach → efficiency → complexity | `.agents/skills/optimize2/SKILL.md` |
@@ -283,6 +284,7 @@ Choose by **primary outcome** (what must be true when done). If two outcomes are
 
 - **`plan`:** Engineering execution plan (`DEVELOPMENT_PLAN.md`, phases, gates, repo compliance). Use when gates 1–2 are **Clear / Bounded** and the gap is **structured implementation**, not discovery of what to build.
 - **`feature`:** Deep product/requirements process with **mandatory user decision stops** and journey mapping. Use when gate 3 calls for **high decision density** (roles, journeys, approvals) even though gates 1–2 may be partly filled as you go — still clarify unknowns early within that skill, especially app-usage ambiguity and intentional standards diversions.
+- **Auto vs `feature`:** IF `plan-grill-auto` triggers are active and the user did **not** invoke `/feature`, route to the `plan` corridor with the auto rail — not `feature`. `/feature` or “ask me” turns auto off and `feature` 🔴 stops apply.
 
 ### `plan` vs `quick-piv`
 
@@ -345,13 +347,14 @@ Choose by **primary outcome** (what must be true when done). If two outcomes are
 - **`rule-quality`:** Grade or improve **rules/commands** (rubric + quality standards).
 - **`review`:** Score **React/MUI components** with component rubric.
 
-### `grill-me` vs `plan-grill` vs `plan` § Refine
+### `grill-me` vs `plan-grill` vs `plan-grill-auto` vs `plan` § Refine
 
 - **`grill-me`:** **Optional warm start** before the plan corridor — product/design Q&A when gate 1 fails on vision/tradeoffs, or explicit stress-test / “grill me.” Logs Closed rows to `DECISIONS.md`. Prefer closing more here so the corridor asks less. Includes optional **Zoom out first** (formerly `stepback`).
 - **`plan-grill`:** **Rail beside every plan corridor phase** (Refine / Investigate / Create). Same ask style as `grill-me`; **mandatory fork checklist** before locking (enumerate ≥2 options or justify sole; ask on ties; log clear-winners; anti-dup). Loop: ask → `DECISIONS.md` → **same phase**. Not a Create-only side quest. Not for XS/`quick-piv`. Not for industry precedent (`pattern-review`).
-- **`plan` § Refine:** Split — product/scope/architecture-boundary → **`plan-grill` rail**; gate-2 acceptance/API examples → stay in Refine. Full corridor after gates 1–2 (or when user already started `/plan`).
+- **`plan-grill-auto`:** Same rail and checklist as `plan-grill`, but the **agent answers every fork**. No questions, no Present wait, then `implement` so the user can test. Ledger `source: plan-grill-auto`.
+- **`plan` § Refine:** Split — product/scope/architecture-boundary → **`plan-grill` rail** (or **`plan-grill-auto`** when the user forbids questions); gate-2 acceptance/API examples → stay in Refine. Full corridor after gates 1–2 (or when user already started `/plan`).
 
-**Tiebreak:** Fuzzy idea + not yet planning → `grill-me`. Already in `plan` / user said `/plan` → `plan-grill` for product forks. Gate-2 examples only → Refine without `plan-grill`.
+**Tiebreak:** Fuzzy idea + not yet planning + user will answer → `grill-me`. Already in `plan` / user said `/plan` → `plan-grill` for product forks. User forbids questions (`/plan-grill-auto`, “answer yourself”, “I won’t check”) during a **plan corridor** → `plan-grill-auto` (wins over `grill-me`, `plan-grill`, and `feature` unless they invoked `/feature`). Bug reports → `debug` (auto does not mute intake). Protected-file, `finish`, and `push` confirms still ask. Gate-2 examples only → Refine without `plan-grill`.
 
 ### `prime` vs `start`
 
@@ -363,7 +366,7 @@ Choose by **primary outcome** (what must be true when done). If two outcomes are
 - **`finish`:** Commit-ready locally (version, changelog, staging rules); emits **Ready for you to test** handoff (§ User test).
 - **`bundle-ship`:** Multi-thread same-checkout landing — one bundled `finish` commit, then `push` in one invocation.
 - **`push`:** Remote sync only **after** commits exist; never commit inside push.
-- **`babysit` / post-push CI:** Read `src/config/git-workflow.json`. **Model A:** after successful **`push`** that created or updated a PR to **`develop`**, read and run **`babysit`** (`~/.cursor/skills-cursor/babysit/SKILL.md`) unless waived in **Decisions made**. **Model B:** after successful push to **`develop`**, watch the branch `test` workflow run (`gh run watch`); do **not** require a PR or treat PR babysit as the sole path. On in-scope CI failure → fix and re-push; on out-of-scope failure → `ci-investigator` or report to user.
+- **`babysit` / post-push CI:** Read `src/config/git-workflow.json`. **Model A:** after successful **`push`** that created or updated a PR to **`develop`**, read and run **`babysit`** (`~/.cursor/skills-cursor/babysit/SKILL.md`) unless waived in **Decisions made**. **Model B:** after successful push to **`develop`** or **`main`**, report the commit URL and stop. Do **not** `gh run watch` or block the checkout on Actions. Do **not** require a PR. If the user later brings a failed check → `ci-investigator` or fix in scope and re-push.
 
 ### `canvas` vs `validate` / reporting
 
@@ -492,7 +495,7 @@ Do **not** run standalone **`pattern-review`** `scan` in the same session if **`
 ### `prime` vs clarification skills
 
 - **`prime`:** Optional **once** for technical repo context — not a substitute for gates 1–2.
-- **Order when both needed:** `prime` (if unfamiliar) → **`grill-me`** (optional warm start) **and/or** `plan` § Refine (gate 2) → re-run gates → **`plan` corridor** with **`plan-grill` rail** (or `feature` / `quick-piv` per gate 3).
+- **Order when both needed:** `prime` (if unfamiliar) → **`grill-me`** (optional warm start) **and/or** `plan` § Refine (gate 2) → re-run gates → **`plan` corridor** with **`plan-grill` rail** (or **`plan-grill-auto`** if the user forbids questions; or `feature` / `quick-piv` per gate 3).
 
 ### `review` vs `optimize2`
 
@@ -572,6 +575,7 @@ Do **not** run standalone **`pattern-review`** `scan` in the same session if **`
 - `.agents/skills/api-integrate/SKILL.md`
 - `.agents/skills/grill-me/SKILL.md`
 - `.agents/skills/plan-grill/SKILL.md`
+- `.agents/skills/plan-grill-auto/SKILL.md`
 - `.agents/skills/pattern-review/SKILL.md`
 - `.agents/skills/dont-reinvent-the-wheel/SKILL.md`
 - `.agents/skills/modularity-review/SKILL.md`
@@ -586,7 +590,7 @@ Do **not** run standalone **`pattern-review`** `scan` in the same session if **`
 ### Router references (not skills)
 
 - `.agents/skills/router/references/dev-cycle-matrix.md` — dev-cycle happy path and M/L gates (SSOT)
-- `.agents/skills/router/references/skill-relationship-flow.md` — grill / plan corridor / plan-grill rail diagram (SSOT; `align-harness` maintains)
+- `.agents/skills/router/references/skill-relationship-flow.md` — grill / plan corridor / plan-grill rail diagram (SSOT; `align-harness` maintains; includes `plan-grill-auto`)
 
 ### User Cursor bundle (`~/.cursor/skills-cursor/`)
 

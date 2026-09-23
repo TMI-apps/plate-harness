@@ -4,10 +4,10 @@
 `router` and `align-harness` **link here** — do not duplicate a second mermaid elsewhere.
 
 **Owner:** `.agents/skills/router/references/skill-relationship-flow.md`  
-**Maintainers:** update when skills are added/removed/renamed, or when handoffs between `grill-me` / `plan-grill` / `plan` / `feature` / `pattern-review` / `dont-reinvent-the-wheel` / `quick-piv` change.  
-**Checked on every** `/align-harness` run (Phase 0 need-check → Phase 7 update if stale).
+**Maintainers:** update when skills are added/removed/renamed, or when handoffs between `grill-me` / `plan-grill` / `plan-grill-auto` / `plan` / `feature` / `pattern-review` / `dont-reinvent-the-wheel` / `quick-piv` change.  
+**Checked on every** `/align-harness` run (Phase 0 need-check → later phase update if stale).
 
-Optional IDE canvas (not repo SSOT): Cursor `canvases/plan-grill-flow.canvas.tsx` may mirror this; prefer editing **this file** first.
+This file is the diagram SSOT. An IDE canvas is optional and is not part of this repo.
 
 ---
 
@@ -19,6 +19,7 @@ flowchart TD
   xs -->|yes| qp[quick-piv]
   xs -->|no| warm{Idea fuzzy / gate 1?}
   warm -->|yes optional| grill[grill-me warm start]
+  warm -->|yes + auto| corridor
   warm -->|no / sharp| corridor
   grill --> ledger[DECISIONS.md]
   ledger --> corridor
@@ -35,9 +36,11 @@ flowchart TD
     direction TB
     check[Fork checklist each phase]
     check --> ask{Tie after enum?}
-    ask -->|yes| q[One grill question]
+    ask -->|yes + default| q[One grill question]
+    ask -->|yes + auto| pick[plan-grill-auto agent pick]
     ask -->|clear winner| log[Log clear-winner]
     q --> write[Write DECISIONS.md]
+    pick --> write
     log --> write
     write --> same[Continue same phase]
   end
@@ -50,7 +53,12 @@ flowchart TD
   same -.-> create
 
   create --> planfile[DEVELOPMENT_PLAN.md]
-  planfile --> impl[implement]
+  planfile --> rdp[review-dev-plan when M/L]
+  rdp --> who{Who accepts?}
+  who -->|default| userOk[User accepts]
+  who -->|auto| agentOk[agent-accept + Plan review Done]
+  userOk --> impl[implement]
+  agentOk --> impl
   impl --> ship[validate → finish]
 
   corridor -->|reuse vs custom| wheel[dont-reinvent-the-wheel]
@@ -66,14 +74,17 @@ flowchart TD
 |-------|---------|
 | **grill-me** | Optional feeder into the ledger **before** the corridor |
 | **plan-grill rail** | Beside **every** corridor phase — not a Create-only child |
-| **Loop** | ask → write `DECISIONS.md` → **continue the same phase** |
-| **DECISIONS.md** | Product/scope locks |
+| **plan-grill-auto** | Same checklist; agent picks on ties; skips Present; on M/L writes `agent-accept` and Plan review `Done`, then implement |
+| **Loop** | ask *or* agent-pick → write `DECISIONS.md` → **continue the same phase** |
+| **DECISIONS.md** | Product/scope locks (`plan-grill` / `plan-grill-auto` / `feature`) |
 | **DEVELOPMENT_PLAN.md** | How to build |
-| **pattern-review** | Industry precedent side door |
+| **review-dev-plan** | After the plan file when Complexity is M/L, before `implement` |
+| **pattern-review** | Industry precedent side door. Auto mode picks internally; default mode stops for the owner |
 | **dont-reinvent-the-wheel** | Package/pattern reuse side door (Investigate; before custom generic code) |
-| **quick-piv** | No plan-grill |
+| **quick-piv** | No grill rail. If auto is already on, still no questions |
+| **feature** | 🔴 stops. Auto does not enter `feature` unless the user invoked `/feature` |
 
-Checklist/cues SSOT: [`.agents/skills/plan-grill/SKILL.md`](../../plan-grill/SKILL.md).  
+Checklist/cues SSOT: [`.agents/skills/plan-grill/SKILL.md`](../../plan-grill/SKILL.md). Auto-answer variant: [`.agents/skills/plan-grill-auto/SKILL.md`](../../plan-grill-auto/SKILL.md).  
 Prose routing: [router § Plan corridor flow](../SKILL.md).
 
 ---
@@ -83,8 +94,8 @@ Prose routing: [router § Plan corridor flow](../SKILL.md).
 Mark this file **needs update** when any of:
 
 1. Skill added/removed/renamed that appears in the diagram or in router situation → skill for clarify/plan.
-2. Handoff change among `grill-me`, `plan-grill`, `plan`, `feature`, `pattern-review`, `quick-piv`, `implement`.
-3. `DECISIONS.md` / corridor / rail semantics change in `plan-grill` or router § Plan corridor flow.
+2. Handoff change among `grill-me`, `plan-grill`, `plan-grill-auto`, `plan`, `feature`, `pattern-review`, `dont-reinvent-the-wheel`, `quick-piv`, `implement`, `review-dev-plan`.
+3. `DECISIONS.md` / corridor / rail semantics change in `plan-grill`, `plan-grill-auto`, or router § Plan corridor flow.
 4. Composition lens finds a handoff edge in the live skill DAG that this mermaid omits or contradicts.
 
 If none apply: record `skill-relationship-flow: current` in the reconcile summary and leave the file unchanged.

@@ -3,22 +3,23 @@ name: plan
 description: >-
   Creates DEVELOPMENT_PLAN.md with repo-rule compliance researched first (file placement,
   architecture, patterns). Runs plan-grill as a rail beside Refine/Investigate/Create
-  (mandatory fork checklist; anti-dup via DECISIONS.md). Use for new features, M/L work,
-  or /plan. Not XS/S quick changes (quick-piv), product-only requirements (feature), or
-  changelog updates (finish).
+  (mandatory fork checklist; anti-dup via DECISIONS.md). When the user forbids questions,
+  the rail is plan-grill-auto (same checklist, agent picks, no Present wait). Use for
+  new features, M/L work, or /plan. Not XS/S quick changes (quick-piv), product-only
+  requirements (feature), or changelog updates (finish).
 ---
 
 # plan
 
 Create a development plan for a feature or job. Research how best to implement it, check repo rules, and produce `DEVELOPMENT_PLAN.md` in `documentation/jobs/temp_job_<name>/`.
 
-**Critical:** Conflict and compliance is researched first; steps in each phase must reflect that (file placements, architecture, patterns). The plan documents *how* to implement according to repo rules. **`plan-grill` is a rail beside every corridor phase** (Refine / Investigate / Create) — run its **mandatory fork checklist** before locking product/scope/architecture-boundary choices. Do not invent one approach and call it done.
+**Critical:** Conflict and compliance is researched first; steps in each phase must reflect that (file placements, architecture, patterns). The plan documents *how* to implement according to repo rules. **`plan-grill` is a rail beside every corridor phase** (Refine / Investigate / Create) — run its **mandatory fork checklist** before locking product/scope/architecture-boundary choices. Do not invent one approach and call it done. IF `plan-grill-auto` is active this job (user forbids questions) THEN use [`.agents/skills/plan-grill-auto/SKILL.md`](../plan-grill-auto/SKILL.md) for the rail — same checklist, agent picks, no asks, no Present wait.
 
 **Do NOT update the changelog.** Changelog updates are done in the finish command, not during planning.
 
 **Templates:** [`references/implementation-plan-template.md`](references/implementation-plan-template.md), [`references/complexity-rubric.md`](references/complexity-rubric.md).
 
-**Related:** For session context, use `.agents/skills/prime/SKILL.md`. For product forks during this skill, `.agents/skills/plan-grill/SKILL.md`. For architecture/quality gate before merging, use `.agents/skills/validate/SKILL.md` (auto-selects gate depth). For small scoped work without a full plan file, use `.agents/skills/quick-piv/SKILL.md`. To execute this plan phase by phase, use `.agents/skills/implement/SKILL.md`. For repo-rule plan/impl review, use `.agents/skills/validate/SKILL.md`. For multi-lens plan critique (including industry precedent), use `.agents/skills/review-dev-plan/SKILL.md`. For industry precedent on plans/proposals, use `.agents/skills/pattern-review/SKILL.md`. For package/pattern reuse vs custom code, use `.agents/skills/dont-reinvent-the-wheel/SKILL.md`. For commits and changelog, use `.agents/skills/finish/SKILL.md`.
+**Related:** For session context, use `.agents/skills/prime/SKILL.md`. For product forks during this skill, `.agents/skills/plan-grill/SKILL.md` (or `.agents/skills/plan-grill-auto/SKILL.md` when the user forbids questions). For architecture/quality gate before merging, use `.agents/skills/validate/SKILL.md` (auto-selects gate depth). For small scoped work without a full plan file, use `.agents/skills/quick-piv/SKILL.md`. To execute this plan phase by phase, use `.agents/skills/implement/SKILL.md`. For repo-rule plan/impl review, use `.agents/skills/validate/SKILL.md`. For multi-lens plan critique (including industry precedent), use `.agents/skills/review-dev-plan/SKILL.md`. For industry precedent on plans/proposals, use `.agents/skills/pattern-review/SKILL.md`. For package/pattern reuse vs custom code, use `.agents/skills/dont-reinvent-the-wheel/SKILL.md`. For commits and changelog, use `.agents/skills/finish/SKILL.md`.
 
 ---
 
@@ -42,11 +43,11 @@ Create a development plan for a feature or job. Research how best to implement i
 
 | Kind of ambiguity | Owner |
 |-------------------|--------|
-| **Product / scope / edge / architecture-boundary** | [`.agents/skills/plan-grill/SKILL.md`](../plan-grill/SKILL.md) **rail** — mandatory fork checklist; anti-dup via `DECISIONS.md`. Skip for XS/`quick-piv`. |
+| **Product / scope / edge / architecture-boundary** | [`.agents/skills/plan-grill/SKILL.md`](../plan-grill/SKILL.md) **rail** — mandatory fork checklist; anti-dup via `DECISIONS.md`. Skip for XS/`quick-piv`. IF auto-grill active → [`.agents/skills/plan-grill-auto/SKILL.md`](../plan-grill-auto/SKILL.md) (no asks). |
 | **Gate 2 — engineering acceptance** (concrete examples, API shapes, schemas, RLS needs, interactive states) | Stay in § Refine (table below). Do **not** use `plan-grill` for these alone. |
 
-- If product ambiguity remains and `DOC_APP_VISION.md` answers **who** / **why**: read it first; if still **`DRAFT`**, pause for fill or deferral before locking scope.
-- **Before leaving Refine:** run plan-grill fork checklist on every open scope/non-goal/success/**generality** topic; loop is ask → write `DECISIONS.md` → **continue Refine** until clear. Then finish gate-2 questions.
+- If product ambiguity remains and `DOC_APP_VISION.md` answers **who** / **why**: read it first; if still **`DRAFT`**, pause for fill or deferral before locking scope. IF `plan-grill-auto` active: do not pause — log `vision-deferred` and continue.
+- **Before leaving Refine:** run plan-grill fork checklist on every open scope/non-goal/success/**generality** topic; loop is ask → write `DECISIONS.md` → **continue Refine** until clear. Then finish gate-2 questions. IF `plan-grill-auto` active: loop is agent-pick → ledger → continue Refine (fill gate-2 examples yourself; do not ask).
 - Only proceed to investigation once product scope is clear **and** gate-2 acceptance is concrete enough to investigate.
 
 #### Optional: Requirements depth (complex or unfamiliar features)
@@ -69,10 +70,10 @@ For features involving external APIs, database changes, auth, or novel logic, ga
 - [ ] **Reuse vs custom:** If the remaining work is a generic subsystem (auth, webhooks, parsers, queues, protocol clients, complex widgets, …) and current deps do not obviously cover it, run [`.agents/skills/dont-reinvent-the-wheel/SKILL.md`](../dont-reinvent-the-wheel/SKILL.md) **before** locking a from-scratch approach. Record the compact rec in Conflict & compliance. Skip when the work is bespoke/business-specific.
 - [ ] **Replaceability:** If this work adds a `src/features/` module or a new UI/data vendor, schedule [`.agents/skills/modularity-review/SKILL.md`](../modularity-review/SKILL.md) after implement (or run now if the folder already exists). After a package is added, ask whether a `stack-port-*` cruiser rule is needed.
 - [ ] Identify relevant rules from `.cursor/rules/` (start at `.cursor/rules/INDEX.md`).
-- [ ] Align narrative with **`documentation/DOC_APP_VISION.md`** when the plan changes user-facing behavior (problem, persona, app role); if **`DRAFT`**, pause for fill or explicit deferral.
+- [ ] Align narrative with **`documentation/DOC_APP_VISION.md`** when the plan changes user-facing behavior (problem, persona, app role); if **`DRAFT`**, pause for fill or explicit deferral. IF `plan-grill-auto` active: log `vision-deferred` and continue.
 - [ ] For server-cached data, check `documentation/DOC_TANSTACK_QUERY.md` and existing `api/keys.ts` patterns in features.
 - [ ] Determine scope and boundaries (in-scope vs out-of-scope).
-- [ ] **plan-grill rail:** Before locking ride-vs-new, neighbor absorption, greenfield, architecture-boundary, or **generality** (instance vs feature vs rewirable — SSOT `plan-grill` § Generality) — run [`.agents/skills/plan-grill/SKILL.md`](../plan-grill/SKILL.md) **mandatory fork checklist** (enumerate ≥2 options or justify sole option; ask on ties; log clear-winners; anti-dup). Loop: ask → `DECISIONS.md` → **continue Investigate**. Industry/precedent → `pattern-review`. Package/pattern reuse vs custom → `dont-reinvent-the-wheel` (already run above when Step 1 applies).
+- [ ] **plan-grill rail:** Before locking ride-vs-new, neighbor absorption, greenfield, architecture-boundary, or **generality** (instance vs feature vs rewirable — SSOT `plan-grill` § Generality) — run [`.agents/skills/plan-grill/SKILL.md`](../plan-grill/SKILL.md) **mandatory fork checklist** (enumerate ≥2 options or justify sole option; ask on ties; log clear-winners; anti-dup). Loop: ask → `DECISIONS.md` → **continue Investigate**. IF `plan-grill-auto` active: agent-pick, no ask. Industry/precedent → `pattern-review`. Package/pattern reuse vs custom → `dont-reinvent-the-wheel` (already run above when Step 1 applies).
 - [ ] **Feature decomposition self-check (mandatory):** Enumerate distinct domain concepts this work introduces. If more than one cohesive bounded context applies, or projected file count exceeds `featureBudgets.config.cjs` defaults, plan multiple features under `src/features/` before writing steps. Do not wait for the user to request architecture. See `.cursor/rules/architecture/RULE.mdc` § Feature granularity.
 
 #### Optional: Foundation validation (high-risk features)
@@ -88,19 +89,19 @@ Do **not** invest in full planning until the foundation is proven.
 ### 4. Create plan
 
 - [ ] Run conflict and compliance analysis first (see below).
-- [ ] **plan-grill rail:** Before writing opinionated product/scope picks into phases/steps — run fork checklist for any topic not in `DECISIONS.md`. Loop: ask → ledger → **continue Create**.
+- [ ] **plan-grill rail:** Before writing opinionated product/scope picks into phases/steps — run fork checklist for any topic not in `DECISIONS.md`. Loop: ask → ledger → **continue Create**. IF `plan-grill-auto` active: agent-pick, no ask.
 - [ ] **M/L ledger gate:** If Complexity will be **M** or **L**, ensure `DECISIONS.md` lists every product/scope lock (or a single `no product forks — <reason>` row) before Present.
 - [ ] Define phases in logical order (workable chunks).
 - [ ] Write steps per phase aligned with compliance (concrete paths, layers, patterns).
 - [ ] Add a gate for each phase.
-- [ ] Write `DEVELOPMENT_PLAN.md` to `documentation/jobs/temp_job_<name>/` using [`references/implementation-plan-template.md`](references/implementation-plan-template.md). If `DECISIONS.md` already exists in that folder (from `grill-me` / `plan-grill`), keep it; do not overwrite.
+- [ ] Write `DEVELOPMENT_PLAN.md` to `documentation/jobs/temp_job_<name>/` using [`references/implementation-plan-template.md`](references/implementation-plan-template.md). If `DECISIONS.md` already exists in that folder (from `grill-me` / `plan-grill` / `plan-grill-auto`), keep it; do not overwrite.
 - [ ] Set **Complexity** (`XS` | `S` | `M` | `L`) in Summary per [`references/complexity-rubric.md`](references/complexity-rubric.md).
 
 ### 5. Pattern & precedent
 
 **Proactively** run [`.agents/skills/pattern-review/SKILL.md`](../pattern-review/SKILL.md) (`plan-section` mode) when Complexity is **M** or **L**, or the plan introduces new user-visible behavior/contracts (see [rubric](../pattern-review/references/rubric.md) — agent chooses relevant aspects).
 
-Fill **Pattern & precedent** in the plan. If non-standard, **stop** for owner pick (A/B/C or waiver) before implementation.
+Fill **Pattern & precedent** in the plan. If non-standard, **stop** for owner pick (A/B/C or waiver) before implementation. IF `plan-grill-auto` active: agent picks, logs `source: plan-grill-auto`, continues.
 
 Industry / product precedent → **pattern-review**. Package/pattern reuse → **dont-reinvent-the-wheel** (Investigate, before this step). Repo rules → **Conflict & compliance** and later **validate**.
 
@@ -112,6 +113,7 @@ Set **Plan review** in Summary per [dev-cycle matrix](../router/references/dev-c
 
 - Present the plan to the user.
 - Incorporate feedback and update the plan as needed.
+- IF `plan-grill-auto` is active: **do not wait**. Print the footer, then `review-dev-plan` (when required) → `implement`. User tests the result, not the plan.
 
 **Chat footer (short):**
 
@@ -144,7 +146,7 @@ Next: <review-dev-plan | implement | blocked> — <one-line gate>
 | **Conflict & compliance** | Avoid technical debt, meet repo rules | See checklist below |
 | **Pattern & precedent** | Industry / product patterns vs this design | See template; required for M/L; agent-chosen aspects |
 | **Notes during development** | For implementation | Leave empty in the plan; fill during implementation |
-| **Decisions made** | Impl-time choices only | Leave empty in the plan; fill during **`implement`**. Product/scope forks live in sibling **`DECISIONS.md`** (`grill-me` / `plan-grill` / `feature`) — do not duplicate them here. |
+| **Decisions made** | Impl-time choices only | Leave empty in the plan; fill during **`implement`**. Product/scope forks live in sibling **`DECISIONS.md`** (`grill-me` / `plan-grill` / `plan-grill-auto` / `feature`) — do not duplicate them here. |
 
 ### Per phase (repeat for each phase)
 
@@ -271,7 +273,7 @@ Each phase must have a gate.
 5. **Gates are mandatory:** Every phase has a gate.
 6. **Compliance first:** Conflict & compliance before detailed steps; steps must be rules-compliant.
 7. **Empty sections:** Notes during development and Decisions made start empty (impl-time). Product decisions → `DECISIONS.md`, not the plan’s Decisions made table.
-8. **Product forks:** `plan-grill` at Refine / Investigate / Create — never silent product locks.
+8. **Product forks:** `plan-grill` at Refine / Investigate / Create — never silent product locks. `plan-grill-auto` still enumerates; it only skips the ask. Principles 1–3 are then satisfied by agent-pick + ledger, not by a question to the user.
 
 ---
 
@@ -288,5 +290,5 @@ Each phase must have a gate.
 | Repo-rule audit of plan/impl | `validate` |
 | Changelog / commit | `finish` |
 | Product vision Q&A (gate 1) | `grill-me` — use **§ Refine** only for gate 2 |
-| Product forks *during* plan design | `plan-grill` **rail** (mandatory checklist each of Refine / Investigate / Create) |
+| Product forks *during* plan design | `plan-grill` **rail** (mandatory checklist each of Refine / Investigate / Create). `plan-grill-auto` when the user forbids questions. |
 | Industry precedent A/B/C | `pattern-review` (not `plan-grill`) |

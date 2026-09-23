@@ -72,6 +72,8 @@ If unclear, **ask** which branch applies.
 
 **Process:**
 
+**IF `plan-grill-auto` is active:** skip user questions in steps 1 and 4 and the DRAFT-vision pause in the Goal line. Fill from repo + `DOC_APP_VISION.md`. If vision is `DRAFT`, log `vision-deferred` in chat and continue. Precedent diversions: pick one, one line in chat, continue. Still print the quick plan in chat before code.
+
 1. If the request is vague, or ambiguity appears during quick investigation, stop and ask 1–2 clarifying questions about the user's vision for how the app will be used. Do not choose between plausible interpretations silently.
 2. Quick investigation: search codebase; skim `.cursor/rules/INDEX.md` for applicable rules; use `documentation/DOC_TANSTACK_QUERY.md` if server state / queries are involved. If the change is a generic subsystem not obviously covered by current deps, run `.agents/skills/dont-reinvent-the-wheel/SKILL.md` (skip when bespoke / tiny).
 3. Sanity-check file placement against `.cursor/rules/file-placement/RULE.mdc` and `projectStructure.config.cjs`.

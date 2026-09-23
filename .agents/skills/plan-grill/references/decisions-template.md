@@ -14,7 +14,7 @@ Updated: <ISO date>
 
 | id | topic | status | choice | source | notes |
 |----|-------|--------|--------|--------|-------|
-| D1 | <short topic> | closed | <picked option / clear-winner label> | grill-me \| plan-grill | <one line> |
+| D1 | <short topic> | closed | <picked option / clear-winner label> | grill-me \| plan-grill \| plan-grill-auto | <one line> |
 
 ## Open
 
@@ -24,14 +24,14 @@ Updated: <ISO date>
 
 ## Log
 
-- <ISO datetime> — D1 closed via <grill-me|plan-grill> (<asked|clear-winner>)
+- <ISO datetime> — D1 closed via <grill-me|plan-grill|plan-grill-auto> (<asked|clear-winner|agent-pick>)
 ```
 
 ### Field rules
 
 - **id** — stable `D1`, `D2`, … never reuse.
 - **status** — `open` | `closed`.
-- **source** — which skill wrote the row (`grill-me` | `plan-grill` | `feature`).
+- **source** — which skill wrote the row (`grill-me` | `plan-grill` | `plan-grill-auto` | `feature`). `plan-grill-auto` rows are Closed (`agent-pick` or `clear-winner`); no Open row waiting on the user.
 - **Anti-dup** — before asking, scan **Closed** + **Open**; skip any topic already decided or currently open awaiting answer.
 - **Clear winner** — append to **Closed** with note `clear-winner`; do not ask.
 - **Tie** — add **Open** row, ask once (grill question style), then move to **Closed**.

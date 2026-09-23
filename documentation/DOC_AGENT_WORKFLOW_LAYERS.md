@@ -202,7 +202,7 @@ When the human only files feature requests or bug reports and tests in the app:
 | Human | Describe goal or bug; test in app; confirm pass/fail |
 | Agent | Full delivery chain — no git/CI coordination required from human |
 
-**Default agent chain:** `router` → plan/feature/debug as needed → `implement` or `quick-piv` → `validate` → `finish` → `push` → **post-push CI** (Model A: babysit PR to `develop`; Model B: watch branch `test` run) → **Ready for you to test** handoff (`finish` § User test).
+**Default agent chain:** `router` → plan/feature/debug as needed → `implement` or `quick-piv` → `validate` → `finish` → `push` → **post-push CI** (Model A: babysit PR to `develop`; Model B: report the commit URL and stop — do not `gh run watch`) → **Ready for you to test** handoff (`finish` § User test).
 
 **Standing protected-file consent:** Optional Cursor **user rule** listing categories agents may edit without per-task ask (e.g. `.agents/skills/**` for workflow glue). Repo `.cursor/rules/agent-behavior/RULE.mdc` § Protected Files stays strict — the user rule is external standing consent, not a repo policy change.
 
@@ -222,7 +222,7 @@ When the human only files feature requests or bug reports and tests in the app:
 | `.husky/pre-push` | `git-workflow/RULE.mdc`, `push` skill, this doc if hook scope changes |
 | `finish` / `push` flow | Both skills, `router` matrix |
 | New invocable workflow | `router/SKILL.md` (situation table + skill index); [`router/references/skill-relationship-flow.md`](../.agents/skills/router/references/skill-relationship-flow.md) when clarify/plan relationships change |
-| Product decision ledger (`DECISIONS.md`) / `grill-me` ↔ `plan-grill` | `.agents/skills/plan-grill/` (template SSOT); `grill-me`, `feature`, `plan`, `implement`; router § Plan corridor flow + [`skill-relationship-flow.md`](../.agents/skills/router/references/skill-relationship-flow.md) |
+| Product decision ledger (`DECISIONS.md`) / `grill-me` ↔ `plan-grill` ↔ `plan-grill-auto` | `.agents/skills/plan-grill/` (template SSOT); `grill-me`, `plan-grill-auto`, `feature`, `plan`, `implement`; router § Plan corridor flow + [`skill-relationship-flow.md`](../.agents/skills/router/references/skill-relationship-flow.md) |
 | Rules registry for skills | `.agents/skills/plan/references/rules-registry.md`; callers link only |
 | Pattern / industry-standard review | `.agents/skills/pattern-review/` — see § Pattern / industry-standard review above |
 | Package / pattern reuse (don't reinvent) | `.agents/skills/dont-reinvent-the-wheel/` — see § Don't reinvent the wheel above |
@@ -242,18 +242,19 @@ Shared anti-dup ledger for product/scope forks (not impl-time plan **Decisions m
 
 1. **Optional:** `grill-me` warm start → Closed rows in `DECISIONS.md`.
 2. **`plan` corridor:** Refine → Investigate → Create.
-3. **`plan-grill` rail:** beside every corridor phase — fork checklist before locking; loop ask → ledger → **same phase**.
+3. **`plan-grill` rail:** beside every corridor phase — fork checklist before locking; loop ask → ledger → **same phase**. IF the user forbids questions → **`plan-grill-auto`** (same checklist; agent-pick; no Present wait).
 4. **`DEVELOPMENT_PLAN.md`:** how to build (after locks are logged).
+5. **M/L:** `review-dev-plan` before `implement`. Default: user accepts. Auto: `agent-accept` in plan **Decisions made** and Plan review `Done`, then `implement` with no Present wait.
 
 Router SSOT: `.agents/skills/router/SKILL.md` § Plan corridor flow.  
 Diagram SSOT: [`.agents/skills/router/references/skill-relationship-flow.md`](../.agents/skills/router/references/skill-relationship-flow.md).  
-Checklist/cues SSOT: `.agents/skills/plan-grill/SKILL.md`.
+Checklist/cues SSOT: `.agents/skills/plan-grill/SKILL.md`. Auto-answer: `.agents/skills/plan-grill-auto/SKILL.md`.
 
 | Audience | Start here |
 |----------|------------|
-| **Agents** | `.agents/skills/plan-grill/SKILL.md` + [`references/decisions-template.md`](../.agents/skills/plan-grill/references/decisions-template.md) |
-| **Writers** | `grill-me`, `plan-grill`, `feature` (first writer creates `documentation/jobs/temp_job_<name>/DECISIONS.md`) |
-| **Readers** | `plan` (anti-dup + M/L ledger gate), `implement` (soft-warn on open rows) |
+| **Agents** | `.agents/skills/plan-grill/SKILL.md` + [`references/decisions-template.md`](../.agents/skills/plan-grill/references/decisions-template.md); auto-answer `.agents/skills/plan-grill-auto/SKILL.md` |
+| **Writers** | `grill-me`, `plan-grill`, `plan-grill-auto`, `feature` (first writer creates `documentation/jobs/temp_job_<name>/DECISIONS.md`) |
+| **Readers** | `plan` (anti-dup + M/L ledger gate), `implement` (soft-warn on open rows; auto resolves Open rows without asking) |
 
 **Not the same as:** `DEVELOPMENT_PLAN.md` § Decisions made (filled during `implement`).
 

@@ -151,7 +151,7 @@ Close with a **chat summary** plus an up-to-date **`DECISIONS.md`** (all closed 
 - **Recommended direction** — including which loops to extend; file-level detail for `plan` § Investigate.
 - **Ledger path** — `documentation/jobs/temp_job_<name>/DECISIONS.md` when any decision was logged.
 
-**Next:** re-run `.agents/skills/router/SKILL.md` gates 1–2 → `plan` § Refine or `feature`. During `plan`, `plan-grill` continues the gate for *new* forks only. Proceed to `implement` only after a `DEVELOPMENT_PLAN.md` exists.
+**Next:** re-run `.agents/skills/router/SKILL.md` gates 1–2 → `plan` § Refine or `feature`. During `plan`, `plan-grill` continues the gate for *new* forks only (`plan-grill-auto` when the user forbids questions). Proceed to `implement` only after a `DEVELOPMENT_PLAN.md` exists.
 
 ---
 
@@ -162,9 +162,9 @@ Close with a **chat summary** plus an up-to-date **`DECISIONS.md`** (all closed 
 | Scope-edge alignment + `DECISIONS.md` rows | `feature` (Phase 2) to document requirements |
 | Resolved scope ready for execution planning | `plan` § Refine → Investigate (`plan-grill` for new forks) |
 | Gate 2 acceptance / API shape detail | `plan` § Refine (grill informs; plan records) |
-| Plan-time product/scope forks (rail + checklist) | `plan-grill` (via `plan` corridor) |
+| Plan-time product/scope forks (rail + checklist) | `plan-grill` (via `plan` corridor); `plan-grill-auto` when the user forbids questions |
 | Migrations, RLS policies, exact API contracts | `plan` § Investigate |
 | Trivial/XS work with no real edges | `quick-piv` |
 | Landed implementation | `implement` / `finish` |
 
-**SSOT note:** `grill-me`, `plan-grill`, and `feature` share `DECISIONS.md`; `feature`/`plan` record requirements and execution. Chat summary remains; ledger prevents duplicate asks.
+**SSOT note:** `grill-me`, `plan-grill`, `plan-grill-auto`, and `feature` share `DECISIONS.md`; `feature`/`plan` record requirements and execution. Chat summary remains; ledger prevents duplicate asks.

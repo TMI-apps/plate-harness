@@ -431,7 +431,7 @@ Ensures:
 | Phase-by-phase execution | `implement` (after handoff from Phase 4) |
 | Small XS/S scoped change | `quick-piv` |
 | Product Q&A when gates 1–2 fail | `grill-me` |
-| Product forks during `plan` | `plan-grill` |
+| Product forks during `plan` | `plan-grill` (or `plan-grill-auto` when the user forbids questions) |
 | Product decision ledger format | `plan-grill/references/decisions-template.md` (this skill writes rows) |
 | Changelog / commit / push | `finish` / `push` |
 | Simplify existing feature | `challenge` |

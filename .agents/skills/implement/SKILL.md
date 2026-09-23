@@ -38,13 +38,13 @@ Execute a development plan phase by phase. Use `DEVELOPMENT_PLAN.md` as the guid
 ### 1. Load plan
 
 - [ ] Read `DEVELOPMENT_PLAN.md` for the resolved job folder.
-- [ ] If `DECISIONS.md` exists beside the plan: skim it. If any row is **open**, **soft-warn** in chat (list topics) — may proceed; do not hard-block. Prefer resolving with the user or `plan-grill` when the open topic still matters.
+- [ ] If `DECISIONS.md` exists beside the plan: skim it. If any row is **open**, **soft-warn** in chat (list topics) — may proceed; do not hard-block. Prefer resolving with the user or `plan-grill` when the open topic still matters. IF `plan-grill-auto` is active: resolve Open rows yourself (no ask) before continuing.
 - [ ] If the plan’s **Summary** or acceptance criteria imply user-facing product change, skim `documentation/DOC_APP_VISION.md` for consistency; if **`DRAFT`**, flag to the user before heavy implementation.
 - [ ] Verify mandatory sections exist: Summary, Phase overview, Conflict & compliance, Notes during development, Decisions made.
 - [ ] If Summary **Complexity** is **M** or **L**, or the plan changes user-visible behavior/contracts: verify **Pattern & precedent** is filled (or explicitly skipped with reason).
 - [ ] If the first pending phase would write nontrivial **custom** code for a generic subsystem (auth, parsers, queues, protocol clients, …) and Conflict & compliance has **no** reuse rec (and no “skipped — bespoke” line), run [`.agents/skills/dont-reinvent-the-wheel/SKILL.md`](../dont-reinvent-the-wheel/SKILL.md) once, record the rec in the plan, then continue. Skip when the plan already recorded a rec or skip reason.
 - [ ] If **Plan review** is `Required: pending`, **stop** and route to `.agents/skills/review-dev-plan/SKILL.md` (or record waiver in **Decisions made**).
-- [ ] If **Pattern & precedent** is `Non-standard — waiver recommended` without an explicit waiver in **Decisions made**, **stop** and ask the owner.
+- [ ] If **Pattern & precedent** is `Non-standard — waiver recommended` without an explicit waiver in **Decisions made**, **stop** and ask the owner. IF `plan-grill-auto` is active and `DECISIONS.md` has a Closed precedent row with `source: plan-grill-auto`, that row **is** the waiver — do not ask.
 - [ ] Find the first phase in the overview that is not done (e.g. status `Pending`, empty, or not marked ✅).
 - [ ] After a phase **creates** a `src/features/` folder or adds a UI/data vendor: run [`.agents/skills/modularity-review/SKILL.md`](../modularity-review/SKILL.md) before marking that phase done (do not unwrap unless the job asked).
 

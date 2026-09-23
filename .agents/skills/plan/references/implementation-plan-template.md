@@ -52,7 +52,7 @@ If pattern review was skipped (XS, no new behavioral contract), one line: **Patt
 
 ## Decisions made
 
-Impl-time only (`implement` fills). Product/scope forks → sibling `DECISIONS.md` (`grill-me` / `plan-grill` / `feature`).
+Impl-time only (`implement` fills). Product/scope forks → sibling `DECISIONS.md` (`grill-me` / `plan-grill` / `plan-grill-auto` / `feature`).
 
 | # | Topic | Choice | Precedent? |
 |---|-------|--------|------------|

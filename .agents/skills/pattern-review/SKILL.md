@@ -20,7 +20,7 @@ disable-model-invocation: false
 
 Apply **without being asked** when you are about to propose or write a plan, RFC, or material UX/API/architecture design — especially before novel `src/` work.
 
-**Do:** follow [`references/rubric.md`](references/rubric.md) → choose relevant aspects → compare to precedents → verdict → **Pattern risk** alert if non-standard → **stop** until owner picks A/B/C or waives.
+**Do:** follow [`references/rubric.md`](references/rubric.md) → choose relevant aspects → compare to precedents → verdict → **Pattern risk** alert if non-standard → **stop** until owner picks A/B/C or waives. IF `plan-grill-auto` is active, skip the stop (procedure step 6).
 
 **Do not:** treat “we already do it in the codebase” as sufficient without naming **external** precedent and tradeoffs.
 
@@ -69,7 +69,7 @@ Per [`documentation/DOC_AGENT_WORKFLOW_LAYERS.md`](../../../documentation/DOC_AG
 3. **Classify** the capability; **pick precedents**; **select dimensions** that matter for this change (agent judgment — not a fixed checklist).
 4. If review is **not needed** (trivial / no new behavioral contract) → one short paragraph and stop.
 5. If **aligned** or **acceptable product-specific** with documented tradeoffs → short summary; proceed under normal gates.
-6. If **non-standard** → post alert from [`references/alert-template.md`](references/alert-template.md); **stop** until owner decides.
+6. If **non-standard** → post alert from [`references/alert-template.md`](references/alert-template.md); **stop** until owner decides. IF `plan-grill-auto` is active: do **not** stop — return the A/B/C verdict so that skill can pick, log `source: plan-grill-auto`, and continue.
 7. For `plan-section`, record in `DEVELOPMENT_PLAN.md` § **Pattern & precedent**.
 
 ---
@@ -95,6 +95,7 @@ Rubric § Lite pass; escalate to full alert if material divergence.
 | Caller | How |
 |--------|-----|
 | `plan` | Step 5: `plan-section` when M/L or material behavioral design |
+| `plan-grill-auto` | Same procedure; non-standard does not wait — caller picks and logs |
 | `dont-reinvent-the-wheel` | Complementary — reuse vs custom **before** this skill's design check |
 | `review-dev-plan` | Industry precedent agent reads `references/rubric.md` |
 | `router` | Novel behavior → pattern-review before `src/`; see dev-cycle matrix |

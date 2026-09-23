@@ -177,7 +177,7 @@ Rulesets (not classic branch protection):
 - `develop` is ahead of `main`
 - Latest commit on `develop` has green combined status (`test` CI)
 
-**Agent UX:** When the user says "promote to production", or colloquial equivalents such as **"PR develop to main"**, **"merge develop to main"**, or **"release to production"**, **do not** open a `develop` → `main` PR. Run `gh workflow run promote-to-production.yml` and watch (`gh run watch`).
+**Agent UX:** When the user says "promote to production", or colloquial equivalents such as **"PR develop to main"**, **"merge develop to main"**, or **"release to production"**, **do not** open a `develop` → `main` PR. Run `gh workflow run promote-to-production.yml`, report the run URL, and stop. Do not `gh run watch`.
 
 **Why no PAT or bypass actor is needed:** `main`'s ruleset only enforces `deletion` + `non_fast_forward`, so the workflow's built-in `GITHUB_TOKEN` can fast-forward. Daily integration + CI happen on `develop`.
 
@@ -209,7 +209,7 @@ Rulesets (not classic branch protection):
 3. **`finish`:** cleanup, changelog/version, `git add` + `git commit` — never push
 4. **`push`:** clean tree, existing commits only; then by mode:
    - **Model A:** push `feature/*` → create/update PR to `develop` → babysit PR checks
-   - **Model B:** push `develop` → babysit branch `test` workflow run (`gh run watch`) — **no** `gh pr create`
+   - **Model B:** push `develop` → report the commit URL and stop. Do not `gh run watch`. **No** `gh pr create`
 5. Never assume the user wants to commit; commit messages need a detailed body (see `finish`)
 
 ---

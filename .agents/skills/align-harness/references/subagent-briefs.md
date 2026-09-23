@@ -95,7 +95,7 @@ Orient (above). Using `links-to` from the registry:
 2. **Orphans:** skills nothing routes to (unreachable from the router front door).
 3. **Dead ends:** skills that never state "what's next" where a successor is expected.
 4. **Front-door check:** confirm the router is the only situation→skill map and that every skill is reachable and listed once.
-5. **Relationship diagram:** read [`.agents/skills/router/references/skill-relationship-flow.md`](../../router/references/skill-relationship-flow.md). Flag **diagram stale** if the mermaid omits or contradicts a live clarify/plan handoff edge (especially `grill-me` / `plan-grill` / `plan` / `feature` / `pattern-review` / `quick-piv`). Include `skill-relationship-flow: needs update | current` in the return.
+5. **Relationship diagram:** read [`.agents/skills/router/references/skill-relationship-flow.md`](../../router/references/skill-relationship-flow.md). Flag **diagram stale** if the mermaid omits or contradicts a live clarify/plan handoff edge (especially `grill-me` / `plan-grill` / `plan-grill-auto` / `plan` / `feature` / `pattern-review` / `quick-piv`). Include `skill-relationship-flow: needs update | current` in the return.
 
 Return: the edge list + a findings list `issue | skill(s) | fix`. No edits.
 
