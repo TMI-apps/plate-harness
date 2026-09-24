@@ -134,6 +134,7 @@ Before editing app-code files:
   2. Create: `gh pr create --base develop --head <feature-branch> --title "<type>: <short title>" --body "<markdown>"`.
   3. Verify base: `gh pr view --json baseRefName,url` — **`baseRefName` must be `develop`**.
   4. On PowerShell, do **not** use bash `<<'EOF'` heredocs. Pass `--body` via a PowerShell here-string or a temp file.
+  5. **Chat handoff (required):** In the same assistant message that reports the PR, include a **markdown link** whose label is the PR number (e.g. `#50`) and whose target is the PR `html_url` from `gh pr create` or `gh pr view --json number,url`. Example: `[#50](https://github.com/TMI-apps/plate-harness/pull/50)`. Do not stop at a bare URL or number alone when a PR was created or updated this turn.
 - **PR body template:**
 
 ```markdown

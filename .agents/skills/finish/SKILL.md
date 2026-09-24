@@ -188,7 +188,7 @@ After commit (and after push/PR when applicable), output a **handoff card** for 
 - **Where to test:** <preview URL or "local dev — agent runs dev server">
 - **Steps:** 1. … 2. …
 - **Edge/deploy note:** (only if edge functions / env-specific)
-- **CI:** <pending | green on PR #N | not pushed yet>
+- **CI:** <pending | green on PR (markdown link per git-workflow § Pull Requests step 5) | not pushed yet>
 ```
 
 **Forbidden closure phrases** until the user confirms in the app: “implementation complete,” “fixed,” “done,” “should work” — use **“ready for you to test”** instead.
