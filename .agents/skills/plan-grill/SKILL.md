@@ -72,26 +72,28 @@ A **fork** exists when **any** of these is true for a topic **not** already in `
 
 **SSOT for this fork.** Run the mandatory checklist on this topic before phases/steps assume a platform or a one-off. Do not silently over-build or under-build.
 
-**Three levels** (later options stronger / more modular):
+**Modularity is the default; speculative platforms are not.** Every level below uses category-based names, standard reusable primitives, composition, and a narrow replaceable boundary from the first implementation. The fork decides how much product-specific extension machinery to build, not whether the code is modular.
+
+**Three levels** (later options add stronger product extension machinery):
 
 | Level | Meaning | When |
 |-------|---------|------|
-| **Instance** | One UI/path for the known job (a buy button on this page; this SKU) | Default when only one consumer is known now |
+| **Instance** | One contextual composition for the known job, built from generic primitives; instance details stay in props/caller/thin wrapper | Default when only one consumer is known now |
 | **Feature** | One bounded domain with a public API (checkout start/confirm/fail); thin UIs call it | The work is a domain even with one screen |
 | **Rewirable** | Ports for “what is bought / how paid / what success means” so other products plug in | ≥2 product kinds are **in scope now**, or the owner picks future expansion *and* names the second consumer |
 
-**Default:** specific enough to ship the known job. Modular only where a second real consumer already exists or is a Closed row.
+**Default:** modular and composable enough to replace or reuse from day one; specific enough to ship the known job. Do not add speculative ports, plugin registries, or unused hooks until a second real consumer exists or is a Closed row. Reuse an established generic primitive immediately; do not wait for duplicate contextual implementations.
 
 | Situation | Classify |
 |-----------|----------|
-| One known use; second use is a guess | **Clear-winner → instance** (or **feature** if it is already a domain). Log deferred second use as a non-goal. Do **not** ask. |
+| One known use; second use is a guess | **Clear-winner → instance** (or **feature** if it is already a domain), using generic primitives and a replaceable boundary. Log deferred extension machinery as a non-goal. Do **not** ask. |
 | Two known uses, same verbs | **Clear-winner → feature** (one public API, two thin UIs) unless product kinds differ |
 | Two known uses, different verbs | **Tie or clear-winner → split features**; share only what both need. Ask if which concepts belong together is Pareto-fair |
 | Owner wants a platform “just in case” | **Ask** — `[Wins: least code]` instance vs `[Wins: reusability]` rewirable, with explicit pay lines |
 
 Guessed future use stays a **deferred non-goal** in `DECISIONS.md`. Do not code the unused hook.
 
-**Not this cue:** npm/package reuse (`dont-reinvent-the-wheel`); extracting a shared helper with <3 call sites (`optimize2`); scoring how hard a shipped feature is to swap (`modularity-review`).
+**Not this cue:** npm/package reuse (`dont-reinvent-the-wheel`); extracting a novel shared helper from repeated business logic (`optimize2`); scoring how hard a shipped feature is to swap (`modularity-review`).
 
 ### Mandatory fork checklist (before locking)
 

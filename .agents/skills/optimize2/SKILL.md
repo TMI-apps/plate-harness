@@ -28,11 +28,18 @@ ANALYZE (all 4 levels) → PRESENT OPTIONS → USER CHOOSES → EXECUTE → VERI
 
 ### Rule of Three (MANDATORY for Extractions)
 
-**Don't extract/abstract until you have 3+ concrete use cases.** Two usages might be coincidental; wait for the third to prove the pattern.
+**For a novel abstraction inferred from duplicated business logic, don't extract/abstract until you have 3+ concrete use cases.** Two usages might be coincidental; wait for the third to prove the pattern.
 
 **Why:** Every extraction adds indirection. Can you trace the feature without opening >5 files?
 
-**Exceptions (Rare - document why overriding):**
+**Not governed by Rule of Three:**
+
+1. **Names:** Category-based function/component/type/file names are mandatory on the first use; never wait for more callers before naming the capability correctly.
+2. **Established primitives and patterns:** Reuse standard UI controls, design-system components, platform APIs, and existing repo abstractions immediately. A text input does not need three contextual copies before it can use `TextInput`.
+3. **Thin project primitive with an existing contract:** A first-use wrapper is justified when it enforces an already-established project-wide contract such as theme, accessibility, validation, or error presentation. Otherwise use the underlying standard primitive directly; do not add a speculative passthrough wrapper.
+4. **Composition and boundaries:** Keep context-specific labels, data, and behavior in props, the caller, or a thin contextual wrapper from day one. This is modular placement, not an abstraction inferred from duplication.
+
+**Exceptions for novel extractions (Rare - document why overriding):**
 
 1. **Architectural Violation:** Code in wrong layer (e.g., business logic in component) → Extract to correct layer even if single-use
 2. **Testability Critical:** Function untestable as-is → Extract enables isolated testing
@@ -54,20 +61,20 @@ Signs of too much abstraction (see also: [Over-Engineering Indicators](#over-eng
 - 🚩 **Can't answer "where does X happen?" quickly** → Feature scattered across too many files
 - 🚩 **High fan-out (file imports 10+ things)** → Responsibilities scattered
 - 🚩 **Wrapper functions that add nothing** → `logError = (msg) => console.error(msg)`
-- 🚩 **Two similar functions** → Accept duplication until third proves the pattern
+- 🚩 **Two similar business-logic functions** → Accept duplication until third proves the pattern
 
 ### Over-Engineering Indicators
 
 When NOT to refactor (accept complexity instead):
 
-- Creating files for single-use code (unless [exception](#rule-of-three-mandatory-for-extractions) applies)
-- Extracting helpers with <3 call sites (violates [Rule of Three](#rule-of-three-mandatory-for-extractions))
+- Creating files for single-use novel abstractions (unless [exception](#rule-of-three-mandatory-for-extractions) applies)
+- Extracting novel shared helpers with <3 concrete use cases (violates [Rule of Three](#rule-of-three-mandatory-for-extractions))
 - Breaking up cohesive functions that do one thing
 - High statement count but low cognitive complexity
 - Verbose operations inflating metrics (style copying, config objects, DOM manipulation)
 - Abstraction layers with single implementations
 - "Future-proofing" for requirements that don't exist
-- Two similar functions that "could be" abstracted (wait for third use case)
+- Two similar business-logic functions that "could be" abstracted (wait for third use case)
 
 **Remember:** The cure should not be worse than the disease. Prefer inline code over scattered micro-files.
 
@@ -193,7 +200,7 @@ Assuming design is sound, evaluate the algorithmic approach:
   - Missing indexes for frequent lookups?
 
 - **Are there unnecessary abstractions? (Indirection Check)**
-  - **Apply [Rule of Three](#rule-of-three-mandatory-for-extractions):** Don't abstract until you have 3+ concrete use cases
+  - **Apply [Rule of Three](#rule-of-three-mandatory-for-extractions):** For novel abstractions inferred from duplicated business logic, don't abstract until you have 3+ concrete use cases
   - Over-abstracted for flexibility never used?
   - Indirection that adds overhead without benefit? (See [Indirection Red Flags](#indirection-red-flags))
   - Patterns used for pattern's sake?
@@ -286,7 +293,7 @@ pnpm lint
 
 | Question | If NO → Default to 4E |
 |----------|----------------------|
-| Does this code have 3+ existing call sites? | <3 uses → keep inline ([Rule of Three](#rule-of-three-mandatory-for-extractions)) OR check [exceptions](#rule-of-three-mandatory-for-extractions) |
+| Is this a novel abstraction inferred from duplicated business logic, and does it have 3+ concrete use cases? | <3 uses → keep inline, unless it is outside Rule of Three or an exception applies ([Rule of Three](#rule-of-three-mandatory-for-extractions)) |
 | Would extracted helpers be reusable elsewhere? | Non-reusable → keep inline |
 | Is cognitive complexity high (not just statement count)? | High statements + low cognitive = acceptable |
 | Would a new developer understand it better after extraction? | Same/worse readability → keep together |
@@ -298,10 +305,10 @@ pnpm lint
 - Single-purpose utility used in one place
 - Function is cohesive and readable despite exceeding thresholds
 - Extraction would create files with only 1-2 private helpers
-- Two similar functions that "could be abstracted" but aren't proven to need it yet (wait for third)
+- Two similar business-logic functions that "could be abstracted" but aren't proven to need it yet (wait for third)
 
 **Possible outcomes:**
-- **4A - Extract methods/functions:** Break down large functions *(only if ≥3 call sites OR [exception](#rule-of-three-mandatory-for-extractions) applies)*
+- **4A - Extract methods/functions:** Break down large functions *(for novel shared abstractions: only if ≥3 concrete use cases OR [exception](#rule-of-three-mandatory-for-extractions) applies)*
 - **4B - Simplify conditionals:** Guard clauses, polymorphism
 - **4C - Reduce coupling:** Extract interfaces, dependency injection
 - **4D - Introduce parameter object:** Reduce parameter count
@@ -433,13 +440,13 @@ LEVEL 4 - COMPLEXITY:
 │   ├── Statements: [S] (threshold: 20)
 │   └── Params: [N] (threshold: 5)
 ├── Proportionality Check:
-│   ├── Has 3+ call sites? [Yes/No] ([Rule of Three](#rule-of-three-mandatory-for-extractions))
+│   ├── Novel abstraction with 3+ concrete use cases? [Yes/No] ([Rule of Three](#rule-of-three-mandatory-for-extractions))
 │   │   └── Exception? [See Core Principles](#rule-of-three-mandatory-for-extractions)
 │   ├── Cognitive complexity high? [Yes/No]
 │   ├── Extraction improves readability? [Yes/No]
 │   └── Function cohesive? [Yes/No]
 └── Options:
-    [4A] Extract methods - [which parts] (≥3 call sites OR exception)
+    [4A] Extract methods - [which parts] (novel shared abstraction: ≥3 concrete use cases OR exception)
     [4B] Simplify conditionals - [how]
     [4C] Reduce coupling - [how]
     [4D] Parameter object - [which params]
@@ -500,7 +507,7 @@ Please choose options for each level (e.g., "1D 2D 3A 4B"):
 
 1. Document expected inputs/outputs
 2. Implement new approach
-   - **Note:** If the rewrite naturally requires extracting helper functions (even with <3 call sites), this is acceptable as a "Level 2 rewrite side effect" [exception](#rule-of-three-mandatory-for-extractions). Document in commit message.
+   - **Note:** If the rewrite naturally requires extracting helper functions (even with <3 concrete use cases), this is acceptable as a "Level 2 rewrite side effect" [exception](#rule-of-three-mandatory-for-extractions). Document in commit message.
 3. Remove old implementation
 4. Run complexity analysis on new code
 5. Hand off to **`.agents/skills/finish/SKILL.md`** when the user wants to commit (do not commit inline during optimize2).
@@ -518,7 +525,7 @@ Please choose options for each level (e.g., "1D 2D 3A 4B"):
 ### Action Type: REFACTOR (4A/4B/4C/4D)
 
 1. **Confirm proportionality** (for 4A extractions—MANDATORY):
-   - [ ] ≥3 call sites OR [exception](#rule-of-three-mandatory-for-extractions) applies (document why)
+   - [ ] If proposing a novel shared abstraction: ≥3 concrete use cases OR [exception](#rule-of-three-mandatory-for-extractions) applies (document why)
    - [ ] Extraction improves readability/maintainability
    - [ ] Single responsibility, not creating micro-files
    - [ ] Feature traceable without opening >5 files

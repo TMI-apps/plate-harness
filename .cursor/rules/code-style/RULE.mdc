@@ -43,6 +43,17 @@ This is the same test as `layer-consistency-check` shape **instance-encoded nami
 
 Applies to: functions, hooks, components, types, feature folders, services, Edge Function folder names. Test titles may name the scenario (`should … when …`); production symbols must not.
 
+### Generic core, contextual edge
+
+For standard primitives and recurring categories, choose the generic capability name on the **first** implementation; do not wait for duplicate callers or a third copy.
+
+- Shared primitive: `TextInput`, `SelectInput`, `QuestionField`
+- Context in props/caller: `label="Store item description"`, validation rules, data binding
+- Optional thin contextual wrapper when it improves domain readability: `ItemDescriptionField`
+- Wrong shared name: `StoreItemDescriptionInput` when the implementation is fundamentally a reusable text input
+
+This does **not** require speculative factories, plugin systems, or unused extension hooks. Generic naming and composable boundaries are mandatory; product-specific extension machinery still needs a real use case.
+
 ### Variables and Functions
 - Use camelCase for variables and functions
 - Use descriptive names that indicate **category purpose** (not the first caller)

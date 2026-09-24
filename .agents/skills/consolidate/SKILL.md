@@ -42,7 +42,7 @@ If the ask is only “what warrants consolidation / make a rubric,” read [`ref
 
 ### Rule of Three (Inherited from optimize2)
 
-Do not extract/abstract until you have **3+ concrete use cases**. Full rule and exceptions: **`.agents/skills/optimize2/SKILL.md`** § Rule of Three.
+For a **novel abstraction inferred from duplicated business logic**, do not extract/abstract until you have **3+ concrete use cases**. This does not delay category-based naming, established standard primitives, or existing repo patterns. Full scope and exceptions: **`.agents/skills/optimize2/SKILL.md`** § Rule of Three.
 
 ### Consolidation != Abstraction
 

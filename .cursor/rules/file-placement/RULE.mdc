@@ -217,41 +217,23 @@ Files within subdirectories do NOT require the DOC_ prefix.
 - Ensures permanent documentation is intentional and approved
 - Easy cleanup: `find documentation/jobs -name "temp_*"` or `find documentation/temp`
 
-## ⚠️ CRITICAL: NEVER Move Files Programmatically
+## File Moves and Renames
 
-**The AI assistant MUST NEVER move, rename, or relocate files programmatically.**
+**The AI assistant may move, rename, or relocate files.** Do not delegate a rename to the user merely because the IDE can update imports.
 
-When files need to be moved or renamed:
+**Required workflow:**
 
-1. **DO NOT** use read_file + write + delete_file to move files
-2. **DO NOT** attempt to update imports manually after moving files
-3. **INSTEAD**, guide the user to perform the move in their IDE:
-   - In VS Code/Cursor: Drag the file to the new location, or right-click → "Rename"
-   - The IDE will automatically prompt to update all imports
-   - This ensures BOTH directions of imports are updated:
-     - Imports IN the moved file (what it imports)
-     - Imports OF the moved file (other files importing it)
+1. Read the file and search for all imports, exports, string references, registrations, tests, config entries, and documentation that name its old path or symbol.
+2. Confirm the destination is allowed by `projectStructure.config.cjs` and the architecture rules.
+3. Move or rename the file with the available filesystem or shell tool. Preserve LF line endings and file history where the tool supports it.
+4. Update references in both directions:
+   - Imports **in** the moved file
+   - Imports **of** the moved file
+   - Barrel exports, lazy imports, route/config registries, tests, and path strings
+5. Search for stale references to the old path and old symbol.
+6. Run proportional verification: type-check plus relevant lint, tests, structure, and architecture checks.
 
-**Why this matters:**
-- When AI moves files programmatically, it bypasses the IDE's import updating mechanism
-- This breaks imports in BOTH directions, requiring extensive manual fixes
-- The IDE's built-in file move handles this automatically
-
-**Correct workflow for file restructuring:**
-1. AI describes which files need to move and where
-2. User performs the moves in IDE (gets auto-import updates)
-3. AI verifies the result and continues with other changes
-
-**Example response when file move is needed:**
-```
-To restructure this feature, please move the following files in your IDE 
-(drag & drop or right-click → Rename). The IDE will update all imports automatically:
-
-1. Move `src/components/chat/ChatContainer.tsx` → `src/features/chat/components/ChatContainer.tsx`
-2. Move `src/hooks/useChat.ts` → `src/features/chat/hooks/useChat.ts`
-
-Let me know once you've moved them and I'll continue with the remaining changes.
-```
+Use an IDE rename when the user explicitly wants to perform the move themselves; it is an option, not a requirement. Never keep a compatibility husk or stale filename solely to avoid doing a verified rename.
 
 ## Workflow
 
