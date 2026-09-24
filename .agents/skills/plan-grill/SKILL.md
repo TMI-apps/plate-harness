@@ -142,7 +142,7 @@ Loop shape: **ask one question (if tie) → write DECISIONS.md → continue the 
 | Helper extract / Rule of Three | `optimize2` |
 | Pure mechanism, no product/boundary edge | Agent decides (see “Not a fork”) |
 
-Question style: `.agents/skills/grill-me/SKILL.md` § Question style — do not fork a second format. Same **turn contract** applies: one grill question per turn, think/re-ground on `DECISIONS.md` before the next.
+Question style: `.agents/skills/grill-me/SKILL.md` § Question style — do not fork a second format. Cost-sketch table stays in the chat message. `AskQuestion` `prompt` and option labels are plain text — no markdown table. Same **turn contract** applies: one grill question per turn, think/re-ground on `DECISIONS.md` before the next.
 
 ## Flow
 

@@ -96,7 +96,8 @@ Share findings plainly ("the app already does X via Y") or uncertainty ("no noti
 
 - **One question per turn.** One `AskQuestion` call, one entry in its `questions` array. Never queue a second question, preview upcoming questions, or merge two boundary questions into one form "for efficiency" — even when both are already known.
 - **Stop and think before the next ask.** After the user answers: update `DECISIONS.md`, re-check the answer against the hook map / perimeter / non-goals, and only then decide the next single question. An earlier answer can change which question is next, or make one unnecessary — decide that in this thinking step, not by asking anyway.
-- A turn may include grounding prose (evidence, cost sketch) **plus the one question** — never plus a second question.
+- A turn is grounding prose in the **chat message** (evidence, cost sketch) **plus one** `AskQuestion` call — never plus a second question.
+- **Plain text inside the tool.** `AskQuestion` `prompt` and option `label`s do not render markdown. Never put a table, heading, or other markdown in those fields. A pipe table there shows as raw `|` text.
 
 Use a question tool call when available; prefer multiple-choice when branches are clear.
 
@@ -106,13 +107,14 @@ Use a question tool call when available; prefer multiple-choice when branches ar
 
 ### Boundary-question template (required)
 
-Structure every multiple-choice boundary question in this order:
+Same content every time. Split across two channels — the cost-sketch table stays in chat, where markdown renders:
 
-1. **Evidence** — one line on what the repo shows (or `Uncertain`). Explore first when the codebase can answer part of the question.
-2. **Cost sketch** — when exploration allows, a compact table comparing branches on **Perf | Code | UX** (add **Scope-cut** when relevant). Mark agent estimates; `plan` verifies exact numbers.
-3. **Choices** — 2–4 options, each one line:
+1. **Chat message — evidence.** One line on what the repo shows (or `Uncertain`). Explore first when the codebase can answer part of the question.
+2. **Chat message — cost sketch.** When exploration allows, a compact markdown table comparing branches on **Perf | Code | UX** (add **Scope-cut** when relevant). Mark agent estimates; `plan` verifies exact numbers. This table is chat-only. Do not copy it into `AskQuestion`.
+3. **`AskQuestion` `prompt`.** One plain-text question sentence. No table. No markdown.
+4. **`options` labels** — 2–4 choices, each one plain line (no markdown):
    - **`[Wins: <axis>] <label>`** — gain; **pay** (explicit cost on other axes).
-4. **Omnipresent** — always append both escape hatches below.
+5. **Omnipresent** — always append both escape hatches below, as plain option labels.
 
 **Example option line:** `[Wins: performance] Shader-only fake glow — no extra passes; pays with less convincing scatter.`
 
@@ -123,6 +125,7 @@ Every multiple-choice question includes two omnipresent options:
 
 ### Anti-patterns (do not ship questions like these)
 
+- A markdown table (or any markdown) inside `AskQuestion` `prompt` or option labels. Cost sketch stays in the chat message.
 - Options grouped **only by feature area** (e.g. "glints / Fresnel / foam") with no `[Wins: …]` axis or pay line.
 - Two options claiming the **same winning axis** without different pay lines.
 - **Bundling** integration approach and content scope in one question when each branch has different Perf/Code/UX — split (usually integration perimeter first, then what is in the bright-pass / handoff).
