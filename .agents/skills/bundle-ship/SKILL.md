@@ -53,17 +53,20 @@ Bundle-ship progress:
 2. Summarize **everything** that would land — by area/feature, not by which thread wrote it.
 3. Do **not** filter to “this thread’s files.” The perimeter is the **entire** working tree.
 
-### Step 2: Confirm bundle scope
+### Step 2: State bundle scope, then continue
 
-Tell the user:
+Invoking this skill **is** consent to finish and push the current snapshot. State what will land (files and areas, version/changelog when required, other threads should be paused) and **continue in the same turn**.
 
-- What files and areas are included.
-- That version/changelog (if required) will describe **the full bundle**, per `finish` semver rules.
-- That other agent threads on this checkout should be **paused**.
+**Never** ask whether the user is ready to bundle, commit, or push after they invoked this skill.
 
-Ask once: **ready to bundle-finish and push this snapshot?**
+**Stop and ask only when the snapshot deviates** from a straight landing:
 
-If the user declines, stop. If they want thread-scoped finish instead, route to plain `finish` (no push in that turn unless they ask).
+- The tree changed between two fresh reads (another thread is still writing).
+- A protected file, secret, or path the invocation did not cover must change.
+- Several in-progress tasks exist and it is unclear which to archive.
+- The named destination breaks the branch gate (`git-workflow`). Follow that gate. Do not add a second ready-check.
+
+If the user declines after such a stop, stop. If they want thread-scoped finish instead, route to plain `finish` (no push in that turn unless they ask).
 
 **Task backlog:** If `src/config/app-tasks.json` has multiple `in-progress` rows from different threads, ask which task(s) to archive before commit — same as `finish`, but expect ambiguity more often in multi-thread landings.
 
@@ -77,8 +80,9 @@ Read `.agents/skills/finish/SKILL.md` and execute it with these overrides:
 | Scope = this thread’s work | Scope = **full tree** from Step 1 |
 | Ends with offer to push | Continue to Step 4 in **this same turn** after a successful commit |
 | Stash lane / wait-and-recheck | **Out of scope** — user must pause other threads first |
+| Ready-to-commit confirmation | **Skip** — invocation is consent. Ask only for a Step 2 deviation |
 
-Follow all other `finish` requirements: archive task when applicable, version/changelog gate, staging decision gate, **Lesson check** (§ Lesson check — offers `/learn` when plan Notes have mistake signals), ready-to-commit confirmation, commit message standards, protected files, feature-doc validation.
+Follow all other `finish` requirements: archive task when applicable, version/changelog gate, staging decision gate, **Lesson check** (§ Lesson check — offers `/learn` when plan Notes have mistake signals), commit message standards, protected files, feature-doc validation.
 
 **One commit** for the full snapshot. Changelog and version bump (when required) must reflect **all** bundled changes.
 
@@ -87,7 +91,7 @@ Follow all other `finish` requirements: archive task when applicable, version/ch
 After a **successful** commit:
 
 1. Read `.agents/skills/push/SKILL.md` and execute it in this same turn.
-2. User already asked for ship — push confirmation may be a single “ready to push this bundled commit?” (still required; do not push without confirmation).
+2. Do **not** ask “ready to push?”. The invocation already authorized the push. Run `push` preconditions; stop only when those fail or a Step 2 deviation appears.
 3. If push preconditions fail (dirty tree, behind remote), stop per `push` and report — do not commit-fix inside `push`.
 
 ## Non-goals

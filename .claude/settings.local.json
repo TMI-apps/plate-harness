@@ -1,11 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git -C \"C:\\\\Users\\\\Lenovo\\\\Documents\\\\AppDev\\\\boilerplate-vite-supabase-mui-cursor\" branch -a)",
-      "Bash(git -C \"C:\\\\Users\\\\Lenovo\\\\Documents\\\\AppDev\\\\boilerplate-vite-supabase-mui-cursor\" status)",
-      "Bash(git -C \"C:\\\\Users\\\\Lenovo\\\\Documents\\\\AppDev\\\\boilerplate-vite-supabase-mui-cursor\" log --oneline -5)",
-      "Bash(git -C \"C:\\\\Users\\\\Lenovo\\\\Documents\\\\AppDev\\\\boilerplate-vite-supabase-mui-cursor\" checkout develop)",
-      "Bash(git -C \"C:\\\\Users\\\\Lenovo\\\\Documents\\\\AppDev\\\\boilerplate-vite-supabase-mui-cursor\" log --oneline -3)",
+      "Bash(git -C \"C:\\\\Users\\\\Lenovo\\\\Documents\\\\AppDev\\\\plate-harness\" branch -a)",
+      "Bash(git -C \"C:\\\\Users\\\\Lenovo\\\\Documents\\\\AppDev\\\\plate-harness\" status)",
+      "Bash(git -C \"C:\\\\Users\\\\Lenovo\\\\Documents\\\\AppDev\\\\plate-harness\" log --oneline -5)",
+      "Bash(git -C \"C:\\\\Users\\\\Lenovo\\\\Documents\\\\AppDev\\\\plate-harness\" checkout develop)",
+      "Bash(git -C \"C:\\\\Users\\\\Lenovo\\\\Documents\\\\AppDev\\\\plate-harness\" log --oneline -3)",
       "Read(//c/Users/Lenovo/AppData/Roaming/Claude/local-agent-mode-sessions/skills-plugin/0ab8e9f4-1ea8-479f-8ba0-d75fb248d5c9/cb18496f-cb2f-4d77-8ee8-a5c144d06845/skills/docx/**)",
       "Bash(pandoc \"C:\\\\Users\\\\Lenovo\\\\Downloads\\\\WorldMCP_Schema_Upgrade_Handoff.docx\" -o output.md)",
       "Bash(python scripts/office/unpack.py \"C:\\\\Users\\\\Lenovo\\\\Downloads\\\\WorldMCP_Schema_Upgrade_Handoff.docx\" unpacked/)"
