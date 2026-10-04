@@ -15,6 +15,7 @@ Use as a menu aligned with [`.agents/skills/plan/SKILL.md`](../SKILL.md). Output
 - **Why:**
 - **Complexity:** XS | S | M | L — <one-line reason>
 - **Plan review:** Not required | Required: pending | Done <YYYY-MM-DD> | Waived: <reason>
+- **Plan validate:** Not required | Required: pending | Done <YYYY-MM-DD> | Waived: <reason>
 - **Scope / constraints:**
 
 ## Phase overview
@@ -30,6 +31,22 @@ Use as a menu aligned with [`.agents/skills/plan/SKILL.md`](../SKILL.md). Output
 - Reuse / packages: <`dont-reinvent-the-wheel` rec, or skipped — reason>
 - Risks / open questions:
 - Standards diversions (repo / industry):
+
+## Review contract
+
+The bar this plan and its implementation are graded against. `review-dev-plan` and `validate` grade against this section. Anything outside it is advisory unless the user promotes it (see Amendments).
+
+- **Rules pinned:** `rules@<short SHA>` (`git log -1 --format=%h -- .cursor/rules`) — <rule paths from Conflict & compliance § Applicable rules>
+- **Required lenses:** Pattern & precedent (M/L), Reuse / packages, Feature decomposition, Category naming (`code-style` § Category, not instance) — mark any that are skipped with a reason
+- **Tooling gate:** `validate` § Tooling pass (contract gate list) — phase gates cite this list instead of restating commands
+- **Locked decisions:** sibling `DECISIONS.md` + **Decisions made** below + Amendments
+
+### Amendments
+
+Every change to the bar after Present: an accepted must-fix, a promoted advisory finding, or a waiver.
+
+| # | Date | Source | Change | Applied to |
+|---|------|--------|--------|------------|
 
 ## Pattern & precedent
 

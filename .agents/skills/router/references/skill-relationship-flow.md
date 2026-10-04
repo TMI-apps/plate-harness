@@ -56,9 +56,11 @@ flowchart TD
   planfile --> rdp[review-dev-plan when M/L]
   rdp --> who{Who accepts?}
   who -->|default| userOk[User accepts]
-  who -->|auto| agentOk[agent-accept + Plan review Done]
-  userOk --> impl[implement]
-  agentOk --> impl
+  who -->|auto| agentOk[agent applies contract must-fixes]
+  userOk --> amend[Amendments + Plan review Done]
+  agentOk --> amend
+  amend --> pv[validate plan-review when M/L]
+  pv --> impl[implement]
   impl --> ship[validate → finish]
 
   corridor -->|reuse vs custom| wheel[dont-reinvent-the-wheel]
@@ -74,7 +76,7 @@ flowchart TD
 |-------|---------|
 | **grill-me** | Optional feeder into the ledger **before** the corridor |
 | **plan-grill rail** | Beside **every** corridor phase — not a Create-only child |
-| **plan-grill-auto** | Same checklist; agent picks on ties; skips Present; on M/L writes `agent-accept` and Plan review `Done`, then implement |
+| **plan-grill-auto** | Same checklist; agent picks on ties; skips Present; on M/L applies contract must-fixes as Amendments, writes `agent-accept` + Plan review `Done`, runs `validate` plan-review → Plan validate `Done`, then implement |
 | **Loop** | ask *or* agent-pick → write `DECISIONS.md` → **continue the same phase** |
 | **DECISIONS.md** | Product/scope locks (`plan-grill` / `plan-grill-auto` / `feature`) |
 | **DEVELOPMENT_PLAN.md** | How to build |

@@ -39,7 +39,7 @@ Treat the thread as **mid-task** when **any** of these hold:
 |--------|----------|
 | **Conversation** | Recent turns executing `implement`, `quick-piv`, `feature`, `debug`, `grill-me`, `plan-grill`, or `plan` § Refine on a specific job; quick plan posted but implement/validate not done |
 | **Open / recent files** | `documentation/jobs/temp_job_*/DEVELOPMENT_PLAN.md` or `DECISIONS.md` tied to the current job |
-| **Plan state** | Active plan has pending phases, `Plan review: Required: pending`, or incomplete **Pattern & precedent** when M/L requires it |
+| **Plan state** | Active plan has pending phases, `Plan review: Required: pending`, `Plan validate: Required: pending`, or incomplete **Pattern & precedent** when M/L requires it |
 | **Working tree** | `git status` shows changes that match the thread’s stated scope (same job/files discussed) |
 
 **Not** active thread work: new or idle chat; prior job explicitly completed in thread; user clearly changed topic; only unrelated uncommitted files with no in-thread narrative.
@@ -56,6 +56,7 @@ Pick **one** primary by the **most blocking** row that applies (top wins). Then 
 | `feature` phase incomplete | `feature` |
 | Gates 1–2 still fail **on the current job** | `grill-me` (gate 1 / optional warm start) or `plan` § Refine (gate 2). IF already inside `plan` corridor THEN product/scope forks → `plan-grill` rail (not a new standalone `grill-me`). IF user forbids questions THEN `plan-grill-auto` (not `grill-me`). |
 | Plan exists; **Plan review** pending (M/L) | `review-dev-plan` |
+| Plan exists; **Plan validate** pending (M/L) | `validate` (plan-review) — before `implement` |
 | Plan exists; **Pattern & precedent** missing when required | `pattern-review` (`plan-section`) or resume `plan` |
 | Plan exists; pending phase(s) | `implement` |
 | Plan exists; XS/S in-thread extension only | `quick-piv` |
@@ -417,7 +418,9 @@ When the user asks to **review a plan** or before **implement** on Complexity **
 1. **`dont-reinvent-the-wheel`** during **`plan`** Investigate (and `feature` § 3.1a) when the work is a generic subsystem not obviously covered — recommendation only; skip when bespoke.
 2. **`pattern-review`** (`plan-section`) during **`plan`** step 5 when M/L or new user-visible/contracts — fills **Pattern & precedent** in the plan.
 3. **`review-dev-plan`** when Summary says `Plan review: Required: pending` (mandatory for M/L).
-4. **`validate`** (plan-review mode) for **repo rule** compliance on the plan document.
+4. **`validate`** (plan-review mode) when Summary says `Plan validate: Required: pending` (mandatory for M/L) — **repo rule** compliance on the plan document, before `implement`.
+
+**One bar:** steps 3–4 and later impl-full `validate` grade against the plan's **Review contract**. Findings outside it are advisory. Accepted fixes are written into the plan as **Amendments** before a status becomes `Done`.
 
 Do **not** run standalone **`pattern-review`** `scan` in the same session if **`review-dev-plan`** already ran the industry-precedent lens (unless the user requests a delta review).
 

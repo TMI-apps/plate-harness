@@ -96,6 +96,7 @@ Do **not** invest in full planning until the foundation is proven.
 - [ ] Add a gate for each phase.
 - [ ] Write `DEVELOPMENT_PLAN.md` to `documentation/jobs/temp_job_<name>/` using [`references/implementation-plan-template.md`](references/implementation-plan-template.md). If `DECISIONS.md` already exists in that folder (from `grill-me` / `plan-grill` / `plan-grill-auto`), keep it; do not overwrite.
 - [ ] Set **Complexity** (`XS` | `S` | `M` | `L`) in Summary per [`references/complexity-rubric.md`](references/complexity-rubric.md).
+- [ ] Fill **Review contract**: pin rules with `git log -1 --format=%h -- .cursor/rules`, copy the applicable rules from Conflict & compliance, mark required lenses (or skipped + reason). Phase gates cite the contract tooling gate instead of restating commands. Reviewers grade only against this section; leave **Amendments** empty.
 
 ### 5. Pattern & precedent
 
@@ -107,7 +108,7 @@ Industry / product precedent → **pattern-review**. Package/pattern reuse → *
 
 ### 6. Plan review gate
 
-Set **Plan review** in Summary per [dev-cycle matrix](../router/references/dev-cycle-matrix.md) § Plan depth and gates — do not duplicate the M/L table here.
+Set **Plan review** and **Plan validate** in Summary per [dev-cycle matrix](../router/references/dev-cycle-matrix.md) § Plan depth and gates — do not duplicate the M/L table here.
 
 ### 7. Present and iterate
 
@@ -141,9 +142,10 @@ Next: <review-dev-plan | implement | blocked> — <one-line gate>
 
 | Section | Purpose | Content |
 |---------|---------|---------|
-| **Summary** | Why and what, in brief | Goal, why, **Complexity**, **Plan review** status, scope, constraints |
+| **Summary** | Why and what, in brief | Goal, why, **Complexity**, **Plan review** and **Plan validate** status, scope, constraints |
 | **Phase overview** | Table of all phases | Phase #, goal, gate, status |
 | **Conflict & compliance** | Avoid technical debt, meet repo rules | See checklist below |
+| **Review contract** | The single bar for plan review, validate, and implementation | Pinned rules, required lenses, tooling gate, locked-decision sources, Amendments table (empty at Present) |
 | **Pattern & precedent** | Industry / product patterns vs this design | See template; required for M/L; agent-chosen aspects |
 | **Notes during development** | For implementation | Leave empty in the plan; fill during implementation |
 | **Decisions made** | Impl-time choices only | Leave empty in the plan; fill during **`implement`**. Product/scope forks live in sibling **`DECISIONS.md`** (`grill-me` / `plan-grill` / `plan-grill-auto` / `feature`) — do not duplicate them here. |
@@ -203,7 +205,7 @@ During planning, work through (using the rules reference above):
 - Known risks / attention points.
 - Reuse / packages (`dont-reinvent-the-wheel` rec, or skipped — reason).
 - Open questions for the user.
-- Confirmed standards diversions, including whether the user chose to keep the diversion or align with best practices.
+- Confirmed standards diversions, including whether the user chose to keep the diversion or align with best practices. A diversion confirmed here is part of the contract; later reviewers do not re-ask it.
 
 ---
 
@@ -271,7 +273,7 @@ Each phase must have a gate.
 3. **Standards diversions are explicit:** If a plan diverges from industry standards, best practices, or repo conventions, ask whether that is intentional before proceeding.
 4. **Phases are workable:** Each phase is a logical, testable chunk.
 5. **Gates are mandatory:** Every phase has a gate.
-6. **Compliance first:** Conflict & compliance before detailed steps; steps must be rules-compliant.
+6. **Compliance first:** Conflict & compliance before detailed steps; steps must be rules-compliant. The Review contract is the one bar every later reviewer grades — if a standard matters, put it there; if the bar changes later, it goes through Amendments.
 7. **Empty sections:** Notes during development and Decisions made start empty (impl-time). Product decisions → `DECISIONS.md`, not the plan’s Decisions made table.
 8. **Product forks:** `plan-grill` at Refine / Investigate / Create — never silent product locks. `plan-grill-auto` still enumerates; it only skips the ask. Principles 1–3 are then satisfied by agent-pick + ledger, not by a question to the user.
 

@@ -12,7 +12,9 @@ Compact guidance for **next-step mode**. Compress, skip, or reorder when scope, 
 2. **Plan corridor** — `plan` Refine → Investigate → Create with **`plan-grill` rail** (fork checklist each phase; anti-dup via `DECISIONS.md`; **`plan-grill-auto`** when the user forbids questions); writes `DEVELOPMENT_PLAN.md` with Complexity and compliance. **`dont-reinvent-the-wheel`** during Investigate when a generic subsystem is in play.
 3. **Pattern & precedent** — `pattern-review` `plan-section` when M/L or material behavioral design (part of `plan` step 5).
 4. **Plan review** — `review-dev-plan` required for Complexity **M** or **L**; optional for **XS/S** unless risk or user request.
-5. **Plan compliance** — `validate` (plan-review mode) for repo-rule compliance on the plan when M/L or user requests.
+5. **Plan compliance** — `validate` (plan-review mode) required for **M/L** (`Plan validate` in Summary) or on user request; runs before `implement`.
+
+Steps 4, 5, and 7 grade against the plan's **Review contract** (pinned rules, lenses, tooling gate). Outside-contract findings are advisory. Accepted fixes land in the plan as **Amendments** before a status flips to `Done`.
 6. **Implement** — `implement` executes phases and gates.
 7. **Validate** — repo rules and/or architecture gate when warranted (auto-selects impl-full / gate depth).
 8. **Finish** — local commit, version, changelog.
@@ -39,6 +41,6 @@ Optional: `prime` when codebase or branch context is unfamiliar.
 ## Plan depth and gates
 
 - **XS/S** — lighter plan; `review-dev-plan` optional unless risk.
-- **M/L** — full plan + **Pattern & precedent** + `review-dev-plan` before `implement` unless waived.
+- **M/L** — full plan + **Review contract** + **Pattern & precedent** + `review-dev-plan` + `validate` (plan-review) before `implement` unless waived.
 
 **`quick-piv`:** only when scope is small, risk low, and industry-precedent review is unnecessary or already satisfied.

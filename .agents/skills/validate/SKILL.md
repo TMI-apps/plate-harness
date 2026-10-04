@@ -2,7 +2,8 @@
 name: validate
 description: >-
   Validates a plan or an implementation via parallel read-only rule-shaped audits, then
-  synthesizes findings before any fixes. Auto-selects depth: plan review, full implementation
+  synthesizes findings before any fixes. The code-style subagent always sweeps
+  instance-encoded names. Auto-selects depth: plan review, full implementation
   review (rules + tooling + plan-compliance), or a lighter pre-merge architecture gate. Use
   when validating a plan/implementation, before merge/finish, or after large refactors.
 ---
@@ -43,11 +44,24 @@ Fan-out runs on **every** invocation. There is no "single-pass" mode.
 
 | Mode | Always-spawn rule subagents | Conditional subagents | Plan-compliance |
 |---|---|---|---|
-| **plan-review** | every rule plausibly relevant to the plan | as applicable | no |
-| **impl-full** | every rule plausibly relevant to the diff | as applicable | **yes** |
+| **plan-review** | every rule plausibly relevant to the plan, **always including `code-style`** (unpinned rules report as `advisory` — § Grading basis) | as applicable | no |
+| **impl-full** | every rule plausibly relevant to the diff, **always including `code-style`** (unpinned rules report as `advisory` — § Grading basis) | as applicable | **yes** |
 | **gate** | `architecture` (incl. Feature granularity lens), `file-placement`, `code-style` | `security`, `database`, `testing`, `workflow` when scope touches them | no |
 
 Err toward inclusion in all modes — `applicable: false` is cheap.
+
+### Grading basis (contract vs drift vs advisory)
+
+When the governing plan has a **Review contract** (plan-review, impl-full), the contract is the bar the assignee was given:
+
+| Basis | When | Max severity |
+|-------|------|--------------|
+| `contract` | Rule is pinned in the contract and the finding holds under the **pinned** text (`git show <pin>:<rule path>`) | Blocker |
+| `drift` | Finding holds only under rule text changed after the pin (`git diff --name-only <pin>..HEAD -- .cursor/rules`) | Warning |
+| `advisory` | Rule is not pinned in the contract, but plausibly relevant | Warning |
+| `repo-current` | No governing contract (gate mode, legacy plan without one) — current rule text is the bar | Blocker |
+
+`drift` and `advisory` findings never block. The user may promote one, which adds an **Amendments** row to the plan and turns it into `contract`. Legacy plan without a Review contract: use Conflict & compliance § Applicable rules as the pinned set, pinned at the plan file's last commit (`git log -1 --format=%h -- <plan path>`), and state that in the report header.
 
 ---
 
@@ -76,6 +90,7 @@ Every rule subagent is invoked the same way. The parent calls `Task` with `subag
 - **Mode** — `plan-review`, `impl-full`, or `gate`.
 - **Scope** — plan path for plan review; changed paths or unified diff otherwise.
 - **Rule file** — exactly one (e.g. `.cursor/rules/architecture/RULE.mdc`).
+- **Contract** — the plan's Review contract, the pin SHA, whether this rule is pinned, and the paths of `DECISIONS.md` / Amendments (or `none` in gate mode).
 - **Output schema** — every subagent returns the structure below.
 
 **Allowed reads:** the rule file, the scope, and configs the rule itself references (e.g. `projectStructure.config.cjs`, `.dependency-cruiser.cjs`, `ARCHITECTURE.md`, `documentation/DOC_TANSTACK_QUERY.md`, `documentation/DOC_FEATURE_LOCAL_README.md`, `documentation/DOC_APP_VISION.md`). Do **not** read other rule files; cross-rule overlap is handled by the parent.
@@ -89,6 +104,7 @@ Every rule subagent is invoked the same way. The parent calls `Task` with `subag
   "findings": [
     {
       "severity": "Blocker | Warning | Suggestion",
+      "basis": "contract | drift | advisory | repo-current",
       "category": "<short>",
       "file": "<path or 'plan'>",
       "line": "<number or null>",
@@ -103,9 +119,17 @@ Every rule subagent is invoked the same way. The parent calls `Task` with `subag
 
 If the rule does not apply to the scope, return `{ "applicable": false, "findings": [] }`. If the subagent fails, return the same shape with an additional `"error"` field describing the failure.
 
-**Standards diversion** — any deviation from industry standards, framework best practices, or established repo conventions becomes a finding with `ambiguity: "user-question-needed"` and a concrete question.
+**Standards diversion** — a deviation from repo conventions or framework best practices becomes a finding with `ambiguity: "user-question-needed"` and a concrete question, **unless** it is already decided: confirmed in Conflict & compliance § Standards diversions, Closed in `DECISIONS.md`, waived in Pattern & precedent, or in Amendments. Already-decided diversions are not re-asked. Industry/product precedent itself stays with `pattern-review` / `review-dev-plan`.
 
-**Applicability:** spawn a subagent for every rule plausibly relevant to the scope. Err toward inclusion — `applicable: false` is cheap and explicit.
+**Applicability:** spawn a subagent for every rule plausibly relevant to the scope. Err toward inclusion — `applicable: false` is cheap and explicit. **Always spawn `code-style`** in plan-review, impl-full, and gate.
+
+### Category naming (code-style subagent, every mode)
+
+The parent prompt for `.cursor/rules/code-style/RULE.mdc` must require a naming sweep of the scope. The subagent reads § Category, not instance and reports a finding for each new function, hook, component, type, file, feature folder, glob, placement destination, or example that encodes the first caller, SKU, page, vendor, ticket, or host when a category name would still fit a second instance. One caller is not a reason to skip. Do not return `applicable: false` just because quotes and imports look fine.
+
+Do not flag test titles (`should … when …`), an example explicitly marked as the wrong name, or a path labeled as one shipped instance rather than the template.
+
+Severity: **Warning** when guidance will be copied later; **Blocker** when the plan or diff introduces that name as the shared home. `rule_section`: `§ Category, not instance`.
 
 ---
 
@@ -115,7 +139,7 @@ If the rule does not apply to the scope, return `{ "applicable": false, "finding
 
 The parent runs these directly, in parallel with the subagent fan-out (deterministic shell, no value in delegating). Summarize failures only.
 
-**impl-full (full list):**
+**Contract gate list (SSOT — impl-full and gate run the same list; plan phase gates cite it):**
 
 - `pnpm validate:structure`
 - `pnpm validate:feature-size`
@@ -123,28 +147,19 @@ The parent runs these directly, in parallel with the subagent fan-out (determini
 - `pnpm lint`
 - `pnpm type-check`
 - `pnpm arch:check`
-- `pnpm test:run` — merge authority when the change touches tested logic or the plan requires tests; **not** a substitute for CI `test` job on PR
+- `pnpm test:run` — when the change touches tested logic or the plan requires tests; **not** a substitute for CI `test` job
 - `pnpm test:staged` — preview only (dry-run); does not prove tests pass
 - `pnpm format:check` — optional, if style drift is in scope
 
-**gate (lighter list):**
-
-- `pnpm validate:structure`
-- `pnpm validate:feature-size`
-- `pnpm lint`
-- `pnpm type-check`
-- `pnpm arch:check`
-- `pnpm test:run` — when scoped changes touch tested logic; CI `test` job remains merge gate
-- `pnpm test:staged` — fast preview during implementation (after `git add`); not merge-safe
-
-Each failing command becomes one finding (`rule: "tooling"`, `rule_section: "<command>"`). Severity: Blocker for structural / type / lint / arch failures; Warning for format drift; tests follow whether the plan required them. Demote to Warning only with clear context.
+Each failing command becomes one finding (`rule: "tooling"`, `rule_section: "<command>"`, `basis: "contract"` — or `repo-current` in gate mode). Severity: Blocker for structural / type / lint / arch failures; Warning for format drift; tests follow whether the plan required them. Demote to Warning only with clear context.
 
 **Classifier denylist (manual):** When the diff touches `scripts/change-classify.cjs` or adds `scripts/*staged*` / `scripts/*validator*`, flag any new enforcement paths missing from `TEST_INFRA_EXACT` / `TEST_INFRA_PREFIXES` in the report (no new automation script).
 
 ### Plan-compliance subagent (impl-full only)
 
-One additional read-only subagent compares the code against `DEVELOPMENT_PLAN.md`:
+One additional read-only subagent compares the code against the **whole contract**: `DEVELOPMENT_PLAN.md` (including Review contract and Amendments), plan **Decisions made**, and sibling `DECISIONS.md`:
 
+- Closed product/scope decisions and accepted Amendments vs actual code.
 - Phases marked done vs actual code.
 - Gates implied by the plan vs reality.
 - Feature `README.md` content alignment the plan required (`pnpm validate:feature-docs:strict` covers presence; this covers content).
@@ -171,6 +186,7 @@ Same output schema, with `rule: "plan-compliance"`.
 7. **Report** — see format below. No edits in this step.
 8. **Ask:** "What should I do with these findings — fix all, specific items, or nothing?" Wait for the user.
 9. **Optionally act** — only if the user requests fixes; apply changes (plan markdown and/or source) while still following `.cursor/rules/` and the structure whitelist. Changelog remains the responsibility of `.agents/skills/finish/SKILL.md` unless the user explicitly includes it.
+10. **plan-review closes with an amended plan** — before setting Summary **Plan validate** to `Done <date>`, each fixed or waived `contract` finding and each promoted `drift` / `advisory` finding gets one plan **Amendments** row (`source: validate`). IF `plan-grill-auto` is active: fix `contract` Blockers yourself, log the rows, promote nothing, then set `Done`.
 
 **Next:**
 
@@ -183,7 +199,7 @@ Same output schema, with `rule: "plan-compliance"`.
 
 ## Report format
 
-Open the report with: **Mode**, total findings, counts by severity, and any rules listed as **not audited**.
+Open the report with: **Mode**, contract pin (or `none — repo-current`), total findings, counts by severity **and basis**, and any rules listed as **not audited**. List `drift` and `advisory` findings in their own section after `contract` findings.
 
 Group findings by category (Architecture, File placement, Code style, … — plus Tooling, and Plan vs code in impl-full). For each finding:
 

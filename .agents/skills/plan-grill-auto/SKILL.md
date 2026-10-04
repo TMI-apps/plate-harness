@@ -92,7 +92,7 @@ Enumerate internally using `grill-me` § Boundary-question template (evidence + 
 3. **Resolve** — see Ask vs log below. Write `DECISIONS.md` immediately.
 4. **Resume same phase** until no unchecked forks remain.
 5. **Gate-2 / vision / precedent stops that would ask the user** — agent fills them (below), logs, continues.
-6. After Create + `DEVELOPMENT_PLAN.md`: **do not wait**. M/L → `review-dev-plan` (agent-run). Then write plan § **Decisions made** `agent-accept <date> — plan-grill-auto` and set Summary **Plan review** to `Done <date>`. That satisfies `implement`'s pending-review stop. A Closed `plan-grill-auto` precedent row is the Pattern & precedent waiver — `implement` must not re-ask it. Then `implement`. Stop when there is a testable result on the relevant app surface. Do **not** `finish` / commit unless the user asked.
+6. After Create + `DEVELOPMENT_PLAN.md`: **do not wait**. M/L → `review-dev-plan` (agent-run). Apply every `contract` must-fix to the plan and log **Amendments** rows; do not promote advisory items. Then write plan § **Decisions made** `agent-accept <date> — plan-grill-auto` and set Summary **Plan review** to `Done <date>`. Then `validate` (plan-review), fix `contract` Blockers the same way, and set **Plan validate** to `Done <date>`. That satisfies `implement`'s pending-review and pending-validate stops. A Closed `plan-grill-auto` precedent row is the Pattern & precedent waiver — `implement` must not re-ask it. Then `implement`. Stop when there is a testable result on the relevant app surface. Do **not** `finish` / commit unless the user asked.
 
 ### Ask vs log (overrides `plan-grill`)
 
@@ -135,7 +135,7 @@ Axes stay those in `grill-me` § Question style: performance, code consistency, 
 | `plan-grill-auto` owns | Hand off to |
 |---|---|
 | Tie / clear-winner during corridor | Ledger → same `plan` phase |
-| Corridor complete | `review-dev-plan` if M/L required → agent-accept in plan **Decisions made** + Plan review `Done` → `implement` (no Present wait) |
+| Corridor complete | `review-dev-plan` if M/L required → apply contract must-fixes as Amendments → agent-accept + Plan review `Done` → `validate` plan-review → Plan validate `Done` → `implement` (no Present wait) |
 | Testable result | Stop. User tests. Then `finish` only if they ask |
 | Precedent procedure | `pattern-review` (pick internally) |
 | Package/pattern reuse | `dont-reinvent-the-wheel` |
