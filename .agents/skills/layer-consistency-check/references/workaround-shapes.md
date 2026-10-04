@@ -34,6 +34,6 @@ Treat any of these as a stop sign, not friction to push through. Mid-impl trigge
 
 ## Severity filter
 
-Not every instance deserves a stop. **Flag when there's a clear structural alternative worth considering** — i.e. a plausible sibling case exists, or the workaround would need to be remembered/excluded again later, or the "correct" version isn't dramatically more expensive to build now.
+**Shape #5 first.** Do not use the one-off skip when introducing a function, component, type, file, or feature folder. One caller today is when a bad name becomes legacy. Rename to the category (or stop for WARNING) instead of encoding the instance. Naming SSOT: `code-style/RULE.mdc` § Category, not instance.
 
-Don't flag genuinely one-off exceptions that will never recur and cost nothing to leave as-is. **Do not use that skip for shape #5** when introducing a function, component, type, file, or feature folder: one caller today is exactly when a bad name becomes legacy. Rename to the category (or stop for WARNING) instead of encoding the instance. When in doubt on other shapes, do the one-beat layer check from the request-side cues before deciding whether it clears the bar.
+For every other shape, flag when there is a clear structural alternative worth considering — a plausible sibling case, a workaround that would need to be remembered again later, or a correct version that is not dramatically more expensive now. Do not flag a genuinely one-off exception that will never recur and costs nothing to leave as-is. When in doubt on those other shapes, do the one-beat layer check from the request-side cues before deciding whether it clears the bar.

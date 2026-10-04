@@ -1,10 +1,14 @@
 ---
-description: "Project-specific rate limiting and security patterns for Edge Functions"
+description: "Supabase Edge Function rate limiting (Postgres rate_limits). Not a home for other hosts."
 alwaysApply: false
 globs: ["**/supabase/functions/**/*.ts"]
 ---
 
 # Rate Limiting and Security Rules
+
+## Scope
+
+This rule is the rate-limit mechanism for Supabase Edge Functions: a Postgres `rate_limits` table, the service role, and `supabase/functions/_shared/rateLimit.ts`. Other hosts are out of scope. Do not copy that helper into another host, and do not extend it for callers outside Supabase Edge Functions.
 
 Rate limiting patterns for Supabase Edge Functions. See Legacy section for deprecated Firebase implementation.
 

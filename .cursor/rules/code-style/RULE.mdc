@@ -52,7 +52,7 @@ For standard primitives and recurring categories, choose the generic capability 
 - Optional thin contextual wrapper when it improves domain readability: `ItemDescriptionField`
 - Wrong shared name: `StoreItemDescriptionInput` when the implementation is fundamentally a reusable text input
 
-This does **not** require speculative factories, plugin systems, or unused extension hooks. Generic naming and composable boundaries are mandatory; product-specific extension machinery still needs a real use case.
+Do not add plugin registries, unused ports, or other extension machinery until a second consumer exists. That limit does not waive category naming. The first function, file, and feature folder still use the category name.
 
 ### Variables and Functions
 - Use camelCase for variables and functions
@@ -70,10 +70,13 @@ This does **not** require speculative factories, plugin systems, or unused exten
 - **Interfaces for objects, types for unions**
 
 ### File Naming
-- Components: `TodoItem.tsx` (PascalCase)
-- Hooks: `useTodos.ts` (camelCase, `use` prefix)
-- Services: `todoService.ts` (camelCase)
-- Types: `todo.types.ts` (camelCase, `.types.ts` suffix)
+
+These names illustrate case and suffix only. They are not destinations.
+
+- Components: `ItemList.tsx` (PascalCase)
+- Hooks: `useItems.ts` (camelCase, `use` prefix)
+- Services: `itemService.ts` (camelCase)
+- Types: `item.types.ts` (camelCase, `.types.ts` suffix)
 - Do not encode a one-off screen or SKU in a shared file name (`BreadBuyButton.tsx` → `BuyButton.tsx`)
 
 ## Formatting
@@ -142,16 +145,16 @@ When adding external package imports:
 - **Layer boundaries**: See `architecture/RULE.mdc` for what each layer can/cannot import from
 
 ```typescript
-// ✅ CORRECT
-import { useTodos } from "@/shared/hooks/useTodos";
+// ✅ CORRECT — alias shape only, not a required hook name
+import { useAuth } from "@/features/auth/hooks/useAuth";
 import { Button } from "@/components/common/Button";
 import { userService } from "@/shared/services/userService";
 import { fetchUserProfile } from "@/features/auth/services/userProfileService";
 
 // ❌ WRONG
-import { useTodos } from "../../shared/hooks/useTodos"; // Use path alias instead
+import { useAuth } from "../../features/auth/hooks/useAuth"; // Use path alias instead
 import { Button } from "../../components/common/Button"; // Use path alias instead
-import * as todoService from "../services/todoService"; // Use path alias; prefer hooks over direct service imports
+import * as itemService from "../services/itemService"; // Use path alias; prefer hooks over direct service imports
 import { useAuth } from "@features/auth/hooks/useAuth"; // Use @/features/... not @features/...
 ```
 

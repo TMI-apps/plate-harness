@@ -28,18 +28,20 @@ Ensures files/folders are created in correct locations per `projectStructure.con
    - Cloud Function → `cloud-functions/<name>/`
    - Feature docs (`.md`) → `src/features/*/README.md` or `src/features/*/docs/*.md`
    - Docs (`.md`) → See Documentation Placement section below
-   - Migration (`.sql`) → `supabase/migrations/` or `migrations/`
-   - Layout hooks (`.ts`) → `src/shared/hooks/useLayout*.ts`
+   - Migration (`.sql`) → `supabase/migrations/*.sql`
+   - Layout hooks (`.ts`) → `src/shared/hooks/`. Name the category (`code-style` § Category, not instance).
    - Route guards (`.tsx`) → `src/routes/guards/`
    - Feature context (`.tsx`) → `src/features/*/context/`
    - Feature state slice (`.ts`) → `src/features/*/store/`
    - Validation schema (`.ts`) → `src/features/*/types/*.schema.ts` or `src/shared/utils/validation/`
    - Data transformer (`.ts`) → Consumer's `services/` or `src/shared/utils/transformers/`
-   - Agent project skill → `.agents/skills/<name>/SKILL.md` (one `SKILL.md` per folder per `projectStructure.config.cjs`; optional `patterns.md` only where whitelisted, e.g. debug skill pattern library)
+   - Agent project skill → `.agents/skills/<name>/SKILL.md` (one `SKILL.md` per folder per `projectStructure.config.cjs`; optional `patterns.md` on any skill folder the whitelist already permits — `debug` is one current user, not the only legal name)
 3. **Validate**: Directory exists in config, file pattern allowed, matches whitelist
 4. **If invalid**: Identify violation, suggest correct location, explain why, offer to create
 
 ## Examples
+
+Names below illustrate the pattern. They are not the only legal files.
 
 **Page Component**: `ChatPage.tsx` → `src/pages/chat/ChatPage.tsx` (prefer named files, NOT `src/pages/chat/index.tsx`)
 - ✅ CORRECT: `src/pages/files/FilesPage.tsx`
@@ -53,7 +55,7 @@ Ensures files/folders are created in correct locations per `projectStructure.con
 
 **Temp directory**: `temp/` → Not allowed, suggest `.gitignore` or `documentation/temp/`
 
-**Edge function**: `send-email` → Create `supabase/functions/send-email/index.ts`
+**Edge function**: `supabase/functions/<capability>/index.ts`
 
 ## Integration
 

@@ -68,9 +68,9 @@ Grouped by YAML `alwaysApply`. Include `globs` when present.
 | `.cursor/rules/git-workflow/RULE.mdc` | Git branch models (Model A / Model B), PRs, and production promotion · `alwaysApply: false` |
 | `.cursor/rules/platform/RULE.mdc` | Windows/PowerShell command rules and local environment configuration · `alwaysApply: false` |
 | `.cursor/rules/database/RULE.mdc` | SQL migration best practices for the configured relational database (this fork: Supabase/PostgreSQL; not client queries or TanStack) · `alwaysApply: false` · `globs: ["**/supabase/migrations/**/*.sql", "**/supabase/**/*.sql"]` |
-| `.cursor/rules/cloud-functions/RULE.mdc` | When to use Edge Functions vs frontend, function organization, and architecture guidelines · `alwaysApply: false` · `globs: ["**/functions/**", "**/edge-functions/**", "**/supabase/functions/**"]` |
-| `.cursor/rules/project-specific/RULE.mdc` | Project-specific rate limiting and security patterns for Edge Functions · `alwaysApply: false` · `globs: ["**/supabase/functions/**/*.ts"]` |
-| `.cursor/rules/api-integration/RULE.mdc` | Principles for researching an external API, vendor, or backend before writing integration code (MCP-first, doc-freshness, POC-before-code) · `alwaysApply: false` · `globs: ["**/services/**", "**/functions/**", "**/lib/**", "supabase/functions/**"]` |
+| `.cursor/rules/cloud-functions/RULE.mdc` | When to use Edge Functions vs frontend, function organization, and architecture guidelines · `alwaysApply: false` · `globs: ["**/supabase/functions/**", "cloud-functions/**"]` |
+| `.cursor/rules/project-specific/RULE.mdc` | Supabase Edge Function rate limiting (Postgres rate_limits). Not a home for other hosts. · `alwaysApply: false` · `globs: ["**/supabase/functions/**/*.ts"]` |
+| `.cursor/rules/api-integration/RULE.mdc` | Principles for researching an external API, vendor, or backend before writing integration code (MCP-first, doc-freshness, POC-before-code) · `alwaysApply: false` · `globs: ["**/services/**", "**/lib/**", "**/supabase/functions/**", "cloud-functions/**"]` |
 
 ## Defaults
 

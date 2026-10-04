@@ -1,7 +1,7 @@
 ---
 description: "When to use Edge Functions vs frontend, function organization, and architecture guidelines"
 alwaysApply: false
-globs: ["**/functions/**", "**/edge-functions/**", "**/supabase/functions/**"]
+globs: ["**/supabase/functions/**", "cloud-functions/**"]
 ---
 
 # Cloud/Edge Functions Architecture
@@ -26,8 +26,11 @@ This rule defines:
 
 - **Other Cloud/Edge Functions** (Cloud Run, Railway, etc.):
   - Location: `cloud-functions/<service-name>/`
-  - Example: `cloud-functions/greenpt-proxy/` for Cloud Run/Railway deployments
   - These are separate from Supabase Edge Functions and use different runtimes (Node.js, etc.)
+
+Supabase deployment warnings in this rule apply to `supabase/functions/` only. Editing `cloud-functions/` uses the organization and runtime guidance here, not the shared-Supabase-project deploy model.
+
+Rate limiting stored in Postgres is `.cursor/rules/project-specific/RULE.mdc` and applies only to Supabase Edge Functions. Do not copy `supabase/functions/_shared/rateLimit.ts` into `cloud-functions/`, and do not extend that file for callers outside Supabase Edge Functions.
 
 For complete project structure guidelines, refer to `architecture/RULE.mdc`.
 
@@ -235,11 +238,12 @@ If an existing Edge Function could be replaced with frontend logic:
 ## Example Structure
 
 ```
-functions/
-├── ai-chat/          # Handles conversation logic, context, and calls OpenRouter
-├── gamma-generator/  # Handles specific logic for generating presentations/docs via Gamma
-└── webhooks/         # Dedicated function to receive incoming data (if third parties call you back)
+supabase/functions/
+├── <capability>/     # One business capability per folder
+└── _shared/          # Helpers used by more than one capability
 ```
+
+Non-Supabase hosts use `cloud-functions/<service-name>/` instead. The folder name is the capability, not the first caller.
 
 ## Why This Approach?
 
@@ -249,7 +253,7 @@ functions/
 - Failures in one capability don't cascade to others
 
 ### Security
-- API keys for OpenRouter live only inside the `ai-chat` function environment variables, never in the browser
+- API keys for a vendor live in that capability's server environment when the call cannot be made from the client, never in the browser
 - Each function has minimal permissions (principle of least privilege)
 - Secrets are scoped to specific capabilities
 
@@ -263,22 +267,19 @@ functions/
 ### ✅ Good Example
 
 ```typescript
-// functions/ai-chat/index.ts
-// Handles all AI chat-related functionality
+// supabase/functions/<capability>/index.ts
+// One business capability in this folder
 export async function handleRequest(req: Request): Promise<Response> {
-  // Conversation logic
-  // Context management
-  // OpenRouter API calls
-  // All AI chat capabilities in one place
+  // Capability logic stays in this function
 }
 ```
 
 ### ❌ Bad Example
 
 ```typescript
-// functions/api-call-1/index.ts - Generic name, unclear purpose
-// functions/api-call-2/index.ts - Another generic API call
-// functions/utils/index.ts - Mixed concerns
+// supabase/functions/api-call-1/index.ts - Generic name, unclear purpose
+// supabase/functions/api-call-2/index.ts - Another generic API call
+// supabase/functions/utils/index.ts - Mixed concerns
 // Bad: Functions organized by technical similarity, not business capability
 ```
 

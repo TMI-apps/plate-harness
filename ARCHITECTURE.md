@@ -30,7 +30,7 @@ src/
 ├── pages/               # Route-level page components
 ├── shared/              # Shared across features
 │   ├── context/         # React contexts (AuthContext, QueryProvider)
-│   ├── hooks/           # Shared hooks (useSupabaseConfig, etc.)
+│   ├── hooks/           # Cross-feature hooks
 │   ├── services/        # Shared services (Supabase client, Airtable client)
 │   ├── types/           # Shared types
 │   ├── utils/           # Shared utility functions (redirectUtils, queryKeys, etc.)
@@ -170,26 +170,21 @@ export const HomePage = () => {
 **✅ Correct:**
 
 ```typescript
-// src/features/todos/components/TodoItem.tsx
-import { useTodos } from "@/features/todos/hooks/useTodos";
+// Illustration of import direction, not a required filename.
+import { useAuth } from "@/features/auth/hooks/useAuth";
 import { Button } from "@/components/common/Button";
 
-// src/features/todos/hooks/useTodos.ts
-import * as todoService from "@/features/todos/services/todoService";
-import { supabase } from "@/services/supabaseService";
+import { fetchUserProfile } from "@/features/auth/services/userProfileService";
 ```
 
 **❌ Incorrect:**
 
 ```typescript
-// src/features/todos/components/TodoItem.tsx
-import * as todoService from "@/features/todos/services/todoService";  // ❌ Component importing service (use a hook)
-
-// src/features/todos/components/TodoItem.tsx
-import { useAuth } from "@/features/auth/hooks/useAuth";  // ❌ Cross-feature import (use shared context instead)
+// Component importing a service (use a hook)
+import { fetchUserProfile } from "@/features/auth/services/userProfileService";
 
 // src/components/common/Button/Button.tsx
-import { useTodos } from "@/features/todos/hooks/useTodos";  // ❌ Common component importing a feature
+import { useAuth } from "@/features/auth/hooks/useAuth"; // Common component importing a feature
 ```
 
 ## Code Quality Tools

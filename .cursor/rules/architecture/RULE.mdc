@@ -71,7 +71,7 @@ Cross-refs: measure with **`web-perf`** plugin skill when symptoms are CWV/Light
 
 **Proactively** on any request to change existing behavior ("add a color to the gradient", "make it splash", "just add a field/button/flag"), and when the request uses minimizer/exception language, names a first-of-a-kind instance without a category, or imports behavior-by-analogy. **Reactively** when the diff takes a workaround shape (special-case flag, parallel path, symptom tuning, disconnected patch, instance-encoded naming, growing scope, "for now" comment) or mid-impl when your own code starts to look like a workaround.
 
-Before writing the workaround: run [`.agents/skills/layer-consistency-check/SKILL.md`](../../../.agents/skills/layer-consistency-check/SKILL.md) (shapes: [`references/workaround-shapes.md`](../../../.agents/skills/layer-consistency-check/references/workaround-shapes.md)). Post the **WARNING, WORKAROUND** block from its alert template; **stop** until the user chooses workaround vs structural alternative. Apply the severity filter — do not flag genuinely one-off exceptions with no recurring cost. **Exception:** new identifiers still follow `code-style/RULE.mdc` § Category, not instance — first caller is not a reason to skip that test.
+Before writing the workaround: run [`.agents/skills/layer-consistency-check/SKILL.md`](../../../.agents/skills/layer-consistency-check/SKILL.md) (shapes: [`references/workaround-shapes.md`](../../../.agents/skills/layer-consistency-check/references/workaround-shapes.md)). **New identifiers follow `code-style/RULE.mdc` § Category, not instance on the first caller.** The one-off skip does not apply to a new function, component, type, file, or feature folder — one caller is when the name locks. For every other workaround shape, apply the severity filter and do not flag a genuinely one-off exception with no recurring cost. When a non-naming shape still clears that filter, post the **WARNING, WORKAROUND** block from the alert template and **stop** until the user chooses workaround vs structural alternative.
 
 Paths: [`documentation/DOC_AGENT_WORKFLOW_LAYERS.md`](../../../documentation/DOC_AGENT_WORKFLOW_LAYERS.md) § Layer consistency (workaround guard).
 
@@ -160,8 +160,8 @@ src/
 │       ├── context/     # Feature-specific context providers
 │       └── store/       # Feature-specific state slices
 ├── shared/       # Cross-cutting concerns (used across multiple features)
-│   ├── hooks/    # Global hooks (useAuth, useLayout, useLocalStorage)
-│   ├── services/ # Shared services (errorReporting, API clients)
+│   ├── hooks/    # Cross-feature hooks
+│   ├── services/ # Cross-feature services (API clients)
 │   ├── utils/    # Global utilities (date formatters, currency math, validators)
 │   ├── types/    # Shared type definitions
 │   ├── context/  # Cross-feature context providers
@@ -187,7 +187,7 @@ src/
   - Contains: hooks, services, utils, types, context, theme
   - Rule: Reusable logic that doesn't belong to a specific feature
   - Used by: Multiple features need the same functionality
-  - Examples: `shared/hooks/useAuth`, `shared/utils/formatDate`, `shared/services/errorReporting`
+  - Roles: cross-feature hooks, cross-feature utils, cross-feature services
 
 ### Backend/Server-Side Structure
 
@@ -461,7 +461,7 @@ This repo uses **TanStack Query** for server state (`@tanstack/react-query`). Th
 
 #### Related implementation in this repo
 
-- `src/features/auth/hooks/useUpdateUserProfile.ts` — mutation hook; align with this playbook when eliminating profile-related flashes (prefer `setQueryData` from `updateUserProfile` result over invalidation for the same key).  
+- `src/features/auth/hooks/useUpdateUserProfile.ts` — one shipped instance (profile update), not a template prefix. Other mutations get their own category name in the owning feature. Prefer `setQueryData` from the mutation result over invalidation for the same key.  
 - `src/shared/utils/queryClient.ts` — shared `QueryClient` defaults (`createQueryClient`, app singleton).  
 - `src/shared/utils/queryKeys.ts` — shared key helpers; per-feature keys follow the factory pattern in `documentation/DOC_TANSTACK_QUERY.md` (e.g. `features/<feature>/api/keys.ts` when a feature adds queries).  
 - `src/features/auth/services/userProfileService.ts` — example of a **canonical return**: `updateUserProfile` uses `.select(...)` so the caller can patch cache without an extra round-trip.  
@@ -485,7 +485,7 @@ When multiple components must share a dimension or position:
 When code doesn't clearly fit existing categories, use these guidelines:
 
 ### Layout-Specific Logic
-- Hooks for layout state (sidebar, header scroll, etc.): `shared/hooks/useLayout*.ts`
+- Hooks for layout state (sidebar, header scroll, and the like): `src/shared/hooks/`. Name the category (`code-style` § Category, not instance).
 - Layouts import these hooks; they don't own them
 
 ### Page Complexity Threshold
@@ -503,7 +503,7 @@ When code doesn't clearly fit existing categories, use these guidelines:
 
 ### Route Guards
 - Location: `routes/guards/`
-- Auth logic sourced from `shared/hooks/useAuth` or `features/auth/`
+- Auth logic sourced from `src/features/auth/hooks/useAuth.ts` (the auth feature). Do not add a second hook under `src/shared/hooks/` for the same job.
 
 ### Notifications/Toasts
 - Full feature: `features/notifications/`
@@ -511,11 +511,11 @@ When code doesn't clearly fit existing categories, use these guidelines:
 
 ### Error Boundaries
 - Component: `components/common/ErrorBoundary/`
-- Reporting service: `shared/services/errorReporting.ts`
+- Reporting service: `src/shared/services/`. Name the category (`code-style` § Category, not instance).
 
 ### Keyboard Shortcuts
-- Global shortcuts: `shared/hooks/useHotkeys.ts`
-- Feature shortcuts: `features/*/hooks/use*Shortcuts.ts`
+- Global shortcuts: one hook in `src/shared/hooks/`. Name the category (`code-style` § Category, not instance).
+- Feature shortcuts: `features/*/hooks/`. Name the category (`code-style` § Category, not instance).
 
 ### Cross-Feature Data Transforms
 - Consumer feature owns the transform
@@ -531,7 +531,7 @@ When code doesn't clearly fit existing categories, use these guidelines:
 - Compose providers in `App.tsx`
 
 ### Drag & Drop
-- Infrastructure: `shared/context/DndContext.tsx` + `shared/hooks/useDnd.ts`
+- Infrastructure: `src/shared/context/` and `src/shared/hooks/`. Name the category (`code-style` § Category, not instance).
 - Domain actions: respective feature's hooks
 
 ## Architecture Documentation

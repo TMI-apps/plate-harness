@@ -1,7 +1,7 @@
 ---
 description: "Principles for researching an external API, vendor, or backend before writing integration code (MCP-first, doc-freshness, POC-before-code)"
 alwaysApply: false
-globs: ["**/services/**", "**/functions/**", "**/lib/**", "supabase/functions/**"]
+globs: ["**/services/**", "**/lib/**", "**/supabase/functions/**", "cloud-functions/**"]
 ---
 
 # API Integration Research

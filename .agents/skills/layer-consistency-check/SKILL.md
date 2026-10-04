@@ -24,7 +24,7 @@ disable-model-invocation: false
 
 Apply **without being asked** during any implementation task when request-side cues or implementation-side shapes appear (see [`references/workaround-shapes.md`](references/workaround-shapes.md)). Obligation is also stated in `.cursor/rules/architecture/RULE.mdc` § Layer consistency (workaround guard).
 
-**Do:** one-beat layer check → severity filter → if bar cleared, post alert from [`references/alert-template.md`](references/alert-template.md) → **stop** until owner picks workaround vs structural path.
+**Do:** one-beat layer check → **shape #5 first** (a new function, component, type, file, or feature folder is not a one-off skip; one caller is when the name locks; rename to the category or stop with WARNING) → for every other shape, severity filter (skip a genuinely one-off exception with no recurring cost) → if that shape still clears the bar, post alert from [`references/alert-template.md`](references/alert-template.md) → **stop** until owner picks workaround vs structural path.
 
 **Do not:** treat local compliance within the request's phrasing as sufficient without checking the layer beneath.
 
@@ -58,10 +58,11 @@ Per [`documentation/DOC_AGENT_WORKFLOW_LAYERS.md`](../../../documentation/DOC_AG
 1. Read [`references/workaround-shapes.md`](references/workaround-shapes.md).
 2. **Proactive:** on request-side cues, run the one-beat layer check before writing code.
 3. **Reactive:** while implementing, stop when the diff matches a workaround shape.
-4. Apply the **severity filter** — skip genuinely one-off exceptions with no recurring cost.
-5. If the bar is cleared → post **WARNING, WORKAROUND** from [`references/alert-template.md`](references/alert-template.md) → **stop** until the user chooses.
-6. If the user picks the **structural alternative**: IF scope is XS/S THEN `quick-piv`; IF multi-phase/migration/contracts THEN `plan` (cite router § implement vs quick-piv). If they pick the workaround → implement as asked.
-7. **When invoked from `improve`:** treat the IMPROVE finding text + target name as the proactive cue; run the one-beat check before any code.
+4. **Naming first (shape #5).** A new function, component, type, file, or feature folder is not a one-off skip. One caller is when the name locks. Rename to the category (`code-style/RULE.mdc` § Category, not instance), or stop with WARNING.
+5. **Other shapes.** Skip a genuinely one-off exception with no recurring cost.
+6. If a non-naming shape still clears that filter → post **WARNING, WORKAROUND** from [`references/alert-template.md`](references/alert-template.md) → **stop** until the user chooses.
+7. If the user picks the **structural alternative**: IF scope is XS/S THEN `quick-piv`; IF multi-phase/migration/contracts THEN `plan` (cite router § implement vs quick-piv). If they pick the workaround → implement as asked.
+8. **When invoked from `improve`:** treat the IMPROVE finding text + target name as the proactive cue; run the one-beat check before any code.
 
 ---
 
