@@ -67,7 +67,7 @@ Grouped by YAML `alwaysApply`. Include `globs` when present.
 |------|-------------|
 | `.cursor/rules/git-workflow/RULE.mdc` | Git branch models (Model A / Model B), PRs, and production promotion · `alwaysApply: false` |
 | `.cursor/rules/platform/RULE.mdc` | Windows/PowerShell command rules and local environment configuration · `alwaysApply: false` |
-| `.cursor/rules/database/RULE.mdc` | SQL migration best practices for the configured relational database (this fork: Supabase/PostgreSQL; not client queries or TanStack) · `alwaysApply: false` · `globs: ["**/supabase/migrations/**/*.sql", "**/supabase/**/*.sql"]` |
+| `.cursor/rules/database/RULE.mdc` | SQL migration best practices for the configured relational database (this fork: Supabase/PostgreSQL; not client queries or TanStack) · `alwaysApply: false` · `globs: ["**/migrations/**/*.sql"]` |
 | `.cursor/rules/cloud-functions/RULE.mdc` | When to use Edge Functions vs frontend, function organization, and architecture guidelines · `alwaysApply: false` · `globs: ["**/supabase/functions/**", "cloud-functions/**"]` |
 | `.cursor/rules/project-specific/RULE.mdc` | Supabase Edge Function rate limiting (Postgres rate_limits). Not a home for other hosts. · `alwaysApply: false` · `globs: ["**/supabase/functions/**/*.ts"]` |
 | `.cursor/rules/api-integration/RULE.mdc` | Principles for researching an external API, vendor, or backend before writing integration code (MCP-first, doc-freshness, POC-before-code) · `alwaysApply: false` · `globs: ["**/services/**", "**/lib/**", "**/supabase/functions/**", "cloud-functions/**"]` |
@@ -76,6 +76,7 @@ Grouped by YAML `alwaysApply`. Include `globs` when present.
 
 - **Always read before edit.** Run `pnpm validate:structure` if creating new files in unfamiliar locations.
 - **Git workflow mode:** Read `src/config/git-workflow.json`, then apply `.cursor/rules/git-workflow/RULE.mdc` § Mode-aware branch gate (Model A default / Model B opt-in).
+- **Name the mechanism before code.** Before adding or copying a function, hook, component, type, file, or feature folder — including a one-line edit — read `.agents/skills/name-the-mechanism/SKILL.md` and follow it.
 - **Layer consistency before code.** Every request to change existing behavior carries an assumption about how the system works — verify it before acting (user can't see the impl). Cues: `.agents/skills/layer-consistency-check/references/workaround-shapes.md` § Request-side cues → run `.agents/skills/layer-consistency-check/SKILL.md` and stop for user choice before writing code.
 - **Plan before non-trivial work.** Anything beyond a one-line fix should start with the `plan` skill (`.agents/skills/plan/SKILL.md`).
 - **Lean output.** Don't restate skill content — point to the file and follow it.

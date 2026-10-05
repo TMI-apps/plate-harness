@@ -2,7 +2,7 @@
 name: review-dev-plan
 description: >-
   Runs seven parallel Task subagents to critique a development plan (feedback only).
-  One fixed lens checks category-vs-instance naming.
+  One fixed lens checks name-the-mechanism.
   IF DEVELOPMENT_PLAN.md exists AND Summary says Plan review: Required: pending (M/L)
   THEN use this skill. Not for repo-rule compliance (validate plan-review mode).
   Grades against the plan's Review contract; findings outside it are advisory.
@@ -50,9 +50,9 @@ The **Industry precedent** agent must read [`.agents/skills/pattern-review/refer
 
 ### Naming generality (fixed lens)
 
-The prompt must tell this agent to read `.cursor/rules/code-style/RULE.mdc` § Category, not instance, then scan the plan for names that are more specific than the job.
+The prompt must tell this agent to read `.agents/skills/name-the-mechanism/SKILL.md`, then scan the plan for violations of that skill. Do not apply a stricter test than the skill states.
 
-Flag a **must-fix** when a new function, hook, component, type, file, feature folder, glob, or "put new code here" line encodes the first caller, SKU, page, vendor, ticket, or host, and a category name would still fit a second instance. One caller is not a reason to pass. A placement table that names one concrete file as the home is the same finding.
+Flag a **must-fix** for each violation: a name the skill forbids, a second copy with no marker, a third or later copy, a placement line that names one concrete file as the home, or a glob or trigger keyed only to an instance name.
 
 Do not flag: test titles (`should … when …`); an example explicitly marked as the wrong name; a path labeled as one shipped instance rather than the template. Do not invent a replacement product name.
 

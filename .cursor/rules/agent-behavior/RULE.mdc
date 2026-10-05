@@ -59,6 +59,10 @@ The agent must STOP and ASK the user before modifying any of the following file 
 **CI/CD:**
 - `.github/workflows/**`
 
+### Exception: mechanism-rename references
+
+When `.agents/skills/name-the-mechanism/SKILL.md` requires a rename or extraction, updating references to the old name in `.cursor/rules/**`, `.agents/skills/**`, and `AGENTS.md` in that same change does not need a separate approval. Any other edit to those files still stops for approval. This exception does not allow weakening an unrelated rule.
+
 **Required Behavior:**
 
 1. **When a violation or issue requires modifying a protected file:**

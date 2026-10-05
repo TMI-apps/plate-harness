@@ -8,7 +8,7 @@ globs: ["**/supabase/functions/**/*.ts"]
 
 ## Scope
 
-This rule is the rate-limit mechanism for Supabase Edge Functions: a Postgres `rate_limits` table, the service role, and `supabase/functions/_shared/rateLimit.ts`. Other hosts are out of scope. Do not copy that helper into another host, and do not extend it for callers outside Supabase Edge Functions.
+This rule is the rate-limit mechanism for Supabase Edge Functions: a Postgres `rate_limits` table and the service role. The helper lives in `supabase/functions/_shared/` and is named for the rate-limit role. That path is an example of this fork's helper, not a template prefix for other hosts. Other hosts are a different rule. Do not copy or extend this helper so this rule will load.
 
 Rate limiting patterns for Supabase Edge Functions. See Legacy section for deprecated Firebase implementation.
 
@@ -59,7 +59,7 @@ Enable RLS on `rate_limits` table. Create policy blocking all client access (ser
 
 ### Helper Function
 
-Create reusable rate limit checker in `supabase/functions/_shared/rateLimit.ts`:
+Put the rate-limit checker in `supabase/functions/_shared/`, named for the rate-limit role (this fork's file is an example, not the only legal name):
 
 Function signature: `checkRateLimit(userId, action, maxRequests, windowMs): Promise<boolean>`
 

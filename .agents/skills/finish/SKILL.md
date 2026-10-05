@@ -102,7 +102,7 @@ When skipping version/changelog: commit message uses `type: Subject` **without**
   - Never stage all changes automatically when unrelated unstaged work exists without explicit user confirmation.
 - commit with proper message format (see commit message standards below)
 - fix any issues found by pre-commit hook
-- **CRITICAL:** If fixing requires modifying protected files, STOP and ASK the user first. Full manifest: `.cursor/rules/agent-behavior/RULE.mdc` § Protected Files. NEVER modify protected files without explicit user approval.
+- **CRITICAL:** If fixing requires modifying protected files, STOP and ASK the user first. Full manifest: `.cursor/rules/agent-behavior/RULE.mdc` § Protected Files. Exception: mechanism-rename reference updates in that section. NEVER modify other protected files without explicit user approval.
 - check if `ARCHITECTURE.md` needs update
 - do not create new deep docs during finish unless user explicitly requests it
 - **Do NOT push in this command.** `finish` is local-only and ends at a successful commit.

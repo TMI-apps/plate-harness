@@ -14,7 +14,7 @@ Never invent a parallel chat-only rubric. Read this file, then score.
 | One function slow or too complex | `optimize2` |
 | Code in wrong layer/feature | Semantic placement mode (after lint/structure green) |
 | Request would add a flag / parallel path / “for now” | `layer-consistency-check` |
-| Two similar business-logic functions, third not proven | Keep copies (Rule of Three) |
+| Two similar copies of the same logic | `.agents/skills/name-the-mechanism/SKILL.md` — do not score a forbidden copy as "keep" |
 
 Consolidate = **cross-file / cross-feature same concern**, not “make this file prettier.” **Focus** = Target ∪ 1-hop import neighborhood. **Frequency / gates** count **all** same-pattern hits from the `src/` sweep (including out-of-focus). Execute only in-focus files unless the user expands Target.
 
@@ -25,11 +25,11 @@ Consolidate = **cross-file / cross-feature same concern**, not “make this file
 Always apply before scoring.
 
 1. **Same job** for the same user journey — not coincidental similar code. If product intent is unclear, ask; do not merge.
-2. **For a novel abstraction inferred from duplicated business logic: 3+ concrete use cases.** Category-based names, established standard primitives, and existing repo patterns are outside this gate. Other exceptions (document why): wrong layer even if one use; extract required for tests; cognitive >25 **and** cyclomatic >15 **and** >150 lines. Full scope and exceptions: `optimize2` § Rule of Three.
+2. **Copy count allows the extract:** `.agents/skills/name-the-mechanism/SKILL.md`. Do not restate that skill. Established primitives and existing repo patterns are outside this gate. Other exceptions (document why): wrong layer even if one use; extract required for tests; cognitive >25 **and** cyclomatic >15 **and** >150 lines. Those exceptions: `optimize2` § Rule of Three.
 3. **Indirection still cheaper:** trace the feature in ≤5 files; shared code deletes more than it adds; a newcomer reads the share faster than the copies.
 4. **<5 knobs.** More flags means gluing different things. Keep copies or write a convention; do not build a factory.
 5. **Home is a real shared layer** (`shared/utils`, `components/common`, `lib`) — not a new coupling between independent features.
-6. **Lowest-cost fix first:** accept duplication → document a pattern → extract a util → parameterized hook/component. Never jump to a configurable factory.
+6. **Lowest-cost fix first:** accept duplication → document a pattern → extract a util → parameterized hook/component, except when `.agents/skills/name-the-mechanism/SKILL.md` forbids keeping the copies. Never jump to a configurable factory.
 
 ---
 
