@@ -3,7 +3,7 @@ name: validate
 description: >-
   Validates a plan or an implementation via parallel read-only rule-shaped audits, then
   synthesizes findings before any fixes. The code-style subagent always sweeps
-  instance-encoded names. Auto-selects depth: plan review, full implementation
+  names and copy counts against name-the-mechanism. Auto-selects depth: plan review, full implementation
   review (rules + tooling + plan-compliance), or a lighter pre-merge architecture gate. Use
   when validating a plan/implementation, before merge/finish, or after large refactors.
 ---
@@ -125,11 +125,11 @@ If the rule does not apply to the scope, return `{ "applicable": false, "finding
 
 ### Category naming (code-style subagent, every mode)
 
-The parent prompt for `.cursor/rules/code-style/RULE.mdc` must require a naming sweep of the scope. The subagent reads § Category, not instance and reports a finding for each new function, hook, component, type, file, feature folder, glob, placement destination, or example that encodes the first caller, SKU, page, vendor, ticket, or host when a category name would still fit a second instance. One caller is not a reason to skip. Do not return `applicable: false` just because quotes and imports look fine.
+The parent prompt for `.cursor/rules/code-style/RULE.mdc` must require a naming sweep of the scope. The subagent reads `.agents/skills/name-the-mechanism/SKILL.md` and reports a finding for each violation. Do not apply a stricter test than that skill. Do not return `applicable: false` just because quotes and imports look fine.
 
 Do not flag test titles (`should … when …`), an example explicitly marked as the wrong name, or a path labeled as one shipped instance rather than the template.
 
-Severity: **Warning** when guidance will be copied later; **Blocker** when the plan or diff introduces that name as the shared home. `rule_section`: `§ Category, not instance`.
+Severity: **Warning** when guidance will be copied later; **Blocker** when the plan or diff leaves a third or later copy, or introduces an instance name as the shared home. `rule_section`: name-the-mechanism.
 
 ---
 

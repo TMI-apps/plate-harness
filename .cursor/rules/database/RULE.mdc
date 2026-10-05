@@ -1,7 +1,7 @@
 ---
 description: "SQL migration best practices for the configured relational database (this fork: Supabase/PostgreSQL; not client queries or TanStack)"
 alwaysApply: false
-globs: ["**/supabase/migrations/**/*.sql", "**/supabase/**/*.sql"]
+globs: ["**/migrations/**/*.sql"]
 ---
 
 # Database Migrations Best Practices
@@ -10,7 +10,7 @@ globs: ["**/supabase/migrations/**/*.sql", "**/supabase/**/*.sql"]
 
 Database migrations must be safe for both fresh database resets and incremental updates. All migrations should be idempotent and handle edge cases gracefully.
 
-**This rule covers SQL in `supabase/migrations/` only.** It does not define how the React app reads or writes data.
+**This rule covers SQL under a `migrations/` directory** (this fork: `supabase/migrations/`). It does not define how the React app reads or writes data. Another database product is a different rule. Do not copy these migrations into that product so this rule will load.
 
 ---
 

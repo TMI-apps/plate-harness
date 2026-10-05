@@ -33,7 +33,7 @@ Execute a development plan phase by phase. Use `DEVELOPMENT_PLAN.md` as the guid
 ### 0. Branch gate
 
 - [ ] Per `.cursor/rules/git-workflow/RULE.mdc` § Branch Strategy — verify branch before code edits; stop if on protected branches per that section.
-- [ ] **CRITICAL:** If the plan touches protected files (`.husky/**`, `tsconfig*.json`, `.cursor/rules/**`, `.agents/skills/**`, etc.), **stop** and get explicit user approval before editing them. Full manifest: `.cursor/rules/agent-behavior/RULE.mdc` § Protected Files. Record consent in **Decisions made** when granted.
+- [ ] **CRITICAL:** If the plan touches protected files (`.husky/**`, `tsconfig*.json`, `.cursor/rules/**`, `.agents/skills/**`, etc.), **stop** and get explicit user approval before editing them. Full manifest: `.cursor/rules/agent-behavior/RULE.mdc` § Protected Files. Exception: mechanism-rename reference updates in that section. Record consent in **Decisions made** when granted.
 
 ### 1. Load plan
 
@@ -55,7 +55,7 @@ Execute a development plan phase by phase. Use `DEVELOPMENT_PLAN.md` as the guid
 For each phase **in order** (one phase at a time unless the plan explicitly allows parallel work):
 
 1. **Read** the phase: Goal, Steps, Gate.
-2. **Execute** the steps; match file layers, aliases, and patterns in `.cursor/rules/architecture/RULE.mdc` and `ARCHITECTURE.md`. **New identifiers** (function, hook, component, type, file, feature folder): follow `.cursor/rules/code-style/RULE.mdc` § Category, not instance — name the capability, not the first caller/SKU/page.
+2. **Execute** the steps; match the layer and the folder in `.cursor/rules/architecture/RULE.mdc` and `ARCHITECTURE.md`. Do not copy a neighbor's feature prefix onto a shared mechanism. **New or copied identifiers** (function, hook, component, type, file, feature folder): `.agents/skills/name-the-mechanism/SKILL.md`.
 3. **Run** the gate (see below). It must pass before continuing.
 4. **Update** `DEVELOPMENT_PLAN.md`:
    - **Phase overview:** set this phase’s status to `Done` or `✅` (use the wording/style already used in the table).

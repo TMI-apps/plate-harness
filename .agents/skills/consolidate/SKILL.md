@@ -40,14 +40,14 @@ If the ask is only “what warrants consolidation / make a rubric,” read [`ref
 
 ## Core Principles
 
-### Rule of Three (Inherited from optimize2)
+### Rule of Three (pointer)
 
-For a **novel abstraction inferred from duplicated business logic**, do not extract/abstract until you have **3+ concrete use cases**. This does not delay category-based naming, established standard primitives, or existing repo patterns. Full scope and exceptions: **`.agents/skills/optimize2/SKILL.md`** § Rule of Three.
+Copy counts and naming: **`.agents/skills/name-the-mechanism/SKILL.md`**. Do not restate them here. Speculative extracts that the skill does not require stay deferred. Full exceptions for wrong-layer and complexity extracts: **`.agents/skills/optimize2/SKILL.md`** § Rule of Three.
 
 ### Consolidation != Abstraction
 
 Not every repeated pattern needs a shared abstraction. Sometimes the right answer is:
-- **Accept duplication** - the copies will diverge
+- **Accept duplication** — only when `.agents/skills/name-the-mechanism/SKILL.md` allows the copies to remain
 - **Standardize the pattern** - document it as a convention without extracting
 - **Extract a utility** - simple shared function
 - **Create a configurable abstraction** - parameterized hook/component (highest cost)
@@ -256,7 +256,7 @@ If a recommendation would preserve or introduce a standards diversion, ask wheth
 
 **SSOT:** [`references/warrant-rubric.md`](references/warrant-rubric.md) — wrong-tool routing, hard gates, scoring, do-not list.
 
-Always apply **hard gates** from that file before scoring. Fail a gate → accepted duplication; do not invent a chat-only rubric.
+Always apply **hard gates** from that file before scoring. Also apply `.agents/skills/name-the-mechanism/SKILL.md` before scoring: if that skill forbids the copies, the verdict is extract, not accept. Fail a rubric gate → accepted duplication only when that skill allows the copies to remain. Do not invent a chat-only rubric.
 
 ```
 Score = 2×Frequency + 2×Stability + 2×Simplicity + 3×Sameness + 2×SharedBoundary
@@ -361,7 +361,7 @@ Skip this phase on audit-only invocations. For each **user-approved** consolidat
 - [ ] Check `projectStructure.config.cjs` whitelist for target folder
 - [ ] Verify no circular dependencies would be created
 - [ ] All imports will use path aliases (`@/` prefix)
-- [ ] If any protected file must be changed (`.cursor/**`, `projectStructure.config.cjs`, lint/ts config, etc.), stop and get explicit user approval first
+- [ ] If any protected file must be changed (`.cursor/**`, `projectStructure.config.cjs`, lint/ts config, etc.), stop and get explicit user approval first. Exception: mechanism-rename reference updates in `.cursor/rules/agent-behavior/RULE.mdc` § Protected Files.
 
 #### 6.2 Implementation
 

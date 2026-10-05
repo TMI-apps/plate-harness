@@ -102,6 +102,8 @@ These files may be edited on any branch after user confirmation:
 - Cursor rules (`.cursor/rules/**`)
 - README files
 
+Mechanism-rename reference updates do not need that confirmation. See `.cursor/rules/agent-behavior/RULE.mdc` § Protected Files.
+
 App code still follows § Mode-aware branch gate.
 
 #### Emergency Main Branch Changes (Rare Exception)

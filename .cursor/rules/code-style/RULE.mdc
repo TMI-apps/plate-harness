@@ -18,45 +18,24 @@ alwaysApply: true
 - **Variables**: Use `const`/`let` (never `var`)
 - **No `any`**: Explicit types required
 - **Complexity**: Functions ≤ 10 cyclomatic, ≤ 15 cognitive, ≤ 100 lines, ≤ 4 nesting
-- **Names**: category, not first caller/SKU/page (see § Naming)
+- **Names**: before adding or copying any symbol, read `.agents/skills/name-the-mechanism/SKILL.md` and follow it (one-off edits included)
 
 See detailed sections below for complete guidance.
 
 ## Naming Conventions
 
-**SSOT** for identifier and file names in `src/` (and the same idea for new symbols elsewhere). Syntax below; **category vs instance** is the growth rule.
-
-### Category, not instance (mandatory)
-
-Name the **domain verb/noun** (what this always does), not the first ticket, caller, SKU, page, role, or season.
-
-**Test (always, including the first caller):** if a second instance shows up next month, does this identifier still make sense **unmodified**? If you would rename it → you named the instance. Put the instance in a **parameter**, **caller**, or a **thin wrapper** next to that use — not in the shared name.
-
-| ❌ Instance-encoded | ✅ Category |
-|--------------------|-------------|
-| `BreadBuyButton`, `submitGovernorAttendanceQ1Report` | `BuyButton`, `submitReport` |
-| `handleWelcomeEmailClick`, `useCheckoutForCourseSku` | `sendLifecycleEmail`, `useCheckout` |
-
-Still **descriptive**: `handleData`, `processItem`, `ThingManager`, `api-call-1` are too vague. Category names state the capability (`submitReport`, `BuyButton`), not the current customer.
-
-This is the same test as `layer-consistency-check` shape **instance-encoded naming**. Style owns how to name; that skill **stops** if the name is still a workaround.
-
-Applies to: functions, hooks, components, types, feature folders, services, Edge Function folder names. Test titles may name the scenario (`should … when …`); production symbols must not.
+Syntax for identifiers and file names in `src/` (and the same syntax for new symbols elsewhere). What the name means, and when to extract a copy, is `.agents/skills/name-the-mechanism/SKILL.md`. Do not restate that skill here.
 
 ### Generic core, contextual edge
 
-For standard primitives and recurring categories, choose the generic capability name on the **first** implementation; do not wait for duplicate callers or a third copy.
+Do not add plugin registries, unused ports, or other extension machinery until a second consumer exists. That limit does not waive name-the-mechanism.
 
-- Shared primitive: `TextInput`, `SelectInput`, `QuestionField`
-- Context in props/caller: `label="Store item description"`, validation rules, data binding
-- Optional thin contextual wrapper when it improves domain readability: `ItemDescriptionField`
-- Wrong shared name: `StoreItemDescriptionInput` when the implementation is fundamentally a reusable text input
-
-Do not add plugin registries, unused ports, or other extension machinery until a second consumer exists. That limit does not waive category naming. The first function, file, and feature folder still use the category name.
+- Context stays in props, the caller, or a thin wrapper (`label`, validation, data binding).
+- A reusable control uses the role name from the skill. The examples `TextInput` and `ItemDescriptionField` illustrate that split. They are not required file names.
 
 ### Variables and Functions
 - Use camelCase for variables and functions
-- Use descriptive names that indicate **category purpose** (not the first caller)
+- Use descriptive names. What they mean: `.agents/skills/name-the-mechanism/SKILL.md`
 - Avoid abbreviations unless widely understood
 
 ### Constants
@@ -77,7 +56,7 @@ These names illustrate case and suffix only. They are not destinations.
 - Hooks: `useItems.ts` (camelCase, `use` prefix)
 - Services: `itemService.ts` (camelCase)
 - Types: `item.types.ts` (camelCase, `.types.ts` suffix)
-- Do not encode a one-off screen or SKU in a shared file name (`BreadBuyButton.tsx` → `BuyButton.tsx`)
+- Shared file names: `.agents/skills/name-the-mechanism/SKILL.md`. The samples above illustrate case and suffix only.
 
 ## Formatting
 
@@ -105,7 +84,7 @@ These names illustrate case and suffix only. They are not destinations.
 - **Prefer small, reusable components and hooks**
 - Before adding new functionality, search for existing components/hooks/utilities that can be reused
 - When explaining changes, note which existing pieces were checked for reuse
-- Avoid duplicated UI or logic across the codebase
+- Copy counts: `.agents/skills/name-the-mechanism/SKILL.md`
 
 ## Code Extraction Guidelines
 
@@ -377,7 +356,7 @@ When working with TypeScript and React:
 - `testing/RULE.mdc` - May reference code style for test files
 - `workflow/RULE.mdc` - May reference formatting standards in review process
 - `.agents/skills/optimize2/SKILL.md` - Detailed complexity reduction / optimization workflow
-- `.agents/skills/layer-consistency-check/SKILL.md` — instance-encoded naming as a workaround stop; this file owns the naming rule itself
+- `.agents/skills/layer-consistency-check/SKILL.md` — stops if name-the-mechanism is violated. The naming rule itself is `.agents/skills/name-the-mechanism/SKILL.md`.
 
 **Rules that reference this rule:**
 - All other rules may reference code style standards

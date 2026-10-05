@@ -29,7 +29,7 @@ Ensures files/folders are created in correct locations per `projectStructure.con
    - Feature docs (`.md`) → `src/features/*/README.md` or `src/features/*/docs/*.md`
    - Docs (`.md`) → See Documentation Placement section below
    - Migration (`.sql`) → `supabase/migrations/*.sql`
-   - Layout hooks (`.ts`) → `src/shared/hooks/`. Name the category (`code-style` § Category, not instance).
+   - Layout hooks (`.ts`) → `src/shared/hooks/`. Name per `.agents/skills/name-the-mechanism/SKILL.md`.
    - Route guards (`.tsx`) → `src/routes/guards/`
    - Feature context (`.tsx`) → `src/features/*/context/`
    - Feature state slice (`.ts`) → `src/features/*/store/`

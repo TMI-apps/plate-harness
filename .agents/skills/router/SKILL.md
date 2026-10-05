@@ -101,7 +101,9 @@ If unclear, ask about the user's intended app usage, product vision, priorities,
 
 If the emerging direction would diverge from industry standards, framework best practices, or established repo conventions, ask whether the diversion is intentional or whether to align with best practices before routing to implementation.
 
-**Pre-implementation — layer consistency (when cues match):** Before routing to `quick-piv`, `plan`, or direct code, check request-side cues in [`layer-consistency-check/references/workaround-shapes.md`](../layer-consistency-check/references/workaround-shapes.md) § Request-side cues — including **any change to existing behavior** (verify the user's assumption about how the system works first) and the onboarding-UI cue for integrations whose SSOT is `.env` + `src/config/app-tasks.json` + docs. If cues match, read and run [`.agents/skills/layer-consistency-check/SKILL.md`](../layer-consistency-check/SKILL.md) **first** — do not explore for implementation until the one-beat check clears or the user picks workaround vs structural path.
+**Pre-implementation — name the mechanism (code that adds or copies a symbol):** Before routing to `quick-piv`, `plan`, `implement`, or direct code, read and follow [`.agents/skills/name-the-mechanism/SKILL.md`](../name-the-mechanism/SKILL.md) whenever the change adds or copies a function, hook, component, type, file, or feature folder. This includes a one-line edit, a one-off, a second copy, and a third or later copy. Do not defer it to `optimize2`. It runs even when layer-consistency cues do not match.
+
+**Pre-implementation — layer consistency (when cues match):** Before routing to `quick-piv`, `plan`, or direct code, check request-side cues in [`layer-consistency-check/references/workaround-shapes.md`](../layer-consistency-check/references/workaround-shapes.md) § Request-side cues — including **any change to existing behavior** (verify the user's assumption about how the system works first) and the onboarding-UI cue for integrations whose SSOT is `.env` + `src/config/app-tasks.json` + docs. If cues match, read and run [`.agents/skills/layer-consistency-check/SKILL.md`](../layer-consistency-check/SKILL.md) **first** — do not explore for implementation until the one-beat check clears or the user picks workaround vs structural path. Name-the-mechanism still applies to any new or copied symbol in that change.
 
 ### Gate 3 — Delivery shape (only after gates 1–2 pass)
 
@@ -201,7 +203,8 @@ While inside **plan corridor** (`I`), product/scope forks use **`plan-grill` rai
 | Should we align [existing product/feature/component] with industry standards? / how to align? | `.agents/skills/standards-align/SKILL.md` |
 | Delete / remove / rip out / `/purge` a named feature/module/path/engine with multi-asset cleanup; leftover engine after a flag-off or replacement phase; "is the old path gone?" | `.agents/skills/purge-skill/SKILL.md` |
 | Author or refine one project skill under `.agents/skills/` (`/create-skill`) | `.agents/skills/create-skill/SKILL.md` |
-| Change existing behavior / unverified system assumption / workaround / “just this one” exception during implementation | `.agents/skills/layer-consistency-check/SKILL.md` (also always-on via `architecture/RULE.mdc` § Layer consistency) |
+| Add or copy a function, hook, component, type, file, or feature folder; second copy; third or later copy; menu, timer, queue, or layout primitive; placement line, glob, or trigger for that kind of code | `.agents/skills/name-the-mechanism/SKILL.md` **before** the delivery skill (also always-on via `code-style/RULE.mdc` § Naming) |
+| Change existing behavior / unverified system assumption / workaround / “just this one” exception during implementation | `.agents/skills/layer-consistency-check/SKILL.md` (also always-on via `architecture/RULE.mdc` § Layer consistency). Naming still follows `name-the-mechanism`. |
 | Write a cross-repo adoption guide from an implemented pattern | `.agents/skills/write-adoption-guide/SKILL.md` |
 | Goal or scope **not** ready — clarify only (no `DEVELOPMENT_PLAN.md` yet); **one** primary by missing dimension (see **Clarification-first routing**) | Product/vision → `grill-me`; user forbids questions → `plan-grill-auto`; acceptance/APIs → `plan` **§ Refine** only |
 | Execute an existing `DEVELOPMENT_PLAN.md` phase by phase | `.agents/skills/implement/SKILL.md` |
@@ -474,7 +477,7 @@ Do **not** run standalone **`pattern-review`** `scan` in the same session if **`
 
 **Tiebreak:** User asks should/how **align with industry** on existing scope → **`standards-align`**. Novel plan/proposal gate → **`pattern-review`**. “This flow is overbuilt” without industry framing → **`challenge`**.
 
-**Always-on:** layer-consistency is enforced during implementation via `architecture/RULE.mdc` § Layer consistency — not only when the user names the skill.
+**Always-on:** name-the-mechanism is enforced during implementation via `code-style/RULE.mdc` § Naming and the pre-implementation gate above — not only when the user names the skill. layer-consistency is enforced via `architecture/RULE.mdc` § Layer consistency — not only when the user names that skill.
 
 ### `implement` vs `quick-piv`
 
@@ -587,6 +590,7 @@ Do **not** run standalone **`pattern-review`** `scan` in the same session if **`
 - `.agents/skills/purge-skill/SKILL.md`
 - `.agents/skills/create-skill/SKILL.md`
 - `.agents/skills/layer-consistency-check/SKILL.md`
+- `.agents/skills/name-the-mechanism/SKILL.md`
 - `.agents/skills/review-dev-plan/SKILL.md`
 - `.agents/skills/write-adoption-guide/SKILL.md`
 

@@ -54,7 +54,7 @@ A **fork** exists when **any** of these is true for a topic **not** already in `
 | **Neighbor absorption** | Ride existing loop vs new path; which feature owns the data |
 | **User-visible behavior** | Which outcome, error, or empty state the user sees |
 | **Architecture boundary** | Feature split, layer ownership, sync vs async user-visible contract — when the choice changes product feel, coupling, or what neighbors are touched |
-| **Generality** | Instance vs feature module vs rewirable port — how reusable vs specific this capability is (see § Generality) |
+| **Generality** | Composition vs feature module vs rewirable port — how reusable vs specific this capability is (see § Generality). The level name is not permission to encode the caller in an identifier. |
 | **About to write it down** | Phase/step text would pick A over B as if decided |
 
 **Not a plan-grill fork** (do not ask here):
@@ -66,19 +66,19 @@ A **fork** exists when **any** of these is true for a topic **not** already in `
 | Package/pattern reuse vs custom (library search) | `dont-reinvent-the-wheel` |
 | Helper extract / Rule of Three | `optimize2` — not this cue |
 | Stack/feature replaceability scores after a folder exists | `modularity-review` |
-| Pure code mechanism with **no** product/scope/boundary effect (local refactor shape) | Agent decides — still prefer a one-line note in plan Notes if non-obvious. **Names** are not a product fork: follow `code-style/RULE.mdc` § Category, not instance (do not bake the ticket into the identifier) |
+| Pure code mechanism with **no** product/scope/boundary effect (local refactor shape) | Agent decides — still prefer a one-line note in plan Notes if non-obvious. **Names** are not a product fork: `.agents/skills/name-the-mechanism/SKILL.md` |
 
-### Generality (instance vs rewirable)
+### Generality (composition vs rewirable)
 
 **SSOT for this fork.** Run the mandatory checklist on this topic before phases/steps assume a platform or a one-off. Do not silently over-build or under-build.
 
-**Modularity is the default; speculative platforms are not.** Every level below uses category-based names, standard reusable primitives, composition, and a narrow replaceable boundary from the first implementation. The fork decides how much product-specific extension machinery to build, not whether the code is modular.
+**Modularity is the default; speculative platforms are not.** Every level below uses composition and a narrow replaceable boundary from the first implementation. Identifier names and copy counts: `.agents/skills/name-the-mechanism/SKILL.md`. The fork decides how much product-specific extension machinery to build, not whether the code is modular.
 
 **Three levels** (later options add stronger product extension machinery):
 
 | Level | Meaning | When |
 |-------|---------|------|
-| **Instance** | One contextual composition for the known job, built from generic primitives; instance details stay in props/caller/thin wrapper | Default when only one consumer is known now |
+| **Composition** | One contextual composition for the known job, built from generic primitives; caller details stay in props, the caller, or a thin wrapper. This level does not name the identifier after that caller. | Default when only one consumer is known now |
 | **Feature** | One bounded domain with a public API (checkout start/confirm/fail); thin UIs call it | The work is a domain even with one screen |
 | **Rewirable** | Ports for “what is bought / how paid / what success means” so other products plug in | ≥2 product kinds are **in scope now**, or the owner picks future expansion *and* names the second consumer |
 
@@ -86,10 +86,10 @@ A **fork** exists when **any** of these is true for a topic **not** already in `
 
 | Situation | Classify |
 |-----------|----------|
-| One known use; second use is a guess | **Clear-winner → instance** (or **feature** if it is already a domain), using generic primitives and a replaceable boundary. Log deferred extension machinery as a non-goal. Do **not** ask. |
+| One known use; second use is a guess | **Clear-winner → composition** (or **feature** if it is already a domain), using generic primitives and a replaceable boundary. Log deferred extension machinery as a non-goal. Do **not** ask. |
 | Two known uses, same verbs | **Clear-winner → feature** (one public API, two thin UIs) unless product kinds differ |
 | Two known uses, different verbs | **Tie or clear-winner → split features**; share only what both need. Ask if which concepts belong together is Pareto-fair |
-| Owner wants a platform “just in case” | **Ask** — `[Wins: least code]` instance vs `[Wins: reusability]` rewirable, with explicit pay lines |
+| Owner wants a platform “just in case” | **Ask** — `[Wins: least code]` composition vs `[Wins: reusability]` rewirable, with explicit pay lines |
 
 Guessed future use stays a **deferred non-goal** in `DECISIONS.md`. Do not code the unused hook.
 

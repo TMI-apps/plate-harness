@@ -71,7 +71,7 @@ Cross-refs: measure with **`web-perf`** plugin skill when symptoms are CWV/Light
 
 **Proactively** on any request to change existing behavior ("add a color to the gradient", "make it splash", "just add a field/button/flag"), and when the request uses minimizer/exception language, names a first-of-a-kind instance without a category, or imports behavior-by-analogy. **Reactively** when the diff takes a workaround shape (special-case flag, parallel path, symptom tuning, disconnected patch, instance-encoded naming, growing scope, "for now" comment) or mid-impl when your own code starts to look like a workaround.
 
-Before writing the workaround: run [`.agents/skills/layer-consistency-check/SKILL.md`](../../../.agents/skills/layer-consistency-check/SKILL.md) (shapes: [`references/workaround-shapes.md`](../../../.agents/skills/layer-consistency-check/references/workaround-shapes.md)). **New identifiers follow `code-style/RULE.mdc` § Category, not instance on the first caller.** The one-off skip does not apply to a new function, component, type, file, or feature folder — one caller is when the name locks. For every other workaround shape, apply the severity filter and do not flag a genuinely one-off exception with no recurring cost. When a non-naming shape still clears that filter, post the **WARNING, WORKAROUND** block from the alert template and **stop** until the user chooses workaround vs structural alternative.
+Before writing the workaround: run [`.agents/skills/layer-consistency-check/SKILL.md`](../../../.agents/skills/layer-consistency-check/SKILL.md) (shapes: [`references/workaround-shapes.md`](../../../.agents/skills/layer-consistency-check/references/workaround-shapes.md)). **New or copied identifiers follow `.agents/skills/name-the-mechanism/SKILL.md`.** The one-off skip does not suppress that skill or the second-copy marker. For every other workaround shape, apply the severity filter and do not flag a genuinely one-off exception with no recurring cost. When a non-naming shape still clears that filter, post the **WARNING, WORKAROUND** block from the alert template and **stop** until the user chooses workaround vs structural alternative.
 
 Paths: [`documentation/DOC_AGENT_WORKFLOW_LAYERS.md`](../../../documentation/DOC_AGENT_WORKFLOW_LAYERS.md) § Layer consistency (workaround guard).
 
@@ -309,7 +309,7 @@ Use `pnpm validate:structure` to validate:
 
 **SSOT:** This section is the Single Source of Truth for all path alias definitions. Other rules reference this section.
 
-**Canonical form:** use the `@/` catch-all alias only (`@/*` → `src/*`). Mirror the filesystem under `src/` — for example `@/shared/utils/redirectUtils`, `@/features/auth/hooks/useAuth`, `@/components/common/Topbar`.
+**Canonical form:** use the `@/` catch-all alias only (`@/*` → `src/*`). Mirror the filesystem under `src/`. These paths illustrate the alias shape, not required file names: `@/shared/utils/<module>`, `@/features/<feature>/hooks/<hook>`, `@/components/common/<component>`.
 
 **Do not use** granular aliases without the slash (`@shared`, `@features`, `@pages`, `@utils`, `@common`) or relative parent imports (`../`).
 
@@ -485,7 +485,7 @@ When multiple components must share a dimension or position:
 When code doesn't clearly fit existing categories, use these guidelines:
 
 ### Layout-Specific Logic
-- Hooks for layout state (sidebar, header scroll, and the like): `src/shared/hooks/`. Name the category (`code-style` § Category, not instance).
+- Hooks for layout state (sidebar, header scroll, and the like): `src/shared/hooks/`. Name per `.agents/skills/name-the-mechanism/SKILL.md`.
 - Layouts import these hooks; they don't own them
 
 ### Page Complexity Threshold
@@ -511,11 +511,11 @@ When code doesn't clearly fit existing categories, use these guidelines:
 
 ### Error Boundaries
 - Component: `components/common/ErrorBoundary/`
-- Reporting service: `src/shared/services/`. Name the category (`code-style` § Category, not instance).
+- Reporting service: `src/shared/services/`. Name per `.agents/skills/name-the-mechanism/SKILL.md`.
 
 ### Keyboard Shortcuts
-- Global shortcuts: one hook in `src/shared/hooks/`. Name the category (`code-style` § Category, not instance).
-- Feature shortcuts: `features/*/hooks/`. Name the category (`code-style` § Category, not instance).
+- Global shortcuts: one hook in `src/shared/hooks/`. Name per `.agents/skills/name-the-mechanism/SKILL.md`.
+- Feature shortcuts: `features/*/hooks/`. Name per `.agents/skills/name-the-mechanism/SKILL.md`.
 
 ### Cross-Feature Data Transforms
 - Consumer feature owns the transform
@@ -531,7 +531,7 @@ When code doesn't clearly fit existing categories, use these guidelines:
 - Compose providers in `App.tsx`
 
 ### Drag & Drop
-- Infrastructure: `src/shared/context/` and `src/shared/hooks/`. Name the category (`code-style` § Category, not instance).
+- Infrastructure: `src/shared/context/` and `src/shared/hooks/`. Name per `.agents/skills/name-the-mechanism/SKILL.md`.
 - Domain actions: respective feature's hooks
 
 ## Architecture Documentation
