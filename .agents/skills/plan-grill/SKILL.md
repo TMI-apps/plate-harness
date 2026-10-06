@@ -102,7 +102,7 @@ Before treating an approach as decided in the current plan phase, run this check
 1. **Name the topic** in one line (what is being chosen).
 2. **Enumerate ≥2 viable options** *or* state why only one option exists after a real search (repo neighbors + obvious alternatives).
 3. **Classify:**
-   - **Tie** (Pareto-fair, distinct `[Wins: …]` axes) → **ask** one grill question → then Closed.
+   - **Tie** (tradeoff options with distinct `[Wins: …]` axes, **or** a choice question the user owns — placement, preference, what counts as in) → **ask** one grill question → then Closed.
    - **Clear winner** (one option dominates after enumeration) → **log** Closed as `clear-winner` — **no** ask. Do **not** skip the enumeration step.
    - **Precedent-only** → hand to `pattern-review`.
 4. **Anti-dup:** if topic already Closed/Open in `DECISIONS.md` → skip.
@@ -144,7 +144,7 @@ Loop shape: **ask one question (if tie) → write DECISIONS.md → continue the 
 | Helper extract / Rule of Three | `optimize2` |
 | Pure mechanism, no product/boundary edge | Agent decides (see “Not a fork”) |
 
-Question style: `.agents/skills/grill-me/SKILL.md` § Question style — do not fork a second format. Cost-sketch table stays in the chat message. `AskQuestion` `prompt` and option labels are plain text — no markdown table. Same **turn contract** applies: one grill question per turn, think/re-ground on `DECISIONS.md` before the next.
+Question style: `.agents/skills/grill-me/SKILL.md` § Question style — do not fork a second format. That includes picking the question shape (tradeoff vs choice) and the mandatory challenge option; a picked challenge reopens the challenged row and re-runs the checklist from the phase that owns it. Cost-sketch table (tradeoff questions only) stays in the chat message. `AskQuestion` `prompt` and option labels are plain text — no markdown table. Same **turn contract** applies: one grill question per turn, think/re-ground on `DECISIONS.md` before the next.
 
 ## Flow
 

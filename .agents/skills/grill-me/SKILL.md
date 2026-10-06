@@ -101,22 +101,55 @@ Share findings plainly ("the app already does X via Y") or uncertainty ("no noti
 
 Use a question tool call when available; prefer multiple-choice when branches are clear.
 
-**Offer Pareto-optimal options only** — each choice wins on a **distinct** axis. When one choice dominates every axis with acceptable costs on the rest, state it, **enumerate the alternatives you rejected**, **log as clear-winner** in `DECISIONS.md`, and move on — do not invent fake tradeoffs and do not skip enumeration.
+**Options first, labels second.** Start from the real alternatives the question is choosing between. Then describe them. Never generate options by walking an axis list — that produces choices the user was not actually weighing.
 
-**Axes (pick one winner per option):** performance, code consistency, least code, reusability, UX, separation/ease-of-cutting.
+### Question shape (pick one per question)
+
+| Shape | Options differ in… | Example | Label format |
+|---|---|---|---|
+| **Tradeoff** | Cost — each option buys one thing by paying another | Shader glow vs extra render pass | `[Wins: <axis>] <option> — pays: <cost>` |
+| **Choice** | What the user wants — placement, wording, which of N, preference, what counts as in | "On which page should this live?" | `<option> — <what follows from it>` |
+
+**Test:** if every option is roughly equal in cost and the user is picking by preference or product intent, it is a **choice** question. Do not stamp `[Wins: …]` on it.
+
+**Tradeoff questions — offer Pareto-optimal options only.** Each option wins on a **distinct** axis. When one option dominates every axis with acceptable costs on the rest, state it, **enumerate the alternatives you rejected**, **log as clear-winner** in `DECISIONS.md`, and move on — do not invent fake tradeoffs and do not skip enumeration.
+
+**Axes are a menu, not a checklist.** Common axes: performance, code consistency, least code, reusability, UX, separation/ease-of-cutting. When the real tension is something else (discoverability, admin control, data freshness, privacy, learning curve…), name that axis instead. Use only the axes the options actually trade on.
+
+### Challenge option (always present)
+
+Every multiple-choice question carries one **challenge** option. It questions a deeper assumption that all the other options take for granted. It is not a fourth variant of the same idea.
+
+**Format:** `[Challenge: <assumption>] <alternative> — <what it would change>`
+
+Pick the assumption most likely to be wrong for *this* question. Common targets:
+
+- **Right thing?** — does the stated problem need this capability at all, or a smaller or different one?
+- **Right home?** — should this live in another feature, an existing flow, or a different surface (dialog vs page, setting vs default)?
+- **Build vs borrow?** — search open-source or shipped examples first and base the work on one (`dont-reinvent-the-wheel`).
+- **Right time?** — defer until a prerequisite or a real second consumer exists.
+- **Build at all?** — a config, content, or process change solves it without code.
+
+**Example (choice question "On which page should this live?"):** `[Challenge: it needs its own page] Fold it into the existing Settings dialog — no new route; settings gets busier.`
+
+Make it concrete and grounded in what you know about the repo or the problem. A generic "reconsider the approach" is forbidden. If, after honest thought, every underlying assumption is already Closed in `DECISIONS.md`, challenge the strongest remaining one and cite the row it would reopen.
+
+**When the user picks the challenge:** do not log it as a normal answer and move on. Treat it as reopening the assumption: say which earlier decision or perimeter line it overturns, update or reopen that row in `DECISIONS.md`, and re-ground from that level (perimeter, neighbor map, or a hand-off such as `dont-reinvent-the-wheel`) before the next question.
 
 ### Boundary-question template (required)
 
-Same content every time. Split across two channels — the cost-sketch table stays in chat, where markdown renders:
+Same content every time. Split across two channels — any cost-sketch table stays in chat, where markdown renders:
 
 1. **Chat message — evidence.** One line on what the repo shows (or `Uncertain`). Explore first when the codebase can answer part of the question.
-2. **Chat message — cost sketch.** When exploration allows, a compact markdown table comparing branches on **Perf | Code | UX** (add **Scope-cut** when relevant). Mark agent estimates; `plan` verifies exact numbers. This table is chat-only. Do not copy it into `AskQuestion`.
+2. **Chat message — cost sketch (tradeoff questions only).** When exploration allows, a compact markdown table comparing branches on the axes they actually trade on (for example **Perf | Code | UX**, add **Scope-cut** when relevant). Mark agent estimates; `plan` verifies exact numbers. Skip the table for choice questions. Never copy it into `AskQuestion`.
 3. **`AskQuestion` `prompt`.** One plain-text question sentence. No table. No markdown.
-4. **`options` labels** — 2–4 choices, each one plain line (no markdown):
-   - **`[Wins: <axis>] <label>`** — gain; **pay** (explicit cost on other axes).
-5. **Omnipresent** — always append both escape hatches below, as plain option labels.
+4. **`options` labels** — 2–4 choices in the format for the question's shape (see § Question shape), each one plain line, no markdown.
+5. **Challenge option** — one `[Challenge: …]` line (see § Challenge option).
+6. **Omnipresent** — always append both escape hatches below, as plain option labels.
 
-**Example option line:** `[Wins: performance] Shader-only fake glow — no extra passes; pays with less convincing scatter.`
+**Example tradeoff line:** `[Wins: performance] Shader-only fake glow — no extra passes; pays with less convincing scatter.`
+
+**Example choice line:** `Dashboard — first thing users see after login; competes with existing widgets.`
 
 Every multiple-choice question includes two omnipresent options:
 
@@ -126,8 +159,11 @@ Every multiple-choice question includes two omnipresent options:
 ### Anti-patterns (do not ship questions like these)
 
 - A markdown table (or any markdown) inside `AskQuestion` `prompt` or option labels. Cost sketch stays in the chat message.
-- Options grouped **only by feature area** (e.g. "glints / Fresnel / foam") with no `[Wins: …]` axis or pay line.
+- A tradeoff question with options grouped **only by feature area** (e.g. "glints / Fresnel / foam") with no `[Wins: …]` axis or pay line.
+- `[Wins: …]` labels forced onto a **choice** question ("[Wins: UX] Dashboard / [Wins: least code] Settings" for a placement question). The axis is fake; describe what each option means instead.
+- Options invented to fill the axis list instead of the alternatives actually on the table.
 - Two options claiming the **same winning axis** without different pay lines.
+- A challenge option that is generic ("rethink the approach"), or that is just another variant of the regular options.
 - **Bundling** integration approach and content scope in one question when each branch has different Perf/Code/UX — split (usually integration perimeter first, then what is in the bright-pass / handoff).
 
 Mechanism detail (`functionA` vs `functionB`, library vs hand-roll) belongs in `plan` **unless** the integration choice changes product scope, perf budget, or what neighbors are touched — then grill it using the template above (evidence + cost sketch + axis labels).
@@ -135,8 +171,9 @@ Mechanism detail (`functionA` vs `functionB`, library vs hand-roll) belongs in `
 Ask at the level the user can answer — behavior, scope, edges:
 
 - Perimeter: "Is v1 just browsing cached data, or working fully offline and syncing later?"
-- Grounded edge: *Evidence: save flow shows a toast today.* Cost sketch + `[Wins: UX]` / `[Wins: least code]` / … options with pay lines.
-- Grounded ride-vs-new: *Evidence: shared notifications pipeline exists (prefs + history).* Ride vs fork with axis labels, not file names alone.
+- Grounded edge (tradeoff): *Evidence: save flow shows a toast today.* Cost sketch + `[Wins: UX]` / `[Wins: least code]` / … options with pay lines + challenge.
+- Grounded ride-vs-new (tradeoff): *Evidence: shared notifications pipeline exists (prefs + history).* Ride vs fork with axis labels, not file names alone + challenge.
+- Placement (choice): "Which page should show this?" Pages as plain options with consequences, no cost table + challenge ("does it need a page at all?").
 
 ## Recommendation timing
 

@@ -79,6 +79,7 @@ Talk like briefing another LLM. Dense. Named forks, options, pick, why. No pedag
 Fork: <topic>
 - [Wins: <axis>] <A> — pays: <cost>
 - [Wins: <axis>] <B> — pays: <cost>
+- [Challenge: <assumption>] <alternative> — <what it changes>
 Pick: <choice>. <one-line why, repo- or vision-grounded>
 Logged D<n> closed source=plan-grill-auto (<agent-pick|clear-winner>)
 ```
@@ -117,7 +118,9 @@ Enumerate internally using `grill-me` § Boundary-question template (evidence + 
 5. Remaining Pareto set: if the fork is user-visible feel → `[Wins: UX]` matching live neighbor surfaces; else `[Wins: code consistency]` then `[Wins: least code]`.
 6. Still tied → first remaining option; notes must say `tie-break: first remaining`.
 
-Axes stay those in `grill-me` § Question style: performance, code consistency, least code, reusability, UX, separation/ease-of-cutting. Each option still needs a distinct `[Wins:]` axis.
+Question shape and axes follow `grill-me` § Question style. Tradeoff forks need a distinct `[Wins:]` axis per option (common axes are a menu; name the real one). Choice forks (placement, preference) list plain options and skip step 5 when no axis applies.
+
+**Challenge (internal):** for every fork, write the `[Challenge: <assumption>]` line too. If the assumption does not hold up against thread text, vision, or repo evidence, pick the challenge, reopen the row it overturns, and redo that phase's checklist. Otherwise log it in notes as `challenge rejected: <one-line why>`.
 
 ## Ledger
 
