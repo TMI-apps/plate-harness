@@ -55,6 +55,16 @@ Push previously finished work to remote. This command is push-only.
 - `push` = remote validation + push (no commit operations).
 - If `push` detects anything that still needs committing, it must stop and redirect to `finish`.
 
+## Production landing (promote)
+
+When the user asks to **land on `main`**, **promote**, or **release to production** after commits exist on `develop`:
+
+1. **Do not** `git push origin main`, open a `develop` → `main` PR, or squash-merge.
+2. Run **pre-promote check** and, if needed, **ancestor failure reconcile** — SSOT `.cursor/rules/git-workflow/RULE.mdc` § Promote to production.
+3. `gh workflow run promote-to-production.yml`; report the run URL; do not `gh run watch`.
+
+If promote already failed with `main is not an ancestor of develop`, reconcile on `develop` per that section before re-running the workflow.
+
 You have explicit access to use console commands for this task.
 
 ## Boundaries

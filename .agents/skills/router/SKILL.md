@@ -215,8 +215,8 @@ While inside **plan corridor** (`I`), product/scope forks use **`plan-grill` rai
 | Bundle **all** uncommitted work from multiple agent threads (same checkout), then push | `.agents/skills/bundle-ship/SKILL.md` |
 | Push already committed work (after `finish`) | `.agents/skills/push/SKILL.md` |
 | Bug / error / broken / regression (not a new feature) | `.agents/skills/debug/SKILL.md` — § Chat intake before code |
-| Promote `develop` staging to production (`main`) | `gh workflow run promote-to-production.yml` — see `.cursor/rules/git-workflow/RULE.mdc` § Promote to production (not `finish`, not a squash PR) |
-| User asks to PR / merge `develop` → `main`, or "release to production" (colloquial) | **Same as promote** — run `gh workflow run promote-to-production.yml`; **never** `gh pr create --base main --head develop` |
+| Promote `develop` staging to production (`main`) | Pre-promote check + `gh workflow run promote-to-production.yml` — `.cursor/rules/git-workflow/RULE.mdc` § Promote to production (not `finish`, not a squash PR). On ancestor failure → reconcile on `develop` there, then re-run |
+| User asks to PR / merge `develop` → `main`, **land on main**, or "release to production" (colloquial) | **Same as promote** — pre-promote check, then workflow; **never** `gh pr create --base main --head develop` |
 | Human onboarding; README quick start + dev task backlog | `.agents/skills/start/SKILL.md` (includes **App vision** gate → `documentation/DOC_APP_VISION.md`) |
 
 ### This repo — product & codebase shape

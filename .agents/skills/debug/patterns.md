@@ -187,4 +187,14 @@ Add new patterns at the bottom as they prove reusable across incidents.
 
 ---
 
+## Git: Promote fails — main is not an ancestor of develop
+
+- Symptom: `promote-to-production.yml` fails at "Verify fast-forward preconditions" with `main is not an ancestor of develop`. Local `git diff origin/main origin/develop` may show only small deltas while history is forked.
+- Root cause: Same logical change landed on **`main`** and **`develop`** as **sibling commits** (common in Model B: squash PR merged to `main` while an equivalent commit was pushed to `develop`).
+- Key question: "Does `git log --oneline --graph origin/main origin/develop` show two branches after one parent?"
+- Debug approach: Reconcile on `develop` (`git merge origin/main`, push, green CI), then re-run promote — SSOT `.cursor/rules/git-workflow/RULE.mdc` § Promote to production § Ancestor failure. On PowerShell, verify `merge-base --is-ancestor` with `$LASTEXITCODE` alone.
+- Tokens: promote, ancestor, Model B, fast-forward, develop, main
+
+---
+
 ## Add other patterns here as they're discovered.

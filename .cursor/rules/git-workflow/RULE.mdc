@@ -58,11 +58,12 @@ Plans (`documentation/jobs/**/DEVELOPMENT_PLAN.md`) and rules (`.cursor/rules/**
 - **Staging timing:** Workers Builds may deploy `develop` on push **before** `test` is green. Production remains promote-gated.
 - **Concurrency:** Prefer one active agent per checkout on `develop`; serialize concurrent sessions. Shared-branch contention is higher than Model A.
 - **Hotfix:** Prefer fix on `develop` then promote. Rare manual `fix/*` is a human exception — agents still default to `develop` and the gate table.
+- **Single landing path:** Integration commits land on **`develop` only** (direct push). Never squash-merge an app PR into **`main`**. Never land the same change twice on parallel paths (e.g. squash PR on `main` while an equivalent commit is pushed to `develop`) — that creates sibling SHAs and breaks the ancestor invariant (see § Promote to production § Ancestor failure).
 - `main` still forbidden for app code (same as Model A).
 
 ### Forbidden in both modes
 
-- Squash PRs `develop` → `main`; any `main` → `develop` back-merge
+- Squash PRs `develop` → `main`; routine `main` → `develop` back-merge as release hygiene (old broken model)
 - Direct app-code pushes to `main` (except promote workflow / emergency exception)
 
 ## Branch Protection
@@ -165,7 +166,7 @@ The old broken model used squash `develop` → `main` plus mandatory `main` → 
 
 If a Model A `feature/*` PR shows `CONFLICTING`, merge latest `develop` into the feature branch, resolve, push.
 
-If **Promote to production** fails with "main is not an ancestor of develop", stop and reconcile before forcing history.
+If **Promote to production** fails with "main is not an ancestor of develop", run § Promote to production § Ancestor failure — do not squash-merge `develop` into `main` or force-push.
 
 Rulesets (not classic branch protection):
 - Classic `gh api .../branches/main/protection` may return `404` — that is **not** evidence `main` is unprotected.
@@ -180,7 +181,16 @@ Rulesets (not classic branch protection):
 - `develop` is ahead of `main`
 - Latest commit on `develop` has green combined status (`test` CI)
 
-**Agent UX:** When the user says "promote to production", or colloquial equivalents such as **"PR develop to main"**, **"merge develop to main"**, or **"release to production"**, **do not** open a `develop` → `main` PR. Run `gh workflow run promote-to-production.yml`, report the run URL, and stop. Do not `gh run watch`.
+**Agent UX:** When the user says "promote to production", colloquial **"land on main"**, **"PR develop to main"**, **"merge develop to main"**, or **"release to production"**, **do not** open a `develop` → `main` PR. Run the **pre-promote check** below, then `gh workflow run promote-to-production.yml`, report the run URL, and stop. Do not `gh run watch`.
+
+**Pre-promote check (agent, before `workflow_dispatch`):**
+
+1. `git fetch origin main develop`
+2. `git merge-base --is-ancestor origin/main origin/develop` — must exit **0**. On PowerShell, verify `$LASTEXITCODE` after this command alone (see `platform/RULE.mdc` § Exit Code Handling); do not trust a chained `echo` on the same line.
+3. `origin/develop` must be **ahead** of `origin/main` (not equal).
+4. Latest `develop` tip has green CI `test` (same bar as the workflow).
+
+If step 2 fails, run § Ancestor failure before triggering promote.
 
 **Why no PAT or bypass actor is needed:** `main`'s ruleset only enforces `deletion` + `non_fast_forward`, so the workflow's built-in `GITHUB_TOKEN` can fast-forward. Daily integration + CI happen on `develop`.
 
@@ -191,8 +201,19 @@ Rulesets (not classic branch protection):
 
 **Failure modes:**
 - `403` / PR required on `main` — reduce `main` ruleset to `deletion` + `non_fast_forward`
-- `main is not an ancestor of develop` — escalate; do not squash-merge or back-merge
+- `main is not an ancestor of develop` — § Ancestor failure (recurring when Model B work hits `main` via squash PR while `develop` has a parallel commit)
 - Already same commit — nothing to promote
+
+**Ancestor failure (reconcile, then re-promote):**
+
+Typical cause: the same logical change landed on **`main`** (squash PR with wrong base or accidental merge to `main`) and on **`develop`** (direct push or different SHA) after a shared parent — histories fork; promote cannot fast-forward.
+
+1. Confirm: `git log --oneline --graph origin/main origin/develop -10` shows sibling commits after one parent.
+2. On **`develop`**: `git checkout develop && git pull origin develop && git merge origin/main` (healing merge — **not** the forbidden routine back-merge loop).
+3. Push `develop`; wait until CI `test` is green on the new tip.
+4. Re-run pre-promote check; then `gh workflow run promote-to-production.yml`.
+
+**Prevention (Model B):** No app PRs to `main`; no duplicate landing on `main` + `develop`. **Model A:** squash PRs target **`develop` only**; promote is the only path to `main`.
 
 **One-time fork setup:** Create `develop` from `main` (`git push origin main:develop`); configure rulesets per chosen mode (`start` skill).
 
