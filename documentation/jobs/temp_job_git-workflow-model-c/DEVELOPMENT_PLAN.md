@@ -344,13 +344,12 @@ grep -rniE "Forbidden closure|Never claim success without|Never claim the issue 
    - all-branch previews;
    - `develop` no longer the staging branch;
    - Supabase redirect wildcard covers previews.
-5. **Release baseline**, on a branch off `main`:
-   - fold `[Unreleased]` into `## [0.40.0] - <date>`;
-   - `package.json` `0.40.0`;
-   - mode `model-c`;
+5. **Cutover PR** (amendment 32), on a branch off `main` (`feat/model-c-cutover`):
+   - mode `model-c` only — **no** version bump or `[Unreleased]` fold: 0.40.0 already shipped through Model B (`8083ee4`, promoted to `main`);
+   - this plan note;
    - PR title `feat: switch git workflow to Model C`.
-6. The user merges once checks are green and the preview builds. Then they tag `v0.40.0` and create a GitHub release.
-7. Next `feat`/`fix` merge → release PR → dispatched `test` (D21) → the user merges → `validate:version-sync` green.
+6. **Release baseline before merging the cutover PR:** release-please runs on the cutover merge itself (the mode is `model-c` from that commit on). With no tag or release, it would treat all history as unreleased. So **the user** first tags `8083ee4` (current `main`, version 0.40.0) as `v0.40.0` and creates a GitHub release for it. Then the user merges the cutover PR once `test` + `pr-title` are green and the preview builds.
+7. The cutover merge (`feat:`) makes release-please open a 0.41.0 release PR → dispatched `test` (D21) → the user merges → `validate:version-sync` green.
 8. **Wait period:** at least one week. Then:
    - **remove the `develop` ruleset** (it includes `deletion`);
    - the user deletes `develop` (remote + local).
@@ -442,6 +441,7 @@ grep -rniE "Forbidden closure|Never claim success without|Never claim the issue 
 | 29  | 2026-10-16 | validate (code-style)                                          | Script conventions: `.cjs` + `.test.cjs`, double quotes, JSDoc, explicit eslint `.cjs` check                                                                                         | Summary, Review contract |
 | 30  | 2026-10-16 | validate (cloud-functions, debugging, platform; user: fix all) | cloud-functions rewrite (no function staging in any mode); `debugging:75`; `patterns.md:41-58`; platform scoping detail + Git Bash subsection                                        | Phase 1, 4.11            |
 | 31  | 2026-10-16 | validate (git-workflow; user D26)                              | Guard has no override; bootstrap ff-push and emergency-on-main become user-run commands in the rule; one "agents never write to `main`" line in § Model C + Claude pointer           | Phase 3.7, 6.2           |
+| 32  | 2026-10-16 | implement (Phase 8) | Cutover PR is mode-flip only (0.40.0 shipped via Model B); `v0.40.0` tag + GitHub release on `8083ee4` move **before** the cutover merge, because release-please runs on that merge | Phase 8.5–8.7 |
 
 ## Pattern & precedent
 
