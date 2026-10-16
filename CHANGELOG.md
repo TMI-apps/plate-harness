@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Renamed and relocated shared mechanisms per name-the-mechanism: app shell layout tokens (`appViewLayout`), `useAuthBackendConfigured`, `mapProviderUserToAppUser`, account-menu hooks beside `ProfileMenu`, `DevTasksFab` under the tasks feature.
+
 ## [0.39.0] - 2026-08-11
 
 ### Added

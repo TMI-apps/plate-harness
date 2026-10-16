@@ -5,12 +5,12 @@ import { createDefaultAuthContextValue, renderWithProviders } from "tests/test-u
 import { ProfileMenu } from "@/components/common/ProfileMenu";
 import { useAuthContext } from "@/shared/context/AuthContext";
 import { useUserProfileQuery } from "@/features/auth/hooks/useUserProfileQuery";
-import { useSupabaseConfig } from "@/shared/hooks/useSupabaseConfig";
+import { useAuthBackendConfigured } from "@/shared/hooks/useAuthBackendConfigured";
 import type { User } from "@/features/auth/types/auth.types";
 
 vi.mock("@/shared/context/AuthContext");
 vi.mock("@/features/auth/hooks/useUserProfileQuery");
-vi.mock("@/shared/hooks/useSupabaseConfig");
+vi.mock("@/shared/hooks/useAuthBackendConfigured");
 
 const mockSignInWithGoogle = vi.fn();
 const mockLogout = vi.fn();
@@ -44,7 +44,7 @@ describe("ProfileMenu", () => {
     vi.clearAllMocks();
     vi.mocked(useAuthContext).mockReturnValue(defaultAuthContext);
     vi.mocked(useUserProfileQuery).mockReturnValue(defaultUserProfileQuery as never);
-    vi.mocked(useSupabaseConfig).mockReturnValue({ isConfigured: true });
+    vi.mocked(useAuthBackendConfigured).mockReturnValue({ isConfigured: true });
   });
 
   describe("Internal anchor mode (default)", () => {

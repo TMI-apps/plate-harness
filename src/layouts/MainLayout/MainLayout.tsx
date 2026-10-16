@@ -1,12 +1,12 @@
 import { Outlet } from "react-router-dom";
-import { authViewportSx } from "@/features/auth/components/authViewLayout";
+import { appViewportSx } from "@/shared/theme/appViewLayout";
 
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 
 export const MainLayout = () => {
   return (
-    <Box sx={authViewportSx}>
+    <Box sx={appViewportSx}>
       <Container
         component="main"
         sx={{

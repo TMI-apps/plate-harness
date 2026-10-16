@@ -1,14 +1,14 @@
 import { useState, useCallback } from "react";
 
-interface UseProfileMenuStateProps {
+interface UseAnchorMenuStateProps {
   externalAnchorEl?: HTMLElement | null;
   externalOnClose?: () => void;
 }
 
-export const useProfileMenuState = ({
+export const useAnchorMenuState = ({
   externalAnchorEl,
   externalOnClose,
-}: UseProfileMenuStateProps) => {
+}: UseAnchorMenuStateProps) => {
   const [internalAnchorEl, setInternalAnchorEl] = useState<HTMLElement | null>(null);
 
   const anchorEl = externalAnchorEl ?? internalAnchorEl;

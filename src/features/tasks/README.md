@@ -14,7 +14,7 @@ In-repo development backlog for coding agents and local UI.
 
 | Layer | Path | Purpose |
 |-------|------|---------|
-| Components | `components/` | `TasksBacklogPanel`, `ActiveTaskList`, `ArchiveTaskList`, task rows, `TasksAutosaveIndicator`, `TasksListEmptyState`, `taskStatusUi` |
+| Components | `components/` | `TasksBacklogPanel`, `ActiveTaskList`, `ArchiveTaskList`, task rows, `TasksAutosaveIndicator`, `TasksListEmptyState`, `taskStatusUi`, `DevTasksFab` |
 | Hooks | `hooks/` | `useAppTasksBacklog` — CRUD, reorder, archive/restore, dirty-aware text autosave |
 | Services | `services/` | `appTasksDomain` (validation/logic), `appTasksApiService` (HTTP to dev API) |
 | Types | `types/` | `AppTask`, `ActiveTaskStatus`, file path constants |

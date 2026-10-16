@@ -2,11 +2,11 @@ import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "@/shared/context/AuthContext";
 
-interface UseProfileMenuHandlersProps {
+interface UseAccountMenuActionsProps {
   onClose: () => void;
 }
 
-export const useProfileMenuHandlers = ({ onClose }: UseProfileMenuHandlersProps) => {
+export const useAccountMenuActions = ({ onClose }: UseAccountMenuActionsProps) => {
   const { signInWithGoogle, logout } = useAuthContext();
   const navigate = useNavigate();
 

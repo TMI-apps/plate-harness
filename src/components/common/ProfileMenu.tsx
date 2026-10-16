@@ -1,11 +1,11 @@
 import { useAuthContext } from "@/shared/context/AuthContext";
-import { useSupabaseConfig } from "@/shared/hooks/useSupabaseConfig";
+import { useAuthBackendConfigured } from "@/shared/hooks/useAuthBackendConfigured";
 import { useUserProfileQuery } from "@/features/auth/hooks/useUserProfileQuery";
 import { ProfileMenuContent } from "./ProfileMenu/ProfileMenuContent";
 import { ProfileMenuTrigger } from "./ProfileMenu/ProfileMenuTrigger";
-import { getMenuProps } from "@/shared/utils/menuConfig";
-import { useProfileMenuHandlers } from "@/features/auth/hooks/useProfileMenuHandlers";
-import { useProfileMenuState } from "@/features/auth/hooks/useProfileMenuState";
+import { getAnchorMenuProps } from "./ProfileMenu/anchorMenuProps";
+import { useAccountMenuActions } from "./ProfileMenu/hooks/useAccountMenuActions";
+import { useAnchorMenuState } from "./ProfileMenu/hooks/useAnchorMenuState";
 
 import Menu from "@mui/material/Menu";
 
@@ -24,21 +24,21 @@ export const ProfileMenu = ({
 }: ProfileMenuProps) => {
   const { user } = useAuthContext();
   const { data: profile, isLoading: profileLoading } = useUserProfileQuery(user?.id ?? null);
-  const { isConfigured: supabaseConfigured } = useSupabaseConfig();
+  const { isConfigured: authBackendConfigured } = useAuthBackendConfigured();
 
-  const { anchorEl, open, handleClick, handleClose } = useProfileMenuState({
+  const { anchorEl, open, handleClick, handleClose } = useAnchorMenuState({
     externalAnchorEl,
     externalOnClose,
   });
 
-  const { handleSignIn, handleGoToLogin, handleSignOut } = useProfileMenuHandlers({
+  const { handleSignIn, handleGoToLogin, handleSignOut } = useAccountMenuActions({
     onClose: handleClose,
   });
 
   const menuContent = (
     <ProfileMenuContent
       isLoggedIn={user !== null}
-      supabaseConfigured={supabaseConfigured}
+      authBackendConfigured={authBackendConfigured}
       user={user}
       profile={profile ?? null}
       profileLoading={profileLoading}
@@ -48,7 +48,7 @@ export const ProfileMenu = ({
     />
   );
 
-  const menuProps = getMenuProps(anchorEl, open, handleClose);
+  const menuProps = getAnchorMenuProps(anchorEl, open, handleClose);
 
   if (!externalAnchorEl) {
     return (

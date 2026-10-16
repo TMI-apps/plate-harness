@@ -1,6 +1,6 @@
 import { getSupabase, isSupabaseConfigured } from "@/shared/services/supabaseService";
 import * as authService from "@/features/auth/services/authService";
-import { supabaseUserToUser } from "@/shared/utils/userUtils";
+import { mapProviderUserToAppUser } from "@/shared/utils/userUtils";
 import { isOAuthRedirectInProgress } from "@/shared/utils/oauthUtils";
 import type { User } from "@/features/auth/types/auth.types";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
@@ -12,7 +12,7 @@ const handleSessionResult = async (
   session: { user: SupabaseUser } | null
 ): Promise<User | null> => {
   if (session?.user) {
-    return supabaseUserToUser(session.user);
+    return mapProviderUserToAppUser(session.user);
   }
 
   const oauthRedirectInProgress = isOAuthRedirectInProgress();
@@ -54,7 +54,7 @@ export const handleAuthStateChange = async (
   session: { user: SupabaseUser } | null
 ): Promise<{ user: User | null; error: string | null }> => {
   if (session?.user) {
-    const currentUser = supabaseUserToUser(session.user);
+    const currentUser = mapProviderUserToAppUser(session.user);
     return { user: currentUser, error: null };
   }
 

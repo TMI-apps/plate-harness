@@ -56,7 +56,7 @@
         "src/App.tsx",
         "src/components/common/Button/Button.tsx",
         "src/components/common/Card/Card.tsx",
-        "src/components/common/DevTasksFab/DevTasksFab.tsx",
+        "src/features/tasks/components/DevTasksFab/DevTasksFab.tsx",
         "src/components/common/Input/Input.tsx",
         "src/components/common/Modal/Modal.tsx",
         "src/components/common/PageLoadingState/PageLoadingState.tsx",
@@ -73,7 +73,7 @@
         "src/features/auth/components/EmailAuthForm.tsx",
         "src/features/auth/components/GoogleIcon.tsx",
         "src/features/auth/components/SignInPanel.tsx",
-        "src/features/auth/components/authViewLayout.ts",
+        "src/shared/theme/appViewLayout.ts",
         "src/features/tasks/components/ActiveTaskList.tsx",
         "src/features/tasks/components/ActiveTaskRow.tsx",
         "src/features/tasks/components/ArchiveTaskList.tsx",
@@ -90,7 +90,7 @@
         "src/pages/tasks/TasksPage.tsx",
         "src/shared/theme/defaultTheme.ts",
         "src/shared/theme/themeLoader.ts",
-        "src/shared/utils/menuConfig.ts"
+        "src/components/common/ProfileMenu/anchorMenuProps.ts"
       ]
     },
     {

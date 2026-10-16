@@ -2,10 +2,10 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { SignInPanel } from "./SignInPanel";
 import { useAuthContext } from "@/shared/context/AuthContext";
-import { useSupabaseConfig } from "@/shared/hooks/useSupabaseConfig";
+import { useAuthBackendConfigured } from "@/shared/hooks/useAuthBackendConfigured";
 
 vi.mock("@/shared/context/AuthContext");
-vi.mock("@/shared/hooks/useSupabaseConfig");
+vi.mock("@/shared/hooks/useAuthBackendConfigured");
 vi.mock("@/features/auth/hooks/useAuthRedirect", () => ({
   useAuthRedirect: () => vi.fn(),
 }));
@@ -26,7 +26,7 @@ describe("SignInPanel", () => {
       clearAuthError: vi.fn(),
       setAuthError: vi.fn(),
     });
-    vi.mocked(useSupabaseConfig).mockReturnValue({
+    vi.mocked(useAuthBackendConfigured).mockReturnValue({
       isConfigured: true,
     });
   });
@@ -44,7 +44,7 @@ describe("SignInPanel", () => {
   });
 
   it("should show configuration info and disable OAuth when Supabase is not configured", () => {
-    vi.mocked(useSupabaseConfig).mockReturnValue({
+    vi.mocked(useAuthBackendConfigured).mockReturnValue({
       isConfigured: false,
     });
 

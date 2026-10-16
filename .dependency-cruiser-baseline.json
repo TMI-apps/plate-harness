@@ -1,12 +1,26 @@
 [
   {
     "type": "dependency",
-    "from": "src/features/auth/components/authViewLayout.ts",
+    "from": "src/shared/theme/appViewLayout.ts",
     "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/styles/index.mjs",
     "unresolvedTo": "@mui/material/styles",
     "dependencyTypes": [
       "npm",
       "type-only",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/features/tasks/components/DevTasksFab/DevTasksFab.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Fab/index.mjs",
+    "unresolvedTo": "@mui/material/Fab",
+    "dependencyTypes": [
+      "npm",
       "import"
     ],
     "rule": {

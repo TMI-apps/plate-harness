@@ -5,7 +5,7 @@ import { SignInPanel } from "@/features/auth/components/SignInPanel";
 import { useAuthRedirect } from "@/features/auth/hooks/useAuthRedirect";
 import { PageLoadingState } from "@/components/common/PageLoadingState";
 import { storeRedirectPath } from "@/shared/utils/redirectUtils";
-import { authContentSx, authViewportSx } from "@/features/auth/components/authViewLayout";
+import { appScrollContentSx, appViewportSx } from "@/shared/theme/appViewLayout";
 
 import Box from "@mui/material/Box";
 
@@ -37,8 +37,8 @@ export const LoginPage = () => {
   }
 
   return (
-    <Box sx={authViewportSx}>
-      <Box sx={authContentSx}>
+    <Box sx={appViewportSx}>
+      <Box sx={appScrollContentSx}>
         <SignInPanel />
       </Box>
     </Box>

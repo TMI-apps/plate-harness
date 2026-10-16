@@ -11,7 +11,7 @@ import Divider from "@mui/material/Divider";
 
 interface ProfileMenuContentProps {
   isLoggedIn: boolean;
-  supabaseConfigured: boolean;
+  authBackendConfigured: boolean;
   user: User | null;
   profile: UserProfile | null;
   profileLoading: boolean;
@@ -22,7 +22,7 @@ interface ProfileMenuContentProps {
 
 export const ProfileMenuContent = ({
   isLoggedIn,
-  supabaseConfigured,
+  authBackendConfigured,
   user,
   profile,
   profileLoading,
@@ -45,7 +45,7 @@ export const ProfileMenuContent = ({
     );
   }
 
-  if (supabaseConfigured) {
+  if (authBackendConfigured) {
     return <SignInMenuItems onSignInWithGoogle={onSignInWithGoogle} onGoToLogin={onGoToLogin} />;
   }
 

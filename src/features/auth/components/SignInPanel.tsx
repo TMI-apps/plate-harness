@@ -1,10 +1,14 @@
 import { Button } from "@/components/common/Button";
 import { useAuthContext } from "@/shared/context/AuthContext";
-import { useSupabaseConfig } from "@/shared/hooks/useSupabaseConfig";
+import { useAuthBackendConfigured } from "@/shared/hooks/useAuthBackendConfigured";
+import {
+  formContentMaxWidth,
+  formInlineAlertSx,
+  formStackSpacing,
+} from "@/shared/theme/appViewLayout";
 import { PRIVACY_URL, TERMS_URL } from "@/config/legal";
 import { GoogleIcon } from "./GoogleIcon";
 import { EmailAuthForm } from "./EmailAuthForm";
-import { authStackSpacing, authContentMaxWidth } from "./authViewLayout";
 
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -17,14 +21,14 @@ const SUPABASE_CONFIG_MESSAGE =
 
 export const SignInPanel = () => {
   const { signInWithGoogle, loading, error } = useAuthContext();
-  const { isConfigured: supabaseConfigured } = useSupabaseConfig();
-  const authDisabled = !supabaseConfigured;
+  const { isConfigured: authBackendConfigured } = useAuthBackendConfigured();
+  const authDisabled = !authBackendConfigured;
 
   return (
     <Box
       sx={{
         width: "100%",
-        maxWidth: authContentMaxWidth,
+        maxWidth: formContentMaxWidth,
         flexShrink: 0,
       }}
     >
@@ -32,7 +36,7 @@ export const SignInPanel = () => {
         <Alert
           severity="info"
           sx={{
-            mb: authStackSpacing.section,
+            mb: formStackSpacing.section,
             py: { xs: 0.5, sm: 1 },
             "& .MuiAlert-message": { fontSize: { xs: "0.8rem", sm: "0.875rem" } },
           }}
@@ -47,18 +51,18 @@ export const SignInPanel = () => {
         startIcon={<GoogleIcon />}
         onClick={() => void signInWithGoogle()}
         disabled={loading || authDisabled}
-        sx={{ mb: authStackSpacing.section }}
+        sx={{ mb: formStackSpacing.section }}
       >
         Sign in with Google
       </Button>
 
       {error && (
-        <Alert severity="error" sx={{ mb: authStackSpacing.section, py: { xs: 0.5, sm: 1 } }}>
+        <Alert severity="error" sx={formInlineAlertSx}>
           {error}
         </Alert>
       )}
 
-      <Divider sx={{ my: authStackSpacing.divider }}>
+      <Divider sx={{ my: formStackSpacing.divider }}>
         <Typography variant="body2" color="text.secondary">
           or
         </Typography>
@@ -66,7 +70,7 @@ export const SignInPanel = () => {
 
       <EmailAuthForm authDisabled={authDisabled} />
 
-      <Box sx={{ mt: authStackSpacing.footer, textAlign: "center" }}>
+      <Box sx={{ mt: formStackSpacing.footer, textAlign: "center" }}>
         <Typography variant="caption" color="text.secondary" component="span">
           <Link href={PRIVACY_URL} target="_blank" rel="noopener noreferrer">
             Privacy

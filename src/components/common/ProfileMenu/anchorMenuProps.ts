@@ -1,10 +1,12 @@
 import type { MenuProps } from "@mui/material/Menu";
-export const getMenuProps = (
+
+export const getAnchorMenuProps = (
   anchorEl: HTMLElement | null,
   open: boolean,
-  onClose: () => void
+  onClose: () => void,
+  menuId = "account-menu"
 ): MenuProps => ({
-  id: "profile-menu",
+  id: menuId,
   anchorEl,
   open,
   onClose,

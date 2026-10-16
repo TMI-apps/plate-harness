@@ -3,7 +3,7 @@ import { useAuthContext } from "@/shared/context/AuthContext";
 import { SignInPanel } from "@/features/auth/components/SignInPanel";
 import { useAuthCallbackHandler } from "@/features/auth/hooks/useAuthCallbackHandler";
 import { PageLoadingState } from "@/components/common/PageLoadingState";
-import { authContentSx, authContentMaxWidth } from "@/features/auth/components/authViewLayout";
+import { appScrollContentSx, formContentMaxWidth } from "@/shared/theme/appViewLayout";
 
 import Box from "@mui/material/Box";
 import Alert from "@mui/material/Alert";
@@ -20,12 +20,12 @@ export const HomePage = () => {
   const showInlineLogin = !user;
 
   return (
-    <Box sx={{ ...authContentSx, textAlign: "center" }}>
+    <Box sx={{ ...appScrollContentSx, textAlign: "center" }}>
       {error && (
         <Alert
           severity="error"
           sx={{
-            maxWidth: authContentMaxWidth,
+            maxWidth: formContentMaxWidth,
             width: "100%",
             mb: { xs: 1, sm: 1.5 },
             textAlign: "left",

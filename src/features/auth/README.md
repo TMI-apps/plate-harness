@@ -8,7 +8,6 @@ User authentication and session management via Supabase.
 - Google OAuth sign-in (PKCE callback on `/`)
 - Anonymous sessions for unauthenticated visitors
 - Session persistence and auth state subscription
-- Profile menu state and handlers
 - Auth redirect and callback handling
 - User profile query/mutation (TanStack Query)
 
@@ -16,12 +15,12 @@ User authentication and session management via Supabase.
 
 | Layer | Path | Purpose |
 |-------|------|---------|
-| Hooks | `hooks/` | `useAuth`, `useAuthSession`, `useAuthRedirect`, `useAuthCallbackHandler`, `useUserProfileQuery`, `useUpdateUserProfile`, profile menu hooks |
+| Hooks | `hooks/` | `useAuth`, `useAuthSession`, `useAuthRedirect`, `useAuthCallbackHandler`, `useUserProfileQuery`, `useUpdateUserProfile` |
 | Services | `services/` | `authService`, `authCallbackService`, `authErrorMessages`, `authValidation`, `userProfileService`, `authHandlerUtils` |
-| Components | `components/` | `SignInPanel`, `EmailAuthForm`, `authViewLayout` tokens |
+| Components | `components/` | `SignInPanel`, `EmailAuthForm` |
 | Types | `types/` | `User`, `UserProfile`, `AuthContextValue`, credentials types |
 
-**Cross-layout UI:** `ProfileMenu` lives in `@/components/common/ProfileMenu` (shell widget used by Topbar).
+**Cross-layout UI:** `ProfileMenu` lives in `@/components/common/ProfileMenu` (shell widget used by Topbar). Shared viewport/form layout tokens live in `@/shared/theme/appViewLayout`.
 
 ## Main API
 
@@ -54,7 +53,8 @@ Returns:
 - `@/shared/services/supabaseService` – Supabase client, `isSupabaseConfigured`
 - `@/shared/utils/appOrigin` – absolute app URLs (basename-aware)
 - `@/config/legal` – placeholder Privacy/Terms URLs (`LEGAL_ORIGIN`)
-- `@/shared/utils/userUtils` – `supabaseUserToUser`
+- `@/shared/hooks/useAuthBackendConfigured` – auth backend readiness for UI
+- `@/shared/utils/userUtils` – `mapProviderUserToAppUser`
 - `@/shared/utils/redirectUtils` – safe post-login redirect paths
 - `@/shared/utils/queryKeys` – TanStack profile query keys
 

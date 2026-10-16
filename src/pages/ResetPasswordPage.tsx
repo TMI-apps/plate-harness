@@ -7,10 +7,10 @@ import { useAuthContext } from "@/shared/context/AuthContext";
 import { getSupabase, isSupabaseConfigured } from "@/shared/services/supabaseService";
 import { validatePasswordConfirmation } from "@/features/auth/services/authValidation";
 import {
-  authContentSx,
-  authFormSurfaceSx,
-  authViewportSx,
-} from "@/features/auth/components/authViewLayout";
+  appScrollContentSx,
+  appViewportSx,
+  centeredFormSurfaceSx,
+} from "@/shared/theme/appViewLayout";
 
 import Box from "@mui/material/Box";
 import Alert from "@mui/material/Alert";
@@ -90,9 +90,9 @@ export const ResetPasswordPage = () => {
 
   if (!isSupabaseConfigured()) {
     return (
-      <Box sx={authViewportSx}>
-        <Box sx={authContentSx}>
-          <Box sx={authFormSurfaceSx}>
+      <Box sx={appViewportSx}>
+        <Box sx={appScrollContentSx}>
+          <Box sx={centeredFormSurfaceSx}>
             <Alert severity="info">
               Authentication requires Supabase configuration before you can reset your password.
             </Alert>
@@ -104,9 +104,9 @@ export const ResetPasswordPage = () => {
 
   if (!recoveryReady) {
     return (
-      <Box sx={authViewportSx}>
-        <Box sx={authContentSx}>
-          <Box sx={authFormSurfaceSx}>
+      <Box sx={appViewportSx}>
+        <Box sx={appScrollContentSx}>
+          <Box sx={centeredFormSurfaceSx}>
             <Alert severity="warning">
               This password reset link is invalid or has expired. Request a new link from the
               sign-in page.
@@ -121,9 +121,9 @@ export const ResetPasswordPage = () => {
   }
 
   return (
-    <Box sx={authViewportSx}>
-      <Box sx={authContentSx}>
-        <Box sx={authFormSurfaceSx}>
+    <Box sx={appViewportSx}>
+      <Box sx={appScrollContentSx}>
+        <Box sx={centeredFormSurfaceSx}>
           <Typography variant="h4" component="h1" gutterBottom>
             Reset password
           </Typography>

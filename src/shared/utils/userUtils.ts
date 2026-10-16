@@ -14,23 +14,22 @@ export const isAnonymousUser = (supabaseUser: SupabaseUser | null): boolean => {
 };
 
 /**
- * Converts a Supabase user to our application's User interface.
+ * Maps the auth provider user to the application's User interface.
  * Anonymous users are filtered out and return null (treated as not logged in).
  *
- * @param supabaseUser - The Supabase user object (can be null)
+ * @param providerUser - The Supabase user object (can be null)
  * @returns User object if authenticated, null if anonymous or no user
  */
-export const supabaseUserToUser = (supabaseUser: SupabaseUser | null): User | null => {
-  if (!supabaseUser) return null;
+export const mapProviderUserToAppUser = (providerUser: SupabaseUser | null): User | null => {
+  if (!providerUser) return null;
 
-  // Use official Supabase is_anonymous property
-  if (isAnonymousUser(supabaseUser)) {
-    return null; // Anonymous users are treated as not logged in
+  if (isAnonymousUser(providerUser)) {
+    return null;
   }
 
   return {
-    id: supabaseUser.id,
-    email: supabaseUser.email || "",
-    created_at: supabaseUser.created_at,
+    id: providerUser.id,
+    email: providerUser.email || "",
+    created_at: providerUser.created_at,
   };
 };

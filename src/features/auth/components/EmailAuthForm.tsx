@@ -6,7 +6,7 @@ import { useAuthRedirect } from "@/features/auth/hooks/useAuthRedirect";
 import { PASSWORD_RESET_SENT_MESSAGE } from "@/features/auth/types/authMessages";
 import { useEmailAuthValidation } from "@/features/auth/hooks/useEmailAuthValidation";
 import type { LoginCredentials, SignUpCredentials } from "@/features/auth/types/auth.types";
-import { authStackSpacing } from "./authViewLayout";
+import { formInlineAlertSx, formStackSpacing } from "@/shared/theme/appViewLayout";
 
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -117,7 +117,7 @@ export const EmailAuthForm = ({ authDisabled = false }: EmailAuthFormProps) => {
           onChange={handleModeChange}
           fullWidth
           size="small"
-          sx={{ mb: authStackSpacing.section }}
+          sx={{ mb: formStackSpacing.section }}
         >
           <ToggleButton value="sign-in">Sign in</ToggleButton>
           <ToggleButton value="sign-up">Sign up</ToggleButton>
@@ -125,13 +125,13 @@ export const EmailAuthForm = ({ authDisabled = false }: EmailAuthFormProps) => {
       )}
 
       {displayError && (
-        <Alert severity="error" sx={{ mb: authStackSpacing.section, py: { xs: 0.5, sm: 1 } }}>
+        <Alert severity="error" sx={formInlineAlertSx}>
           {displayError}
         </Alert>
       )}
 
       {successMessage && (
-        <Alert severity="success" sx={{ mb: authStackSpacing.section, py: { xs: 0.5, sm: 1 } }}>
+        <Alert severity="success" sx={formInlineAlertSx}>
           {successMessage}
         </Alert>
       )}
@@ -185,7 +185,7 @@ export const EmailAuthForm = ({ authDisabled = false }: EmailAuthFormProps) => {
         variant="contained"
         fullWidth
         disabled={loading || authDisabled}
-        sx={{ mt: authStackSpacing.section }}
+        sx={{ mt: formStackSpacing.section }}
       >
         {submitLabel}
       </Button>

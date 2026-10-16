@@ -2,7 +2,7 @@ import { getSupabase, isSupabaseConfigured } from "@/shared/services/supabaseSer
 import { queryClient } from "@/shared/utils/queryClient";
 import { getAppOrigin, getAppUrl } from "@/shared/utils/appOrigin";
 import type { User, LoginCredentials, SignUpCredentials } from "@/features/auth/types/auth.types";
-import { supabaseUserToUser } from "@/shared/utils/userUtils";
+import { mapProviderUserToAppUser } from "@/shared/utils/userUtils";
 import { DUPLICATE_SIGNUP_MESSAGE, mapAuthError } from "./authErrorMessages";
 
 const getConfigurationError = (): Error =>
@@ -25,7 +25,7 @@ export const login = async (
       return { user: null, error: new Error(mapAuthError(error)) };
     }
 
-    const user = supabaseUserToUser(data.user);
+    const user = mapProviderUserToAppUser(data.user);
     return { user, error: null };
   } catch (error) {
     return {
@@ -56,7 +56,7 @@ export const signUp = async (
       return { user: null, error: new Error(DUPLICATE_SIGNUP_MESSAGE) };
     }
 
-    const user = supabaseUserToUser(data.user);
+    const user = mapProviderUserToAppUser(data.user);
     return { user, error: null };
   } catch (error) {
     return {
@@ -103,7 +103,7 @@ export const getCurrentUser = async (): Promise<{
       return { user: null, error: new Error(mapAuthError(error)) };
     }
 
-    const user = supabaseUserToUser(authUser);
+    const user = mapProviderUserToAppUser(authUser);
     return { user, error: null };
   } catch (error) {
     return {
