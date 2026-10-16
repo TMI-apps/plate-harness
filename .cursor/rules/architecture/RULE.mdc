@@ -5,264 +5,97 @@ alwaysApply: true
 
 # Architecture Standards
 
-Architectural patterns, module organization, and structural standards for application design.
+SSOT for project structure, layer boundaries, path aliases, and code placement. Enforcement: ESLint boundaries/import, dependency-cruiser, `projectStructure.config.cjs` (`pnpm validate:structure`, `pnpm arch:check`, `pnpm lint:arch`). Other commands: `package.json`.
 
-## Design Principles
+## Skill triggers (run the skill; do not restate it here)
 
-### Separation of Concerns
-- Separate business logic from presentation
-- Keep data access separate from business logic
-- Isolate side effects and I/O operations
+### Pattern risk (industry precedent)
 
-### Single Responsibility
-- Each module/class has one reason to change
-- Functions do one thing well
-- Avoid god objects or utility classes with too many responsibilities
-
-### Dependency Management
-- Depend on abstractions, not concretions
-- Use dependency injection for testability
-- Minimize coupling between modules
-
-### Pattern risk (industry precedent — plans and proposals)
-
-**Proactively** before proposing or implementing designs that may diverge from **common industry practice** for the capability being built. Run [`.agents/skills/pattern-review/SKILL.md`](../../../.agents/skills/pattern-review/SKILL.md) (lens: [`references/rubric.md`](../../../.agents/skills/pattern-review/references/rubric.md)) — the agent **selects relevant aspects** per change; there is no fixed domain checklist.
-
-- Compare **plans and implementation proposals** to external precedent without waiting for the user to ask for “pattern review.”
-- Surface **Pattern risk** when material divergence is not mitigated; codebase convention alone is not sufficient.
-- Plans: fill **Pattern & precedent** (`.agents/skills/plan/references/implementation-plan-template.md`) for Complexity M/L or material behavioral design.
-- Plan critique: `review-dev-plan` includes an **Industry precedent** lens (same rubric).
-
-Paths: [`documentation/DOC_AGENT_WORKFLOW_LAYERS.md`](../../../documentation/DOC_AGENT_WORKFLOW_LAYERS.md) § Pattern / industry-standard review.
-
-**Not:** internal abstraction-layer mismatch or workaround shapes — see § Layer consistency (workaround guard) below. **Not:** package-or-pattern reuse vs writing custom code — see § Don't reinvent the wheel below.
+Before proposing or implementing a design that may diverge from common industry practice, run [`.agents/skills/pattern-review/SKILL.md`](../../../.agents/skills/pattern-review/SKILL.md) without waiting to be asked. Codebase convention alone is not precedent. Plans fill **Pattern & precedent** for Complexity M/L. Paths: `documentation/DOC_AGENT_WORKFLOW_LAYERS.md` § Pattern / industry-standard review.
 
 ### Don't reinvent the wheel (package / pattern reuse)
 
-**Proactively** before sinking real effort into a generic subsystem (auth, webhooks, parsers, queues, rate limits, protocol clients, complex UI widgets, etc.) that this project's current dependencies may not already cover. Run [`.agents/skills/dont-reinvent-the-wheel/SKILL.md`](../../../.agents/skills/dont-reinvent-the-wheel/SKILL.md) — live search, shortlist, license fit, recommendation only.
-
-- Do this **before** the first line of custom code for that subsystem, and before locking a from-scratch approach in a plan.
-- Skip when the work is small, bespoke, or unique business logic.
-- Do **not** install packages or write adapted code from this check — record the recommendation in the plan (Conflict & compliance) and let `plan` / `implement` decide.
-
-Paths: [`documentation/DOC_AGENT_WORKFLOW_LAYERS.md`](../../../documentation/DOC_AGENT_WORKFLOW_LAYERS.md) § Don't reinvent the wheel.
-
-**Not:** industry UX/API *design* precedent (`pattern-review`); vendor contract research (`api-integrate`).
+Before real effort on a generic subsystem (auth, webhooks, parsers, queues, rate limits, protocol clients, complex UI widgets) that current dependencies may not cover, run [`.agents/skills/dont-reinvent-the-wheel/SKILL.md`](../../../.agents/skills/dont-reinvent-the-wheel/SKILL.md). Skip small or bespoke business logic. It recommends only; it does not install or write code. Paths: `documentation/DOC_AGENT_WORKFLOW_LAYERS.md` § Don't reinvent the wheel.
 
 ### Performance cost risk (heavy DB / UI operations)
 
-**Proactively** when planning or implementing operations that could significantly slow the database or UI. Flag the cost, design a leaner alternative, then let the user choose — do not silently ship the expensive path.
+When planning or implementing something that could significantly slow the database or UI, flag it, design a leaner alternative, and let the user choose — never silently ship the expensive path.
 
-**Heavy-operation triggers** (non-exhaustive): N+1 / per-row queries, unbounded or large `SELECT` (no pagination/limit), missing index on a filtered/joined column, full-table scans or aggregates, multi-table joins on large tables, repeated round-trips in a loop, large client-side lists without virtualization, expensive re-renders / unmemoized derived data over big arrays, blocking work on the main thread, oversized bundle/asset loads.
+**Triggers** (non-exhaustive): N+1 / per-row queries, unbounded `SELECT`, missing index on a filtered/joined column, full-table scans, repeated round-trips in a loop, large unvirtualized lists, unmemoized derived data over big arrays, blocking main-thread work, oversized bundle/asset loads.
 
-**Required behavior:**
-1. **Detect** — when a step matches a trigger, estimate the cost (rough order of magnitude: rows touched, round-trips, render work).
-2. **Revisit design** — first try a cheaper architecture: narrower query + index, pagination/cursor, server-side aggregation, denormalized/derived column, caching (TanStack Query keys), batching, virtualization, memoization, deferring/`startTransition`. Prefer the **reductive** option (see `debugging/RULE.mdc` § Reductive Strategy).
-3. **Inform & propose** — tell the user about the heavy operation and present alternatives ordered from current/expensive to leaner/faster (later options progressively stronger).
-4. **Ask** — use the multiple-choice ask tool to let the user pick the approach before implementing. Follow `agent-behavior/RULE.mdc` § Decision Questioning Protocol.
+1. **Detect** — estimate the cost (rows touched, round-trips, render work).
+2. **Revisit design** — cheaper architecture first: narrower query + index, pagination, server-side aggregation, derived column, TanStack Query caching, batching, virtualization, memoization, `startTransition`. Prefer the reductive option (`debugging/RULE.mdc` § Reductive Strategy).
+3. **Propose and ask** — present alternatives from current/expensive to leaner/faster via the multiple-choice tool (`agent-behavior/RULE.mdc` § Decision Questioning Protocol).
 
-Cross-refs: measure with **`web-perf`** plugin skill when symptoms are CWV/Lighthouse → structural fix with **`.agents/skills/optimize2/SKILL.md`** → cite **`.agents/skills/react-perf-vite/SKILL.md`** while implementing (router § `web-perf` vs `optimize2` vs `react-perf-vite`). Stack-native fixes also in `react-perf-vite`; query cache UX `architecture/RULE.mdc` § Plain optimistic + server-canonical response; DB indexes/migrations `database/RULE.mdc`.
-
-**Not:** structural workaround / abstraction-layer mismatch — see § Layer consistency (workaround guard) below.
+Measure with the `web-perf` plugin skill when symptoms are CWV/Lighthouse; fix structurally with `.agents/skills/optimize2/SKILL.md`; cite `.agents/skills/react-perf-vite/SKILL.md` while implementing (router § `web-perf` vs `optimize2` vs `react-perf-vite`). DB indexes: `database/RULE.mdc`.
 
 ### Layer consistency (workaround guard)
 
-**Core reflex:** every request carries the user's assumption about how the system works — they can't see the implementation, so verify it before acting.
+Every request carries the user's assumption about how the system works, and they can't see the implementation — verify it before acting.
 
-**Proactively** on any request to change existing behavior ("add a color to the gradient", "make it splash", "just add a field/button/flag"), and when the request uses minimizer/exception language, names a first-of-a-kind instance without a category, or imports behavior-by-analogy. **Reactively** when the diff takes a workaround shape (special-case flag, parallel path, symptom tuning, disconnected patch, instance-encoded naming, growing scope, "for now" comment) or mid-impl when your own code starts to look like a workaround.
+Run [`.agents/skills/layer-consistency-check/SKILL.md`](../../../.agents/skills/layer-consistency-check/SKILL.md) (shapes: [`references/workaround-shapes.md`](../../../.agents/skills/layer-consistency-check/references/workaround-shapes.md)):
+- **Proactively** on any request to change existing behavior ("add a color to the gradient", "just add a field/flag"), minimizer/exception language, a first-of-a-kind instance named without a category, or behavior imported by analogy.
+- **Reactively** when the diff takes a workaround shape (special-case flag, parallel path, symptom tuning, disconnected patch, instance-encoded naming, growing scope, "for now" comment).
 
-Before writing the workaround: run [`.agents/skills/layer-consistency-check/SKILL.md`](../../../.agents/skills/layer-consistency-check/SKILL.md) (shapes: [`references/workaround-shapes.md`](../../../.agents/skills/layer-consistency-check/references/workaround-shapes.md)). **New or copied identifiers follow `.agents/skills/name-the-mechanism/SKILL.md`.** The one-off skip does not suppress that skill or the second-copy marker. For every other workaround shape, apply the severity filter and do not flag a genuinely one-off exception with no recurring cost. When a non-naming shape still clears that filter, post the **WARNING, WORKAROUND** block from the alert template and **stop** until the user chooses workaround vs structural alternative.
+New or copied identifiers follow `.agents/skills/name-the-mechanism/SKILL.md`; the one-off skip does not suppress it. For other shapes, apply the severity filter and skip genuine one-offs with no recurring cost. When a shape clears the filter, post the **WARNING, WORKAROUND** block from the alert template and **stop** until the user chooses workaround vs structural alternative. If pattern-review also applies, run this first (router § tiebreak). Paths: `documentation/DOC_AGENT_WORKFLOW_LAYERS.md` § Layer consistency (workaround guard).
 
-Paths: [`documentation/DOC_AGENT_WORKFLOW_LAYERS.md`](../../../documentation/DOC_AGENT_WORKFLOW_LAYERS.md) § Layer consistency (workaround guard).
+## Code Placement
 
-**Not:** industry precedent ([`pattern-review`](../../../.agents/skills/pattern-review/SKILL.md)); package/pattern reuse ([`dont-reinvent-the-wheel`](../../../.agents/skills/dont-reinvent-the-wheel/SKILL.md)); repo rule audit ([`validate`](../../../.agents/skills/validate/SKILL.md)); post-hoc wrong-layer repair ([`consolidate`](../../../.agents/skills/consolidate/SKILL.md) § Semantic placement). When both pattern-review and layer-consistency apply, run layer-consistency first (router § tiebreak).
+If code doesn't meet a layer's criteria, move to the next one.
 
-## Project Structure
+- **Components (UI only):** JSX layout, event handlers that call other functions, local UI state (`isOpen`). No data fetching, complex math, or business logic.
+- **Hooks (orchestration):** anything needing React lifecycle (`useEffect`, `useState`, `useContext`). Feature hooks serve one feature; global hooks are reusable.
+- **Services / utils (logic only):** logic not needing React lifecycle lives in plain `.ts`, portable and testable without a DOM.
+- **Service helpers:** types shared by a service and its helpers live in a dedicated types file; helpers import types from there and never import runtime code from the service they support. This prevents circular deps during complexity reduction.
 
-### Directory Organization
-- Group related files by feature/domain
-- Keep shared utilities in common location
-- Separate concerns by layer (presentation, business, data)
+### Logic decision flowchart
 
-### Module Boundaries
-- Define clear interfaces between modules
-- Avoid circular dependencies
-- Use explicit imports and exports
-- Avoid importing from `index.ts` within the same module (causes circular deps)
-- Pages: Barrel files (`index.ts`) not allowed in `pages/` - use direct imports only
+1. Pure calculation? → `shared/utils/` (multiple features) or `features/*/services/` (one feature)
+2. Fetches data or talks to an API? → `features/*/services/` or `shared/services/`
+3. Uses `useEffect` or `useState`? → `features/*/hooks/` or `shared/hooks/`
+4. Generic UI element? → `components/common/`
+5. Connects multiple features or defines a URL? → `pages/`
 
-## Code Placement Rules
-
-Follow these rules. If code doesn't meet criteria for a layer, move to the next one.
-
-### Component Rule (UI Only)
-Component files contain only:
-- JSX (Layout)
-- Event handlers that call other functions
-- Local UI state (e.g., `isOpen`, `isHovered`)
-- Zero data fetching, zero complex math, zero business logic
-
-### Hook Rule (Orchestration)
-Logic requiring React lifecycle (`useEffect`, `useState`, `useContext`) lives in a hook:
-- Feature Hooks: Logic specific to one feature
-- Global Hooks: Reusable logic
-
-### Service/Util Rule (Logic Only)
-Logic not requiring React lifecycle must not be in a component or hook:
-- Put it in a standard `.js` or `.ts` file
-- Makes logic portable and testable without a DOM
-
-### One-Way Directory Rule
-Code imports only from "lower" levels:
-- Component imports Hook, Hook never imports Component
-- Services import from utils, utils never import from services
-- Maintain clear dependency hierarchy
-
-### Service-Helper Extraction Pattern
-When extracting helper functions from a service:
-
-**Types First Principle:**
-- All types shared between service and helpers defined in dedicated types file
-- Services may re-export types for external API consumers
-- Helpers import types from types file, never from service files
-- Helpers never import runtime code from the service they support
-
-**Dependency Flow:**
-```
-types/index.ts ← services/*.ts
-      ↑                ↓
-      └─────── utils/*Helpers.ts
-```
-
-**Why:**
-- Prevents circular dependencies during complexity reduction
-- Makes types reusable without coupling to implementation
-- Types are the foundation layer
-- Applies universally to any feature/module extracting helpers
-
-## Standard Folder Structure
-
-Standardize project structure using this map. New files have a pre-determined home:
+### Standard folder structure
 
 ```
 src/
-├── assets/       # Static files (images, fonts, global CSS)
-├── components/   # UI components
-│   └── common/   # "Dumb" UI components (Button, Input, Modal) - No business logic
-├── features/     # Feature-based organization (grouped by domain)
-│   └── [feature-name]/
-│       ├── README.md    # Feature-local documentation (required for active features)
-│       ├── docs/        # Feature-local deep docs (optional)
-│       ├── components/  # Feature-specific UI
-│       ├── hooks/       # Feature-specific logic
-│       ├── services/    # Pure functions / API calls
-│       ├── types/       # Feature-specific type definitions
-│       ├── context/     # Feature-specific context providers
-│       └── store/       # Feature-specific state slices
-├── shared/       # Cross-cutting concerns (used across multiple features)
-│   ├── hooks/    # Cross-feature hooks
-│   ├── services/ # Cross-feature services (API clients)
-│   ├── utils/    # Global utilities (date formatters, currency math, validators)
-│   ├── types/    # Shared type definitions
-│   ├── context/  # Cross-feature context providers
-│   └── theme/    # Theme configuration and design tokens
-├── layouts/      # Page wrappers (Header/Footer/Sidebar)
-├── pages/        # Route-level components (only used for routing/connecting features)
-├── routes/       # Route definitions and guards
-├── store/        # Global state composition (Redux/Zustand/Context setup)
-├── config/       # Configuration files
-└── lib/          # Third-party library wrappers and integrations
+├── components/common/   # "Dumb" UI (Button, Input, Modal): no business logic, no data fetching
+├── features/<name>/     # One bounded domain: README.md (required), components/, hooks/, services/, types/, context/, store/, docs/ (optional)
+├── shared/              # Cross-feature: hooks/, services/, utils/, types/, context/, theme/
+├── layouts/  pages/  routes/  store/  config/  assets/
+└── lib/                 # Third-party library wrappers
 ```
 
-### Folder Purpose Clarification
+The whitelist in `projectStructure.config.cjs` is the full definition. `components/common/` is presentation-only; `shared/` is cross-cutting logic used by multiple features.
 
-**`components/common/`** vs **`shared/`**:
+**Backend:** Supabase Edge Functions in `supabase/functions/<name>/index.ts` (shared code in `_shared/`, deploy with `supabase functions deploy <name>`). Other cloud/edge services (Cloud Run, Railway, ...) in `cloud-functions/<service>/`.
 
-- **`components/common/`**: Presentation-only, reusable UI components
-  - Contains: Button, Input, Modal, Card, etc.
-  - Rule: Zero business logic, zero data fetching, zero feature-specific code
-  - Used by: Any feature or page that needs basic UI elements
+### Edge-case placement
 
-- **`shared/`**: Cross-cutting logic and utilities used across features
-  - Contains: hooks, services, utils, types, context, theme
-  - Rule: Reusable logic that doesn't belong to a specific feature
-  - Used by: Multiple features need the same functionality
-  - Roles: cross-feature hooks, cross-feature utils, cross-feature services
+Names follow `.agents/skills/name-the-mechanism/SKILL.md`.
 
-### Backend/Server-Side Structure
+| Case | Location |
+|------|----------|
+| Layout state hooks (sidebar, header scroll) | `shared/hooks/`; layouts import them, never own them |
+| Page needing its own hooks/services | Promote it to a feature; pages stay thin (routing + feature composition) |
+| Validation schemas | `features/*/types/*.schema.ts`; generic validators in `shared/utils/validation/` |
+| State | Feature slices `features/*/store/`; composition `store/index.ts`; cross-feature `shared/context/` |
+| Route guards | `routes/guards/`; auth comes from `src/features/auth/hooks/useAuth.ts`. Do not add a second hook under `shared/hooks/` for the same job |
+| Notifications / toasts | One feature, `features/notifications/` — not split across common + shared |
+| Error boundaries | Component `components/common/ErrorBoundary/`; reporting service in `shared/services/` |
+| Keyboard shortcuts | Global: one hook in `shared/hooks/`; feature-specific: `features/*/hooks/` |
+| Cross-feature data transforms | Consumer owns the transform; 2+ consumers → `shared/utils/transformers/` |
+| API response normalizers | Co-locate with API calls in `features/*/services/`; only truly shared ones in `shared/services/` |
+| Feature context used app-wide | Provider in `features/*/context/`, exported via the feature barrel, composed in `App.tsx` |
+| Drag and drop | Infrastructure in `shared/context/` + `shared/hooks/`; domain actions in the owning feature's hooks |
 
-**Supabase Edge Functions:**
-- Location: `supabase/functions/`
-- Each function is a subdirectory: `supabase/functions/<function-name>/index.ts`
-- Shared utilities: `supabase/functions/_shared/`
-- Deploy via: `supabase functions deploy <function-name>`
+## Layers and Imports
 
-**Other Cloud/Edge Functions** (Cloud Run, Railway, etc.):
-- Location: `cloud-functions/<service-name>/`
-- Separate from Supabase Edge Functions, use different runtimes (Node.js, etc.)
+Import direction is downward only: `pages → components → hooks → services → utils → types`. Component imports hook, never the reverse.
 
-## Logic Decision Flowchart
-
-When writing code, ask these questions in order:
-1. Is it a pure calculation? → `shared/utils/` (if used by multiple features) or `features/*/services/` (if feature-specific)
-2. Does it fetch data or talk to an API? → `features/*/services/` (feature-specific) or `shared/services/` (cross-feature)
-3. Does it use `useEffect` or `useState`? → `features/*/hooks/` (feature-specific) or `shared/hooks/` (cross-feature)
-4. Is it a generic UI element? → `components/common/`
-5. Does it connect multiple features or define a URL? → `pages/`
-
-## Architecture Rules Are Immutable
-
-**Do not modify architecture rules without explicit user consent and understanding**
-
-### Rule Modification Policy
-
-1. Architecture rules are not changed when violations are detected
-2. Violations indicate the code is wrong, not that the rules are wrong
-3. If a user requests rule changes, you must:
-   - Issue a clear warning that modifying architecture rules will:
-     - Destroy architectural consistency across the application
-     - Break the enforcement system's purpose (preventing bad patterns)
-     - Create technical debt and inconsistency
-     - Potentially violate architectural principles shared with other applications
-   - Only proceed when the user demonstrates clear understanding of these consequences
-   - Document why the rule was changed and what architectural decision was made
-
-### When Violations Are Detected
-
-- Report violations clearly to the user
-- Suggest fixing the code to match the rules
-- Explain what the rule enforces and why
-- Do not automatically adjust rules to match existing violations
-- Do not change rules without explicit user request
-- Do not change rules without warning about consequences
-
-## Automated Architecture Enforcement
-
-Project uses automated architecture enforcement via ESLint + Dependency-Cruiser. Rules enforced at code level, preventing violations before commit.
-
-### Enforcement Tools
-
-| Tool | Purpose | When It Runs |
-|------|---------|--------------|
-| `project-structure-validator.js` | Folder structure whitelist enforcement | CLI (pre-commit + CI/CD) |
-| `eslint-plugin-boundaries` | Layer boundary enforcement | Real-time (IDE + pre-commit) |
-| `eslint-plugin-import` | Circular dependency prevention, import ordering | Real-time (IDE + pre-commit) |
-| `dependency-cruiser` | Deep analysis, stakeholder reports, CI validation | CI/CD + on-demand |
-| `validate-feature-size.js` (+ `feature-size-lib.js`) | Feature size / granularity budgets (per-layer + per-feature file counts) | CLI; CI (`validate:feature-size`); pre-commit (`validate:feature-size:staged`) |
-| `validate-feature-docs.js` (+ `feature-readme-lib.js`) | Feature-local `README.md` presence (and optional strict headings) | CLI; CI (`validate:feature-docs:strict`); pre-commit (`validate:feature-docs:staged`) |
-
-### Import Direction (Downward Only)
-
-```
-pages → components → hooks → services → utils → types
-```
-
-Never import upward (e.g., hooks cannot import from components).
-
-### Layer Rules
-
-| Layer | Can Import From | Cannot Import From |
-|-------|-----------------|-------------------|
+| Layer | Can import from | Cannot import from |
+|-------|-----------------|--------------------|
 | `pages` | components, hooks, services, utils, types, routes, config | — |
 | `routes` | pages, components, hooks, types | services |
 | `components` | hooks, services, utils, types, config | pages, routes |
@@ -272,355 +105,48 @@ Never import upward (e.g., hooks cannot import from components).
 | `types` | nothing | everything |
 | `config` | types | everything else |
 
-### Folder Structure Whitelist
+- Avoid circular dependencies; never import from `index.ts` within the same module.
+- Barrel files (`index.ts`) are not allowed in `pages/`; use direct imports. They are allowed in features.
+- A `boundaries/element-types` error means a forbidden layer import: move the code to the right layer, bridge with a hook, or extract shared logic to utils/services.
+- Legitimate cross-layer exceptions (rare) need an ESLint disable comment with justification and a ticket reference, and approval in code review.
+- **Baselines:** existing dependency-cruiser violations are ignored via `.dependency-cruiser-baseline.json` and oversized features are grandfathered in `featureBudgets.config.cjs`; new violations and growth beyond the snapshot are blocked.
 
-**Critical:** Project uses a whitelist approach for folder structure. Any folder or file not explicitly defined in `projectStructure.config.cjs` triggers an ESLint error.
+### Path aliases (SSOT)
 
-**Do not modify `projectStructure.config.cjs`** to accommodate existing violations. Fix the code structure instead, or follow the rule modification policy above if architectural changes are truly needed.
+Use the `@/` catch-all only (`@/*` → `src/*`) and mirror the filesystem: `@/shared/utils/<module>`, `@/features/<feature>/hooks/<hook>`, `@/components/common/<component>`. Do not use `@shared`, `@features`, `@pages`, `@utils`, `@common` (no slash) or relative parent imports (`../`). Optional shortcuts: `@/hooks/*`, `@/services/*`, `@/utils/*`, `@/types/*`, `@/context/*`, `@/theme/*` → the matching `src/shared/*` folder.
 
-**What Gets Enforced:**
-- Root level folders: Only predefined folders (`src/`, `public/`, `documentation/`, etc.)
-- `src/` structure: Only predefined subfolders (`pages/`, `components/`, `shared/`, etc.)
-- File naming: Enforced naming conventions per folder type
-- File extensions: Enforced extensions per folder type
+## Architecture Rules Are Immutable
 
-**Project Structure Validation:**
+Violations mean the code is wrong, not the rule. Do not change architecture rules, the folder whitelist (`projectStructure.config.cjs`), or baselines to fit existing violations. When violations are detected, report them, explain what the rule enforces, and suggest fixing the code.
 
-Use `pnpm validate:structure` to validate:
-- Root-level files and folders
-- Nested folder structures recursively
-- All file types (including files without extensions, binary files, etc.)
-- File extensions match allowed patterns per folder
+If the user asks to change a rule: warn that it erodes architectural consistency, defeats the enforcement system, and creates technical debt; proceed only once they show they understand; then document the decision and why.
 
-**Configuration:** See `projectStructure.config.cjs` for complete structure definition.
+## Feature Granularity / Bounded Context (Enforced)
 
-**Related Files:**
-- `scripts/project-structure-validator.js` - Main validator implementation
-- `scripts/validate-feature-size.js` - Feature size / granularity validator
-- `scripts/feature-size-lib.js` - Shared feature size logic
-- `projectStructure.config.cjs` - Structure configuration file
-- `featureBudgets.config.cjs` - Feature size budget configuration (SSOT for limits and waivers)
-- `package.json` - Scripts that call the validator
-- `documentation/PROJECT-STRUCTURE-VALIDATION.md` - User documentation
-- `ARCHITECTURE.md` - Architecture documentation
-- `.cursor/rules/file-placement/RULE.mdc` - File placement rules
+Layer rules alone allow monolithic features. **One feature = one bounded domain concept** — one reason to change, one shared vocabulary. If you can name two or more independent concepts inside a feature (e.g. world, combat, inventory, quests), split them into separate features and move cross-cutting engine code to `src/shared/`.
 
-### Path Aliases (Required)
-
-**SSOT:** This section is the Single Source of Truth for all path alias definitions. Other rules reference this section.
-
-**Canonical form:** use the `@/` catch-all alias only (`@/*` → `src/*`). Mirror the filesystem under `src/`. These paths illustrate the alias shape, not required file names: `@/shared/utils/<module>`, `@/features/<feature>/hooks/<hook>`, `@/components/common/<component>`.
-
-**Do not use** granular aliases without the slash (`@shared`, `@features`, `@pages`, `@utils`, `@common`) or relative parent imports (`../`).
-
-**Common paths:**
-
-- `@/components/*` → `src/components/*`
-- `@/pages/*` → `src/pages/*`
-- `@/features/*` → `src/features/*`
-- `@/shared/hooks/*` → `src/shared/hooks/*`
-- `@/shared/services/*` → `src/shared/services/*`
-- `@/shared/utils/*` → `src/shared/utils/*` (all cross-feature utilities live here)
-- `@/shared/types/*` → `src/shared/types/*`
-- `@/config/*` → `src/config/*`
-- `@/shared/context/*` → `src/shared/context/*`
-- `@/shared/theme/*` → `src/shared/theme/*`
-- `@/routes/*` → `src/routes/*`
-- `@/lib/*` → `src/lib/*`
-- `@/layouts/*` → `src/layouts/*`
-
-**Optional shortcuts** (secondary to tree paths above): `@/hooks/*` → `src/shared/hooks/*`, `@/services/*` → `src/shared/services/*`, `@/utils/*` → `src/shared/utils/*`, `@/types/*` → `src/shared/types/*`, `@/context/*` → `src/shared/context/*`, `@/theme/*` → `src/shared/theme/*`.
-
-Use path aliases, not relative imports.
-
-### When ESLint Shows "boundaries/element-types" Error
-
-This means importing from a forbidden layer. Solutions:
-1. Move the code to the appropriate layer
-2. Create a hook to bridge the gap
-3. Extract shared logic to utils/services
-
-### Exception Handling
-
-For legitimate cross-layer imports (rare cases), use ESLint disable comments with required justification:
-- Exceptions require code review approval
-- Must include justification comment
-- Must reference ticket/issue
-- Review exceptions quarterly for removal
-
-### Baseline Approach
-
-- **Dependency-cruiser:** Existing violations ignored via baseline (`.dependency-cruiser-baseline.json`); new violations flagged and must be fixed.
-- **Feature size:** Existing oversized features grandfathered via `featureBudgets.config.cjs` → `baseline` snapshots; new growth beyond snapshot blocked until split or justified override.
-- Gradual remediation: Fix violations incrementally over time.
-
-### Architecture Checking Commands
-
-**Full Validation (Comprehensive):**
-- `pnpm validate:all` - Full structure + architecture check
-- `pnpm validate:structure` - Full structure validation
-- `pnpm validate:feature-size` - Feature size / granularity validation
-- `pnpm arch:check` - Full architecture check (includes cross-feature import rules)
-- `pnpm arch:check:ci` - CI-friendly verbose output
-- `pnpm arch:graph` - Generate SVG dependency graph
-- `pnpm arch:graph:html` - Generate HTML report for stakeholders
-- `pnpm arch:validate` - Full validation (lint + architecture)
-- `pnpm lint:arch` - ESLint architecture rules only
-
-**Staged Files Only (Fast, for commits):**
-- `pnpm validate:all:staged` - Staged structure + architecture check
-- `pnpm validate:structure:staged` - Staged structure validation only
-- `pnpm validate:feature-size:staged` - Feature size validation for touched features (counts whole feature)
-- `pnpm arch:check:staged` - Architecture check (runs full, but reports staged)
-
-**Note:** Pre-commit hook automatically runs staged checks. Use full validation commands for comprehensive checks before major changes or when troubleshooting.
-
-### Feature Granularity / Bounded Context (Enforced)
-
-Layer rules alone do not prevent monolithic features. A single `src/features/<name>/` folder can hold an entire product domain and still pass layer lint. **One feature = one bounded domain concept** — one reason to change, one cohesive vocabulary users and devs share.
-
-**Heuristic:** If you can name two or more independent domain concepts inside one feature (e.g. game *world*, *combat*, *inventory*, *quests* in one folder), split them into separate features under `src/features/`. Move cross-cutting engine code to `src/shared/`.
-
-**Budgets (SSOT: `featureBudgets.config.cjs`):**
-- `defaults.maxFilesPerLayer` — max `.ts`/`.tsx` files per layer subfolder (`components/`, `hooks/`, `services/`, etc.), recursively.
-- `defaults.maxFilesPerFeature` — max `.ts`/`.tsx` files across the whole feature.
-- `overrides.<featureKey>` — per-feature waiver with **required non-empty `reason`** (e.g. `auth`, `admin/billing`).
-- `baseline.<featureKey>` — grandfathered snapshot; new files fail once counts exceed snapshot. Regenerate: `pnpm validate:feature-size:baseline`.
-
-**Cross-feature imports:** One feature must not deep-import another feature's internals (`components/`, `hooks/`, `services/`, `store/`, `context/`, `types/`). Consume sibling features via their public barrel (`index.ts`) or `api/` layer, or extract shared code to `src/shared/`. Enforced by dependency-cruiser rules `no-cross-feature-internals` and `no-cross-feature-internals-nested`.
-
-**Agent obligation:** Before creating files for new work, enumerate domain concepts. If more than one cohesive concept applies, or projected size exceeds budgets, split into multiple features in the plan — do not wait for the user to request architecture.
-
-**Example split (game):**
-```
-src/features/world/       # map, tiles, rendering
-src/features/combat/      # damage, turns, abilities
-src/features/inventory/   # items, equipment
-src/features/quests/      # objectives, dialogue hooks
-src/shared/               # ECS core, math, asset loader (2+ consumers)
-```
+- **Budgets (SSOT `featureBudgets.config.cjs`):** `defaults.maxFilesPerLayer`, `defaults.maxFilesPerFeature`, per-feature `overrides.<key>` (required non-empty `reason`), grandfathered `baseline.<key>` (regenerate with `pnpm validate:feature-size:baseline`).
+- **Cross-feature imports:** never deep-import another feature's `components/`, `hooks/`, `services/`, `store/`, `context/`, or `types/`. Use its public barrel (`index.ts`) or `api/` layer, or extract to `src/shared/`. Enforced by dependency-cruiser (`no-cross-feature-internals`, `no-cross-feature-internals-nested`).
+- **Agent obligation:** before creating files for new work, enumerate domain concepts. If more than one applies, or projected size exceeds budgets, split into multiple features in the plan — do not wait for the user to ask.
 
 ## Patterns
 
-### Component Patterns
-- Prefer composition over inheritance
-- Use functional components with hooks
-- Keep components focused and reusable
-
-### State Management
-- Keep state as local as possible
-- Lift state up only when necessary
-- Use appropriate state management solutions
+- Prefer composition over inheritance; functional components with hooks.
+- Keep state as local as possible; lift only when necessary.
+- Shared dimensions or positions: one source of truth, parent holds the value and passes it by props; use React Context only when deeply nested or widely shared.
+- Handle errors at appropriate boundaries with meaningful messages.
 
 ### Plain optimistic + server-canonical response (TanStack Query)
 
-**Default pattern** for mutations that must feel instant without stutters, flashes, or snapbacks: one optimistic render, then one committed render that matches persisted data. Avoid a third render from refetch that disagrees with the optimistic patch.
+For mutations that must feel instant: one optimistic render, then one committed render that matches persisted data. On success, merge the mutation result into the cache with `setQueryData`; do **not** call `invalidateQueries`/`refetch` on the happy path for the same keys. Mutation endpoints return the canonical projection (e.g. PostgREST `.select(...)`). Full playbook, anti-patterns, and examples (SSOT): `documentation/DOC_TANSTACK_QUERY.md` § Plain optimistic + server-canonical response.
 
-This repo uses **TanStack Query** for server state (`@tanstack/react-query`). The same mental model maps to other libraries if introduced later: Apollo `optimisticResponse`, RTK Query `updateQueryData`, SWR `mutate` with `optimisticData` + `populateCache`, etc.—**optimistic patch first, server payload merges into cache as truth**.
+## Documentation
 
-#### Playbook steps (in order)
+- `ARCHITECTURE.md` and `CHANGELOG.md` live in the repo root (the structure validator enforces this).
+- Feature docs live with the code in `src/features/*/README.md`; stage README updates whenever feature code changes. `src/features/*/docs/*.md` requires explicit user approval.
+- Update `ARCHITECTURE.md` only after structural architecture changes; `CHANGELOG.md` after user-facing changes. Prefer source-adjacent comments/tests over new narrative docs.
+- Temporary planning docs: `documentation/jobs/` and `documentation/temp/`.
 
-1. **Canonical API contracts**  
-   Server mutation paths should return the **canonical projection** the UI renders (updated row(s), counts, or list slice), e.g. PostgREST `.select(...)` after `.update()` / `.insert()`. Avoid **204 No Content / void success + mandatory refetch** as the default contract for row-level edits when the UI already holds query cache for that entity.
+## Complexity Reduction
 
-2. **Optimistic phase** (`onMutate`, before `await`)  
-   - `cancelQueries` for affected keys if needed to avoid races.  
-   - Snapshot previous cache via `getQueryData` (or equivalent).  
-   - Apply a cache **patch** that uses the **same field shape and normalizers** the server response will use.  
-   - Return rollback context (e.g. `{ previous }`) from `onMutate`.
-
-3. **Error phase** (`onError`)  
-   - Restore the snapshot with `setQueryData` using stored context.  
-   - Surface **one** non-blocking error (toast/snackbar); do not stack multiple error UIs from the same gesture.
-
-4. **Success phase** (`onSuccess` / `onSettled` when error-corrected)  
-   - Merge the **mutation result** into the cache with `setQueryData` (or targeted `setQueriesData`) so cache matches the server response **byte-for-byte** for that projection.  
-   - **Do not** call `invalidateQueries` or `refetch` on the **happy path** for the **same** list/detail keys you just reconciled—this is the main cause of an extra refetch render that does not match the optimistic patch and produces flashes.
-
-5. **Pending / “saving” chrome**  
-   Clear loading or “saving” indicators only after the cache holds **server-canonical** data for the relevant keys (e.g. after `setQueryData` from the response), not merely when the mutation `Promise` resolves if you still rely on a follow-up refetch.
-
-6. **React rendering**  
-   - Wrap non-urgent success-path updates in `startTransition` when they might defer heavy tree work.  
-   - Keep **stable list keys** (`id`-based; avoid array index keys) through optimistic → server merge so React does not remount rows unnecessarily.
-
-7. **When `invalidateQueries` / refetch *is* acceptable**  
-   - Unknown or large blast radius (bulk operations, admin actions touching many rows).  
-   - Cross-table aggregates or summaries where the mutation response does not carry the full derived state.  
-   - **Secondary staleness**: refresh other caches **after** the user-visible path has already merged canonical data for the focused query—optionally deferred (`queueMicrotask`, `setTimeout(0)`, or transition).
-
-8. **Hybrid escape hatch**  
-   Reconcile the **focused** query from the **response body** first. If other caches might be stale, **invalidate only secondary keys**, preferably **deferred**, never in the same tick as a redundant invalidation of the key you just `setQueryData`’d.
-
-#### Anti-patterns (treat as bugs when fixing flashes)
-
-- Optimistic patch followed immediately by **`invalidateQueries` / `refetch` on the same list or detail key** on success.  
-- **Multiple concurrent refresh mechanisms** on one gesture (`refetch()` + `invalidateQueries()` + resetting local duplicated state) without a **single** canonical merge step into TanStack Query cache.  
-- **Divergent data shapes** between optimistic updates and server normalizers (different sort keys, computed fields, `null` vs. `[]`, missing timestamps).  
-- Clearing “saving” state before the cache reflects the server response while a refetch is still the planned source of truth.
-
-#### Related implementation in this repo
-
-- `src/features/auth/hooks/useUpdateUserProfile.ts` — one shipped instance (profile update), not a template prefix. Other mutations get their own category name in the owning feature. Prefer `setQueryData` from the mutation result over invalidation for the same key.  
-- `src/shared/utils/queryClient.ts` — shared `QueryClient` defaults (`createQueryClient`, app singleton).  
-- `src/shared/utils/queryKeys.ts` — shared key helpers; per-feature keys follow the factory pattern in `documentation/DOC_TANSTACK_QUERY.md` (e.g. `features/<feature>/api/keys.ts` when a feature adds queries).  
-- `src/features/auth/services/userProfileService.ts` — example of a **canonical return**: `updateUserProfile` uses `.select(...)` so the caller can patch cache without an extra round-trip.  
-- Supplementary doc: `documentation/DOC_TANSTACK_QUERY.md` (keys, invalidation examples; this architecture section is the SSOT for **optimistic + canonical merge** UX rules).
-
-### Layout and Shared Dimensions
-When multiple components must share a dimension or position:
-- Avoid duplicated magic numbers
-- Use a single source of truth and propagate values
-- Default: Parent component holds the value and passes it via props
-- When deeply nested or widely shared: Use React Context or another shared mechanism if clearly beneficial
-- Exact placement of the source of truth can vary per feature; choose the most logical owner each time
-
-### Error Handling
-- Handle errors at appropriate boundaries
-- Provide meaningful error messages
-- Log errors for debugging
-
-## Edge Case Placement Guide
-
-When code doesn't clearly fit existing categories, use these guidelines:
-
-### Layout-Specific Logic
-- Hooks for layout state (sidebar, header scroll, and the like): `src/shared/hooks/`. Name per `.agents/skills/name-the-mechanism/SKILL.md`.
-- Layouts import these hooks; they don't own them
-
-### Page Complexity Threshold
-- If a page needs its own hooks/services, promote it to a feature
-- Pages should remain thin (routing + feature composition only)
-
-### Validation Schemas
-- Domain-specific: `features/*/types/*.schema.ts`
-- Generic validators: `shared/utils/validation/`
-
-### State Management
-- Feature state slices: `features/*/store/`
-- Composition/setup: `store/index.ts`
-- Cross-feature state: `shared/context/`
-
-### Route Guards
-- Location: `routes/guards/`
-- Auth logic sourced from `src/features/auth/hooks/useAuth.ts` (the auth feature). Do not add a second hook under `src/shared/hooks/` for the same job.
-
-### Notifications/Toasts
-- Full feature: `features/notifications/`
-- Not split across common + shared
-
-### Error Boundaries
-- Component: `components/common/ErrorBoundary/`
-- Reporting service: `src/shared/services/`. Name per `.agents/skills/name-the-mechanism/SKILL.md`.
-
-### Keyboard Shortcuts
-- Global shortcuts: one hook in `src/shared/hooks/`. Name per `.agents/skills/name-the-mechanism/SKILL.md`.
-- Feature shortcuts: `features/*/hooks/`. Name per `.agents/skills/name-the-mechanism/SKILL.md`.
-
-### Cross-Feature Data Transforms
-- Consumer feature owns the transform
-- If 2+ consumers: extract to `shared/utils/transformers/`
-
-### API Response Normalizers
-- Co-locate with API calls in `features/*/services/`
-- Only truly shared normalizers go in `shared/services/`
-
-### Feature Context (App-Wide Usage)
-- Keep provider in `features/*/context/`
-- Export via feature barrel (barrel files allowed in features, NOT in pages)
-- Compose providers in `App.tsx`
-
-### Drag & Drop
-- Infrastructure: `src/shared/context/` and `src/shared/hooks/`. Name per `.agents/skills/name-the-mechanism/SKILL.md`.
-- Domain actions: respective feature's hooks
-
-## Architecture Documentation
-
-### Documentation Maintenance
-- Maintain only high-value architecture docs
-- Update architecture docs only when structural behavior changes
-- Prefer source-adjacent comments/tests over creating additional narrative docs
-- Use clear, descriptive section headings
-
-### Documentation Location
-- `ARCHITECTURE.md` and `CHANGELOG.md` must be in project root directory (not in `documentation/` folder)
-- These files are project-wide references that need to be easily discoverable
-- Root location follows standard conventions (Keep a Changelog format) and ensures README references work correctly
-- If these files are found in wrong location (e.g., `documentation/` folder), they must be moved to root directory
-- Feature-specific documentation should be colocated with code in `src/features/*/README.md`
-- `src/features/*/docs/*.md` is optional and should be created only with explicit user approval
-- Temporary implementation planning docs can be stored in `documentation/jobs/` and `documentation/temp/`
-- Document major architectural decisions and patterns
-- Include diagrams or visual representations when helpful
-- Avoid broad "update all docs" expectations; keep documentation obligations objective
-
-### When to Update Documentation
-- After structural architecture changes, update `ARCHITECTURE.md`
-- After user-facing behavior changes, update `CHANGELOG.md`
-- Whenever staged changes affect a feature, stage updates to that feature's `README.md`
-
-## Examples
-
-### Good Example
-Clear separation: data access, business logic, presentation:
-- Data repository interface defines data access contract
-- Service class uses repository interface (dependency injection)
-- Component uses service, handles UI state and rendering
-
-### Bad Example
-Everything mixed together, no separation:
-- Component directly fetches data
-- Business logic mixed with presentation
-- No separation of concerns
-
-## Complexity Reduction and Architecture
-
-When reducing code complexity through refactoring, all changes must comply with architecture rules:
-
-### Architecture-Aware Complexity Reduction
-
-**Key Principles:**
-- Complexity reduction refactorings must respect layer boundaries
-- Extracted code must be placed in correct layer per architecture rules
-- All imports must use path aliases (`@/` prefix) - never relative parent imports
-- Folder structure whitelist must be respected (or updated if new folder needed)
-
-**Refactoring Workflow:**
-1. Identify complexity violations (cyclomatic > 10, cognitive > 15, nesting > 4, etc.)
-2. Determine target layer for extracted code (utils/services/hooks per architecture rules)
-3. Check folder whitelist - use existing folder or update `projectStructure.config.cjs` first
-4. Extract code using appropriate refactoring technique
-5. Use path aliases for all imports
-6. Verify layer boundaries after extraction
-7. Run `pnpm lint:arch` to verify architecture compliance
-
-**For detailed guidance:** See `.agents/skills/optimize2/SKILL.md` (unified checklist and architecture compliance during refactors)
-
-**For unified checklist:** See `.agents/skills/optimize2/SKILL.md`
-
-## Related Rules
-
-**When modifying this rule, check these rules for consistency:**
-- `code-style/RULE.mdc` - Naming conventions for architectural elements
-- `testing/RULE.mdc` - Testing patterns that depend on architecture
-- `security/RULE.mdc` - Security boundaries and architectural patterns
-- `workflow/RULE.mdc` - Code review standards for architecture
-- `cloud-functions/RULE.mdc` - Function organization patterns
-- `.agents/skills/optimize2/SKILL.md` - Complexity reduction / optimization workflow (must comply with architecture rules)
-
-**SSOT Status:**
-- This rule is the SSOT for:
-  - Project structure and directory organization
-  - Path alias definitions (`@/hooks/*`, `@/components/*`, etc.)
-  - Code placement and layer boundaries
-  - `common/` vs `shared/` folder distinction
-  - Feature granularity budgets and cross-feature import boundaries (`featureBudgets.config.cjs`, dependency-cruiser)
-  - Plain optimistic + server-canonical response patterns for TanStack Query (mutation UX, cache merge vs. invalidation on success)
-- Other rules reference this rule for structure guidelines
-- `code-style/RULE.mdc` references this rule for path aliases instead of duplicating them
-- Complexity reduction rules reference this rule for architecture compliance
-
-**Rules that reference this rule:**
-- All other rules may reference architectural patterns
-- `cloud-functions/RULE.mdc` - References this rule as SSOT for function location
-- `.agents/skills/optimize2/SKILL.md` - References this rule for architecture compliance during refactoring
+Refactors must respect layer boundaries, place extracted code in the right layer, use `@/` aliases, and stay within the folder whitelist. After extracting, run `pnpm lint:arch`. Workflow: `.agents/skills/optimize2/SKILL.md`.
