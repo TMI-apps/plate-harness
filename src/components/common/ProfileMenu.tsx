@@ -4,8 +4,8 @@ import { useUserProfileQuery } from "@/features/auth/hooks/useUserProfileQuery";
 import { ProfileMenuContent } from "./ProfileMenu/ProfileMenuContent";
 import { ProfileMenuTrigger } from "./ProfileMenu/ProfileMenuTrigger";
 import { getAnchorMenuProps } from "./ProfileMenu/anchorMenuProps";
-import { useAccountMenuActions } from "./ProfileMenu/hooks/useAccountMenuActions";
-import { useAnchorMenuState } from "./ProfileMenu/hooks/useAnchorMenuState";
+import { useAccountMenuActions } from "@/shared/hooks/useAccountMenuActions";
+import { useAnchorMenuState } from "@/shared/hooks/useAnchorMenuState";
 
 import Menu from "@mui/material/Menu";
 
