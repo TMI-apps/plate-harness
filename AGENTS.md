@@ -6,7 +6,7 @@ Project memory for coding agents (Cursor, Claude Code, Codex, and other AGENTS.m
 
 **plate-harness** — Vite + React 19 + TypeScript + MUI + Supabase + TanStack Query harness (boilerplate + agent harness) with strict, enforced architecture.
 
-- **Stack:** Vite 8, React 19, TypeScript 6 (strict), MUI 9, TanStack Query 5, Supabase 2, Airtable, React Router 7, Vitest 4, ESLint 10 + GTS + Prettier, Husky + lint-staged, dependency-cruiser, eslint-plugin-boundaries. Pin versions in `package.json`.
+- **Stack:** Vite, React, TypeScript (strict), MUI, TanStack Query, Supabase, Airtable, React Router, Vitest; versions in `package.json`. Architecture is enforced by ESLint boundaries + dependency-cruiser + Husky.
 - **Package manager:** `pnpm@9.15.4` (enforced via `packageManager` field — do **not** use npm or yarn).
 
 ## Workflow — agent skills
@@ -29,15 +29,13 @@ Layer model: `documentation/DOC_AGENT_WORKFLOW_LAYERS.md`.
 
 **Short "what for" (SSOT):** YAML `description` on each `RULE.mdc`. Rows below are a portable copy for tools that load `AGENTS.md` only (e.g. Claude Code). When editing a description, update the YAML first, then this catalog.
 
-**Deep topic map (Cursor):** `.cursor/rules/INDEX.md` — richer topic bullets; not the short-description SSOT.
+**Deep topic map:** `.cursor/rules/INDEX.md` — open on demand (not auto-loaded); richer topic bullets, not the short-description SSOT.
 
 ### `@` imports (Claude/Codex)
 
 Cursor loads `alwaysApply: true` rules directly from `.mdc` frontmatter, so no rule body is imported here (avoids double-load; `temp_job_harness-skills` D14).
 
 **Verified 2026-08-12:** Cursor does **not** expand these `@` lines — it injects `AGENTS.md` verbatim. Treat the paths below as pointers you must **open yourself** when you need them; do not assume their contents are already in context. Tools that do expand `@` imports (Claude Code) get them inlined.
-
-@.cursor/rules/INDEX.md
 
 Claude-specific behavioral reminders (thin pointers):
 
@@ -74,7 +72,7 @@ Grouped by YAML `alwaysApply`. Include `globs` when present.
 
 ## Defaults
 
-- **Always read before edit.** Run `pnpm validate:structure` if creating new files in unfamiliar locations.
+- Run `pnpm validate:structure` if creating new files in unfamiliar locations.
 - **Git workflow mode:** Read `src/config/git-workflow.json`, then apply `.cursor/rules/git-workflow/RULE.mdc` § Mode-aware branch gate. What each mode does: § Mode behavior table (Model C default; A/B selectable).
 - **Name the mechanism before code.** Before adding or copying a function, hook, component, type, file, or feature folder — including a one-line edit — read `.agents/skills/name-the-mechanism/SKILL.md` and follow it.
 - **Layer consistency before code.** Every request to change existing behavior carries an assumption about how the system works — verify it before acting (user can't see the impl). Cues: `.agents/skills/layer-consistency-check/references/workaround-shapes.md` § Request-side cues → run `.agents/skills/layer-consistency-check/SKILL.md` and stop for user choice before writing code.
