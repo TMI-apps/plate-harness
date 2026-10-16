@@ -13,8 +13,8 @@ This README describes folder layout and maintenance â€” it does **not** ove
 - **`code-style/RULE.mdc`**: SSOT for naming conventions, formatting, and documentation standards
 - **`security/RULE.mdc`**: SSOT for security best practices and vulnerability prevention
 - **`workflow/RULE.mdc`**: Hub for code review, development process, deployment pointers, and rule routing
-- **`git-workflow/RULE.mdc`**: SSOT for branch strategy (Model A default / Model B opt-in via `src/config/git-workflow.json`), PRs, and production promotion
-- **`agent-behavior/RULE.mdc`**: SSOT for protected files, decision protocol, and user-test gate
+- **`git-workflow/RULE.mdc`**: SSOT for branch strategy (§ Mode behavior table — Model C default, A/B selectable via `src/config/git-workflow.json`), PRs, and production
+- **`agent-behavior/RULE.mdc`**: SSOT for protected files, decision protocol, and success reporting (verified vs unverified)
 - **`platform/RULE.mdc`**: SSOT for PowerShell command rules and local environment configuration
 - **`cloud-functions/RULE.mdc`**: SSOT for when to use Edge Functions vs frontend, and function organization
 - **`database/RULE.mdc`**: SSOT for database migration best practices and patterns

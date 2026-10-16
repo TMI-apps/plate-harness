@@ -14,9 +14,9 @@ Thin hub for development workflow, code review, and process requirements. Domain
 | Concern | SSOT |
 |---------|------|
 | Branch model, PRs, promote, commit/push flow | `git-workflow/RULE.mdc` |
-| Protected files, decision protocol, user-test gate | `agent-behavior/RULE.mdc` |
+| Protected files, decision protocol, success reporting (verified vs unverified) | `agent-behavior/RULE.mdc` |
 | PowerShell, env vars, shell crash prevention | `platform/RULE.mdc` |
-| Semver, changelog, commit format | `.agents/skills/finish/SKILL.md` |
+| Semver, changelog, commit format | `git-workflow/RULE.mdc` § Mode behavior table → **version source** (A/B: `.agents/skills/finish/SKILL.md`; C: release-please) |
 | Reductive strategy / debugging | `debugging/RULE.mdc` |
 | API doc research | `api-integration/RULE.mdc` |
 
@@ -28,8 +28,8 @@ Read `src/config/git-workflow.json`, then apply `.cursor/rules/git-workflow/RULE
 
 | Topic | SSOT Location |
 |-------|----------------|
-| Semantic versioning, commit format, conventional commit types | `.agents/skills/finish/SKILL.md` |
-| Branch strategy, PRs, production promotion | `git-workflow/RULE.mdc` (§ Mode-aware branch gate; mode: `src/config/git-workflow.json`) |
+| Semantic versioning, commit format, conventional commit types | `git-workflow/RULE.mdc` § Mode behavior table → **version source** (A/B: `.agents/skills/finish/SKILL.md`) |
+| Branch strategy, PRs, production | `git-workflow/RULE.mdc` (§ Mode behavior table, § Mode-aware branch gate; mode: `src/config/git-workflow.json`) |
 | Protected files, agent behaviors | `agent-behavior/RULE.mdc` |
 | PowerShell / local environment | `platform/RULE.mdc` |
 | Architecture patterns, layer rules, code placement | `architecture/RULE.mdc` |
@@ -44,8 +44,7 @@ Read `src/config/git-workflow.json`, then apply `.cursor/rules/git-workflow/RULE
 ## Code Review Process
 
 ### Review Checklist
-- [ ] Changelog updated (if user-facing changes) and matches commit message — `finish/SKILL.md`
-- [ ] Commit message includes version number first and matches changelog when bumped
+- [ ] Version and changelog per `git-workflow/RULE.mdc` § Mode behavior table → **version source** (A/B: changelog updated for user-facing changes and matches the `[VERSION]`-first commit message — `finish/SKILL.md`; C: conventional PR title, release-please does the rest)
 - [ ] Code follows style guidelines (`code-style/RULE.mdc`)
 - [ ] Architecture patterns are followed (`architecture/RULE.mdc`)
 - [ ] Architecture documentation updated (if structural changes)
@@ -66,7 +65,7 @@ Read `src/config/git-workflow.json`, then apply `.cursor/rules/git-workflow/RULE
 
 ### During Development
 
-**Agents:** Do not commit during `plan` or `implement` — commits happen in **`finish`** only (`.agents/skills/finish/SKILL.md`).
+**Agents:** Commit timing per `git-workflow/RULE.mdc` § Mode behavior table → **commit timing** (A/B: never during `plan` or `implement` — commits happen in **`finish`** only; C: when the user asks, directly or via `finish`).
 
 **Humans:** May commit frequently on the branch allowed by the current git-workflow mode (`src/config/git-workflow.json`); still use `finish` when agents wrap up work.
 
@@ -75,9 +74,9 @@ Read `src/config/git-workflow.json`, then apply `.cursor/rules/git-workflow/RULE
 
 ### Before Submitting
 
-- Changelog and version sync: **`finish/SKILL.md`** (not during plan/implement)
+- Changelog and version sync: per **version source** row (A/B: **`finish/SKILL.md`**, not during plan/implement; C: release-please)
 - Run linters and tests; review your own code
-- Update only required docs: `CHANGELOG.md`, `ARCHITECTURE.md`, `src/features/*/README.md`
+- Update only required docs: `ARCHITECTURE.md`, `src/features/*/README.md`, and `CHANGELOG.md` when the **version source** row says `finish`
 - Do not create new docs by default; deep docs need explicit user approval
 - If feature code changed: stage README updates and run `pnpm validate:feature-docs:staged`
 
@@ -85,7 +84,7 @@ Read `src/config/git-workflow.json`, then apply `.cursor/rules/git-workflow/RULE
 
 ### Cloudflare Workers (frontend SPA)
 - **SSOT:** `documentation/DOC_CLOUDFLARE_WORKERS.md` + `wrangler.jsonc`
-- Push-to-deploy via Workers Builds; `develop` → preview, `main` → production
+- Push-to-deploy via Workers Builds; which branch is staging vs production: `git-workflow/RULE.mdc` § Mode behavior table → **staging** / **production** (SSOT for setup: `documentation/DOC_CLOUDFLARE_WORKERS.md`)
 
 ### Cloud Functions Deployment
 - Deploy yourself when changes require it; verify success

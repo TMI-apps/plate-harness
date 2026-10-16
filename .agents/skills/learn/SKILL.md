@@ -121,7 +121,7 @@ Pick **one primary** location. Cross-link elsewhere in one line if needed — ne
 | Folder placement, imports, layers, path aliases | `.cursor/rules/architecture/RULE.mdc` or `.cursor/rules/file-placement/RULE.mdc` |
 | Vitest, coverage, test layout | `.cursor/rules/testing/RULE.mdc` |
 | Branch strategy, PRs, production promotion | `.cursor/rules/git-workflow/RULE.mdc` |
-| Protected files, agent decision protocol, user-test gate | `.cursor/rules/agent-behavior/RULE.mdc` |
+| Protected files, agent decision protocol, success reporting (verified vs unverified) | `.cursor/rules/agent-behavior/RULE.mdc` |
 | Code review, dev process, workflow hub routing | `.cursor/rules/workflow/RULE.mdc` |
 | Changelog, version, finish / commit flow | `.agents/skills/finish/SKILL.md` |
 | Known symptom → fix pattern (repeatable) | `.agents/skills/debug/patterns.md` |

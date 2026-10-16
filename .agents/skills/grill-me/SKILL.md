@@ -143,15 +143,15 @@ Same content every time. Split across two channels — any cost-sketch table sta
 1. **Chat message — evidence.** One line on what the repo shows (or `Uncertain`). Explore first when the codebase can answer part of the question.
 2. **Chat message — cost sketch (tradeoff questions only).** When exploration allows, a compact markdown table comparing branches on the axes they actually trade on (for example **Perf | Code | UX**, add **Scope-cut** when relevant). Mark agent estimates; `plan` verifies exact numbers. Skip the table for choice questions. Never copy it into `AskQuestion`.
 3. **`AskQuestion` `prompt`.** One plain-text question sentence. No table. No markdown.
-4. **`options` labels** — 2–4 choices in the format for the question's shape (see § Question shape), each one plain line, no markdown.
+4. **`options` labels** — 2–3 choices in the format for the question's shape (see § Question shape), each one plain line, no markdown.
 5. **Challenge option** — one `[Challenge: …]` line (see § Challenge option).
-6. **Omnipresent** — always append both escape hatches below, as plain option labels.
+6. **Total cap** — at most **4** options including the challenge (question-tool limit; the tool adds its own free-text "Other").
 
 **Example tradeoff line:** `[Wins: performance] Shader-only fake glow — no extra passes; pays with less convincing scatter.`
 
 **Example choice line:** `Dashboard — first thing users see after login; competes with existing widgets.`
 
-Every multiple-choice question includes two omnipresent options:
+Optional escape hatches — add one only when it fits under the cap and the answer is genuinely unclear:
 
 - **"Explain the UX impact first"** — research the flow, explain what each branch means for users, re-ask.
 - **"Dig deeper in the codebase"** — widen exploration, update the hook map, re-ask.

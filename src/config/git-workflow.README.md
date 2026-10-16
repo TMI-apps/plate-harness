@@ -1,14 +1,8 @@
 # Git workflow mode
 
-Machine-readable mode lives in `git-workflow.json`. Behavior SSOT: `.cursor/rules/git-workflow/RULE.mdc`.
+Machine-readable mode lives in `git-workflow.json` (`mode`: `model-a` | `model-b` | `model-c`). Default for new forks: `model-c`.
 
-| Mode | Daily work | Integration |
-|------|------------|-------------|
-| `model-a` (default) | `feature/*` / `fix/*` branches | Squash PR → `develop` |
-| `model-b` | Commit on `develop` | Direct push → `develop` |
-
-Both modes: production via **Promote to production** (fast-forward `main` to `develop`). Never commit app code to `main`.
-
-**Fork choice:** `start` skill asks at onboarding. Template (plate-harness) stays `model-a`.
-
-**Mid-project switch:** See `documentation/DOC_CONTRIBUTING.md` § Mid-project mode switch. No automated migrator in v1.
+- **Validate / read:** `pnpm validate:git-workflow`; CI and hooks read the mode with `node scripts/validate-git-workflow.cjs --print-mode` (the only reader).
+- **What each mode does:** `.cursor/rules/git-workflow/RULE.mdc` § Mode behavior table (SSOT — do not restate it here).
+- **Fork choice:** the `start` skill asks at onboarding.
+- **Mid-project switch:** `documentation/DOC_CONTRIBUTING.md` § Mid-project mode switch.

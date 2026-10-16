@@ -18,7 +18,7 @@ disable-model-invocation: false
 1. **Should** this product / feature / component align more with industry practice?
 2. **How** — lowest-cost path that closes the gap?
 
-**Feedback first** — map, score, and options only. Do not edit product code until the owner picks Stay / Align-* / Mixed (and then a how option). Never claim success without user testing.
+**Feedback first** — map, score, and options only. Do not edit product code until the owner picks Stay / Align-* / Mixed (and then a how option). Report what was verified and what was not; the user confirms in-app behavior.
 
 ## What this is NOT
 

@@ -19,6 +19,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { spawnSync } = require('child_process');
 const { minimatch } = require('minimatch');
 
 // Load project structure config
@@ -28,6 +29,9 @@ const projectStructureConfig = require('../projectStructure.config.cjs');
 const minimatchCache = new Map();
 
 // Default ignore patterns (common build artifacts and dependencies)
+// Untracked paths ignored by the repo's tracked .gitignore files are skipped too (createGitIgnoredChecker):
+// they cannot be committed, and tools such as Claude Code write runtime state there (.claude/worktrees/,
+// scheduler locks). These defaults stay as the fallback when git is unavailable.
 // NOTE: We intentionally DO NOT ignore .tmp_*, backup/, backups/, or *-check.* files
 // so they get caught as violations by the validator
 // NOTE: .eslintcache is ignored because CI runs `pnpm lint` before `validate:structure`,
@@ -95,6 +99,45 @@ function createIgnoreChecker(ignorePatterns) {
     cache.set(filePath, false);
     return false;
   };
+}
+
+/**
+ * Paths git ignores via the repo's tracked `.gitignore` files (untracked only — tracked files are
+ * always validated). Uses `--exclude-per-directory=.gitignore` instead of `--exclude-standard` so
+ * personal excludes (.git/info/exclude, core.excludesFile) cannot change results between machines.
+ * One git call up front; falls back to "nothing ignored" when git or .git is unavailable.
+ * @param {string} cwd repo root
+ * @param {(args: string[], cwd: string) => {status: number | null, stdout: string}} [runGit]
+ * @returns {(filePath: string) => boolean}
+ */
+function createGitIgnoredChecker(cwd, runGit = defaultRunGit) {
+  const res = runGit(
+    ['ls-files', '-z', '--others', '--ignored', '--exclude-per-directory=.gitignore', '--directory'],
+    cwd
+  );
+  if (res.status !== 0) {
+    return () => false;
+  }
+  const ignored = new Set(res.stdout.split('\0').filter(Boolean));
+
+  return function isGitIgnored(filePath) {
+    const rel = path.relative(cwd, filePath).split(path.sep).join('/');
+    if (ignored.has(rel) || ignored.has(`${rel}/`)) {
+      return true;
+    }
+    // A file inside an ignored directory is listed only as the directory ("dir/").
+    for (let dir = path.posix.dirname(rel); dir !== '.' && dir !== '/'; dir = path.posix.dirname(dir)) {
+      if (ignored.has(`${dir}/`)) {
+        return true;
+      }
+    }
+    return false;
+  };
+}
+
+function defaultRunGit(args, cwd) {
+  const res = spawnSync('git', args, { cwd, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
+  return { status: res.error ? null : res.status, stdout: res.stdout || '' };
 }
 
 /**
@@ -749,7 +792,9 @@ function validateProjectStructure(options = {}) {
   
   // Create cached ignore checker (one-time setup)
   const allIgnorePatterns = [...DEFAULT_IGNORE_PATTERNS, ...ignorePatterns];
-  const shouldIgnore = createIgnoreChecker(allIgnorePatterns);
+  const matchesIgnorePattern = createIgnoreChecker(allIgnorePatterns);
+  const isGitIgnored = createGitIgnoredChecker(cwd);
+  const shouldIgnore = filePath => matchesIgnorePattern(filePath) || isGitIgnored(filePath);
   
   // Collect violations
   const violations = [];
@@ -880,4 +925,4 @@ if (require.main === module) {
   process.exit(result.success ? 0 : 1);
 }
 
-module.exports = { validateProjectStructure, buildValidationTree, validateRoutePlacement };
+module.exports = { validateProjectStructure, buildValidationTree, validateRoutePlacement, createGitIgnoredChecker };

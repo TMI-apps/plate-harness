@@ -245,13 +245,13 @@ Always validate placement before creating. If invalid, suggest correct location 
 
 ### Tooling artifacts (build / deploy CLIs)
 
-When adding deployment or build tooling that writes local state (e.g. Cloudflare Wrangler → `.wrangler/`):
+When adding deployment, build, or agent tooling that writes local state (e.g. Cloudflare Wrangler → `.wrangler/`, Claude Code → `.claude/worktrees/`):
 
-1. Add the path to **`.gitignore`**
-2. Add the same path to **`DEFAULT_IGNORE_PATTERNS`** in `scripts/project-structure-validator.js` (same pattern as `dist/`, `.firebase/`)
+1. Add the path to the tracked **`.gitignore`** — the validator skips untracked paths that the repo's `.gitignore` files ignore (`createGitIgnoredChecker`). Personal excludes (`.git/info/exclude`, global excludes) do **not** count, so results match on every machine.
+2. Optional fallback for runs without git: add the same path to **`DEFAULT_IGNORE_PATTERNS`** in `scripts/project-structure-validator.js` (same pattern as `dist/`, `.firebase/`).
 3. Whitelist any new **root config files** in `projectStructure.config.cjs` (e.g. `wrangler.jsonc`)
 
-Otherwise `pnpm validate:structure` fails after the first local build. See `documentation/DOC_CLOUDFLARE_WORKERS.md`.
+Tracked files are always validated, even if they match `.gitignore`. Otherwise `pnpm validate:structure` fails after the first local build. See `documentation/DOC_CLOUDFLARE_WORKERS.md`.
 
 ## Related Files
 

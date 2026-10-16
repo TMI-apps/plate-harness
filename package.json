@@ -1,7 +1,7 @@
 {
   "name": "plate-harness",
   "private": true,
-  "version": "0.39.0",
+  "version": "0.40.0",
   "type": "module",
   "packageManager": "pnpm@9.15.4",
   "scripts": {
@@ -17,7 +17,7 @@
     "type-check": "tsc --noEmit --project tsconfig.app.json",
     "test": "vitest",
     "test:run": "vitest run",
-    "test:classify": "node --test scripts/change-classify.test.cjs scripts/test-staged.test.cjs scripts/harness_scan.test.cjs scripts/validate-git-workflow.test.cjs scripts/modularity-report.test.cjs",
+    "test:classify": "node --test scripts/change-classify.test.cjs scripts/test-staged.test.cjs scripts/harness_scan.test.cjs scripts/validate-git-workflow.test.cjs scripts/validate-version-sync.test.cjs scripts/ensure-deps-installed.test.cjs scripts/deny-git-write-on-main.test.cjs scripts/project-structure-validator.test.cjs scripts/modularity-report.test.cjs",
     "test:staged": "node scripts/test-staged.cjs --dry-run",
     "test:staged:live": "node scripts/test-staged.cjs",
     "test:ui": "vitest --ui",

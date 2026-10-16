@@ -36,13 +36,13 @@ For complete project structure guidelines, refer to `architecture/RULE.mdc`.
 
 ## Critical Context: Deployment Model
 
-**Branch model (general):** `.cursor/rules/git-workflow/RULE.mdc` § Mode-aware branch gate (`src/config/git-workflow.json`). **This section** is Edge Function deploy semantics only.
+**Branch model (general):** `.cursor/rules/git-workflow/RULE.mdc` § Mode behavior table (`src/config/git-workflow.json`). **This section** is Edge Function deploy semantics only.
 
-**This project has develop and main branches that share ONE Supabase project.**
+**Production and every preview share ONE Supabase project** (any mode: A/B `main` + `develop` staging; C `main` + per-PR previews).
 
-- Frontend code deploys separately per branch (develop vs main)
-- Edge Functions deploy ONCE and affect BOTH branches
-- No staging environment for Edge Functions
+- Frontend code deploys separately per branch (production vs each preview)
+- Edge Functions deploy ONCE (manually, `supabase functions deploy`) and affect production and all previews at the same time
+- No staging environment for Edge Functions in any mode — a PR preview tests frontend only and calls the already-deployed functions
 - No automated testing or rollback for functions
 - Bugs in Edge Functions impact the entire app across all branches
 
@@ -70,7 +70,7 @@ Use Edge Functions ONLY when absolutely necessary:
    - Pattern: System-initiated, not user-initiated
 
 4. **Existing Functions**
-   - Current Edge Functions in this project (located in `supabase/functions/`):
+   - Example Edge Functions from forks of this template (this repo ships no `supabase/` folder; a fork adds them under `supabase/functions/`):
      - `gamma-generate` / `gamma-status` - Presentation generation (server-side API)
      - `tool-execute` - Unified tool execution endpoint (image generation, Gamma, etc.)
      - `migrate-base64-files` - File migration utility
@@ -93,7 +93,7 @@ Use Edge Functions ONLY when absolutely necessary:
 3. **Transformations**
    - ❌ Bad: Edge Function to transform/validate data on write
    - ✅ Good: Frontend transforms before writing, RLS policies validate
-   - Reason: Logic changes can be tested on develop branch first
+   - Reason: Logic changes can be tested on staging first (table → **staging**)
 
 4. **Notification Logic**
    - ❌ Bad: Edge Function to send notifications on events
@@ -128,7 +128,7 @@ await supabase
 ```
 
 **Why this is better than an Edge Function trigger:**
-- ✅ Testable on develop branch first
+- ✅ Testable on staging first (table → **staging**)
 - ✅ Atomic via PostgreSQL (no race conditions)
 - ✅ Fails gracefully (doesn't block conversation save)
 - ✅ Easy rollback (git revert)
@@ -160,7 +160,7 @@ When considering adding an Edge Function, ask:
    - Yes → Edge Function needed
    - No → Use frontend
 
-3. **Testability:** Can I test this safely on develop branch?
+3. **Testability:** Can I test this safely on staging (table → **staging**)?
    - Yes → Prefer frontend
    - No → Consider if the feature is worth the risk
 
@@ -175,20 +175,19 @@ When considering adding an Edge Function, ask:
 
 **Edge Functions Testing Considerations:**
 
-- Manual testing only (no staging environment)
-- Changes affect both develop and main immediately
+- No staging for Edge Functions in any mode: a deploy hits production and every preview at once; PR previews test frontend only
+- Test locally first with `supabase functions serve`, then deploy via `supabase functions deploy <function-name>`
 - Consider impact before adding new functions
-- Deploy via `supabase functions deploy <function-name>`
-- Treat releases to `main` as a separate verification gate when function-adjacent frontend behavior changed
+- Treat production releases (table → **production**) as a separate verification gate when function-adjacent frontend behavior changed
 
 **Frontend Logic Testing Considerations:**
 
-- Test on develop branch
-- User testing before promoting to production (not a squash merge to `main`)
+- Test on staging (table → **staging**: `develop` for A/B, the PR preview for C)
+- User testing before production (table → **production**: A/B promote — never a squash merge to `main`; C the user merges the PR after checking its preview)
 - Easy rollback if issues found
 
 **Release Gate Reminder:**
-- Before running **Promote to production**, re-validate critical flows that depend on currently deployed Edge Functions
+- Before production (A/B: **Promote to production**; C: merging the PR — re-check on its preview, which already calls the deployed functions), re-validate critical flows that depend on currently deployed Edge Functions
 
 For complete testing guidelines and patterns, refer to `testing/RULE.mdc`.
 
@@ -196,9 +195,9 @@ For complete testing guidelines and patterns, refer to `testing/RULE.mdc`.
 
 If an existing Edge Function could be replaced with frontend logic:
 
-1. Implement frontend version on develop branch
-2. Test thoroughly
-3. Promote frontend to production via **Promote to production** workflow (fast-forward `main` to `develop`)
+1. Implement the frontend version on the daily branch (table → **daily branch**)
+2. Test thoroughly on staging (table → **staging**)
+3. Ship the frontend to production per table → **production** (A/B: **Promote to production**, fast-forward `main` to `develop`; C: merge the PR to `main`)
 4. Monitor for issues
 5. Only after proven stable, remove Edge Function
 6. Document the architectural decision
@@ -208,7 +207,7 @@ If an existing Edge Function could be replaced with frontend logic:
 ### Example 1: Usage Tracking (Moved to Frontend)
 
 **Originally:** Edge Function trigger on conversation write
-**Problem:** Bugs affect both branches, can't test safely
+**Problem:** Bugs affect production and all previews at once, can't test safely
 **Solution:** Frontend PostgreSQL UPDATE after successful save
 **Result:** Simpler, testable, consistent with app architecture
 

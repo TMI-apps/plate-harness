@@ -8,9 +8,9 @@ Deploy this Vite + React SPA to **Cloudflare Workers** with static assets, using
 
 | System | Responsibility |
 |--------|----------------|
-| **GitHub (this repo)** | Source + `wrangler.jsonc`. `ci.yml` runs type-check / lint / tests / build on every PR + push to `main` and `develop`. Rulesets depend on git-workflow mode (`src/config/git-workflow.json`) — see ruleset table below. **No deploy workflow. No `CLOUDFLARE_API_TOKEN` secret.** Promote workflow fast-forwards `main` to `develop` for production. |
-| **Cloudflare Workers Builds** | Builds and deploys on push. `main` → production; `develop` → stable staging preview; other branches / PRs → optional per-branch preview builds. Account, build command, and `VITE_*`/`CLOUDFLARE_ACCOUNT_ID` env live in the dashboard connection. |
-| **Supabase** | Same project for preview and production; auth URLs include the deployed origin(s). |
+| **GitHub (this repo)** | Source + `wrangler.jsonc`. `ci.yml` runs type-check / lint / tests / build on every PR + push to `main` and `develop`. Rulesets depend on git-workflow mode (`src/config/git-workflow.json`) — see ruleset table below. **No deploy workflow. No `CLOUDFLARE_API_TOKEN` secret.** Production per `.cursor/rules/git-workflow/RULE.mdc` § Mode behavior table → **production** (C: merging the PR; A/B: Promote workflow fast-forwards `main` to `develop`). |
+| **Cloudflare Workers Builds** | Builds and deploys on push. `main` → production; every other branch → its own preview (Model C relies on these per-PR previews; A/B also use `develop` as the stable staging preview). Account, build command, and `VITE_*`/`CLOUDFLARE_ACCOUNT_ID` env live in the dashboard connection. |
+| **Supabase** | Same project for preview and production (accepted, temp_job_git-workflow-model-c D24): **previews read and write production data**, and Edge Functions have no staging in any mode. Auth URLs include the deployed origin(s). |
 
 Push → Cloudflare builds & deploys. GitHub blocks bad merges. There is no GitHub → Cloudflare deploy step.
 
@@ -18,7 +18,7 @@ Push → Cloudflare builds & deploys. GitHub blocks bad merges. There is no GitH
 
 For coding agents completing the **"Put your app online (Cloudflare hosting)"** task from `src/config/app-tasks.json`. Run it after the user's Supabase env vars exist. Use `.agents/skills/quick-piv/SKILL.md` for the change, or `plan` + `implement` if rulesets/dashboard need research. Branch model: read `src/config/git-workflow.json`; apply `.cursor/rules/git-workflow/RULE.mdc` § Mode-aware branch gate. The **user** confirms success — do not claim done without their test.
 
-**Target:** GitHub = CI gate only (`ci.yml` on every PR + push to `main` and `develop`; rulesets per mode table below; **no** deploy workflow; **no** `CLOUDFLARE_API_TOKEN` secret). Cloudflare Workers Builds = sole deploy path (`develop` → stable staging preview, `main` → production; optional per-branch previews in Model A). Same Supabase project for preview and production.
+**Target:** GitHub = CI gate only (`ci.yml` on every PR + push to `main` and `develop`; rulesets per mode table below; **no** deploy workflow; **no** `CLOUDFLARE_API_TOKEN` secret). Cloudflare Workers Builds = sole deploy path (`main` → production; per-branch previews — required for Model C, optional in A; `develop` → stable staging preview in A/B). Same Supabase project for preview and production.
 
 **Discover first (ask the user when unknown):**
 
@@ -32,14 +32,14 @@ For coding agents completing the **"Put your app online (Cloudflare hosting)"** 
 **Implement (fork commits):**
 
 1. `wrangler.jsonc` — set `name`; `compatibility_date` today; `workers_dev: true`; `preview_urls: true`; `assets.directory: "./dist"`; `assets.not_found_handling: "single-page-application"`; add `account_id`; add `routes: [{ "pattern": "<domain>", "custom_domain": true }]` only when using a custom domain. Do **not** set `pages_build_output_dir`. Remove a `public/_redirects` SPA rule if present (conflicts with `not_found_handling` → `Infinite loop detected`).
-2. GitHub — delete any `deploy-cloudflare-*.yml`; keep `ci.yml` with `main` + `develop` triggers. Configure rulesets by mode:
+2. GitHub — delete any `deploy-cloudflare-*.yml`; keep `ci.yml` with `main` + `develop` triggers. Configure rulesets per `.cursor/rules/git-workflow/RULE.mdc` § Mode behavior table (rows **`main` ruleset** / **`develop` ruleset**); summary:
 
-| Branch / rule | Model A (`model-a`) | Model B (`model-b`) |
-|---------------|---------------------|---------------------|
-| `develop` `pull_request` | Required | **Absent** (direct push) |
-| `develop` `required_status_checks` (`test`) | Yes | Yes |
-| `develop` `non_fast_forward` + `deletion` | Yes | Yes |
-| `main` | **`deletion` + `non_fast_forward` only** | Same |
+| Branch / rule | Model A (`model-a`) | Model B (`model-b`) | Model C (`model-c`, default) |
+|---------------|---------------------|---------------------|------------------------------|
+| `develop` `pull_request` | Required | **Absent** (direct push) | — (no `develop`) |
+| `develop` `required_status_checks` (`test`) | Yes | Yes | — |
+| `develop` `non_fast_forward` + `deletion` | Yes | Yes | — |
+| `main` | **`deletion` + `non_fast_forward` only** | Same | `pull_request` (squash) + required `test` and `pr-title` + `non_fast_forward` + `deletion`; no bypass |
 
    Model A: squash merge for `feature/*` PRs. Model B: **staging may deploy on push before CI `test` is green** — production still promote-gated. On `main`: promote workflow's `GITHUB_TOKEN` can ff with no PAT/bypass.
 3. `package.json` already has `deploy` and `preview:worker` scripts and `wrangler` as a devDependency — no change needed.
@@ -93,7 +93,7 @@ In the Cloudflare dashboard → **Workers & Pages → Create → Workers → Con
 | **Root directory** | **EMPTY (repo root)** — a stale root directory causes `Failed: root directory not found` |
 | Build variables | `NODE_VERSION=20`, `CLOUDFLARE_ACCOUNT_ID=<your account id>`, plus build-time `VITE_*` (e.g. `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`) |
 
-Then enable **non-production branch builds** for `develop` (stable staging URL). Optional: per-`feature/*` branch previews for PR review.
+Then enable **non-production branch builds**: Model C — **all branches** (each PR's preview is its staging; worktree branch names vary, so do not filter by prefix); Model A/B — `develop` (stable staging URL), optionally per-`feature/*` previews. Check the Workers Builds plan's build minutes and concurrency: every pushed branch costs a build.
 
 > `VITE_*` variables are embedded at **build time**. Workers Builds does **not** share runtime and build env vars — set every `VITE_*` your app needs in the build variables, or production will load an app with missing config.
 
@@ -109,6 +109,14 @@ For Google OAuth, also add those origins to Google Cloud **Authorized JavaScript
 ### 4. Verify
 
 After a push, confirm in the dashboard that Workers Builds shows a green build, then open the live URL. **View source** and confirm it loads built assets (`/assets/*.js`), not `/src/main.tsx` — the latter is the Pages-style dev/MIME-type symptom indicating the build/serve config is wrong.
+
+## Rollback
+
+Every merge to `main` deploys production under Model C (and every promote under A/B), so keep a quick way back:
+
+- **Dashboard:** Workers & Pages → your Worker → **Deployments** → pick the last good version → **Rollback**.
+- **CLI:** `pnpm exec wrangler rollback` (optionally with a version ID from `pnpm exec wrangler deployments list`).
+- Then fix forward with a normal PR (C) or `develop` landing (A/B). A rollback does not change git history.
 
 ## Custom domain (per fork, optional)
 
@@ -155,7 +163,7 @@ After validating production on Workers, delete the old Pages project (dashboard 
 | Routes 404 in production | Confirm `not_found_handling: "single-page-application"` |
 | Empty app / missing config in production | `VITE_*` not set as Workers Builds **build** variables |
 
-**Agents:** after changing Wrangler/Cloudflare setup, keep `.wrangler/` in `.gitignore` and the structure validator ignore list (see `.cursor/rules/file-placement/RULE.mdc` § Tooling artifacts), and whitelist new root files in `projectStructure.config.cjs`.
+**Agents:** after changing Wrangler/Cloudflare setup, keep `.wrangler/` in the tracked `.gitignore` (the structure validator skips git-ignored paths — `.cursor/rules/file-placement/RULE.mdc` § Tooling artifacts), and whitelist new root files in `projectStructure.config.cjs`.
 
 ## Related docs
 

@@ -1,5 +1,5 @@
 ---
-description: "Agent decision protocol, success validation, and protected-file consent"
+description: "Agent decision protocol, success reporting, and protected-file consent"
 alwaysApply: true
 ---
 
@@ -12,25 +12,23 @@ Agent-specific behaviors and corrections to compensate for default agent behavio
 - The agent has complete control over the application codebase
 - The user is the tester and product-owner who provides user stories and tasks
 - The agent turns user stories into architecture, logic, and code implementation
-- Always respect user decisions and wait for validation before claiming success
+- Always respect user decisions; report outcomes per § Success Validation
 
 ## Decision Questioning Protocol
 
 When asking the user to choose between implementation, product, architecture, or UX options:
-- First ask the question in raw text before using a multiple-choice UI. This guides your following preparation actions.
-- Then inspect the relevant codebase patterns, rules, and existing UX behavior to identify which option is most consistent with the current application.
-- Only after that research, ask the actual multiple-choice question.
-- Clearly label the option or recommendation that is most consistent with the current codebase.
-- Always include an omnipresent option for UX impact research, such as: "Research the UX impact of this decision, explain the tradeoffs, then re-ask this question."
-- If the user selects the UX impact option, pause the decision, research the user-facing consequences in the relevant code and UX flows, explain the findings, then ask the same decision again with the updated context.
-- Keep options ordered so later options are progressively stronger when presenting implementation approaches.
+- First inspect the relevant codebase patterns, rules, and existing UX behavior to identify which option is most consistent with the current application.
+- Then ask the multiple-choice question (at most 4 options — the question tool's limit).
+- Put the recommended option first and label it; it is the one most consistent with the current codebase.
+- After the recommended option, order the alternatives from lightest to strongest when presenting implementation approaches.
+- Optional: offer a UX-impact research option when the user-facing consequences are unclear. If the user picks it, research the consequences, explain them, then ask the same decision again.
 
 ## Success Validation
 
-Never claim success without a user test:
-- The user decides if an implementation is successful, not the agent
-- Always wait for user confirmation before marking tasks as complete
-- Avoid statements like "This should work" or "The implementation is complete"
+Report outcomes faithfully:
+- State what was verified (commands run, checks passed, behavior observed) and what was not verified.
+- The user decides whether product behavior is right; when they still need to test something in the app, say exactly what and where.
+- When something is done and verified, say so plainly; when it is not verified, say that instead of implying it works.
 
 ## Protected Files
 

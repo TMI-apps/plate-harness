@@ -5,10 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.40.0] - 2026-10-16
+
+### Added
+
+- **Git workflow Model C (Claude Code defaults):** third mode `model-c` in `src/config/git-workflow.json` — per-task (worktree) branch → squash PR → `main`, merge = production, per-PR preview URLs; becomes the default for new forks. `validate-git-workflow.cjs` accepts it and gains `--print-mode` (single mode reader for CI).
+- **Mode behavior table** in `.cursor/rules/git-workflow/RULE.mdc`: one SSOT row per mode-dependent behavior (branch gate, landing, commit timing, version source, CI watcher, staging, production, rulesets, fork setup); skills, rules, and docs point at its rows.
+- **Release automation for Model C:** `.github/workflows/release-please.yml` (mode-gated; dispatches CI on the release branch so required checks run without a PAT) and a `pr-title` CI job enforcing conventional PR titles.
+- **Claude Code hooks** in `.claude/settings.json`: SessionStart `scripts/ensure-deps-installed.cjs` installs dependencies in new worktree sessions; PreToolUse `scripts/deny-git-write-on-main.cjs` blocks agent commits/pushes to `main` in every mode.
+- **`tighten-harness` skill:** cut harness context cost (prune, merge, relocate, replace prose with enforcement) without behavior change; indexed from `align-harness`, router, and `AGENTS.md`.
+- Tests for the new scripts, `validate-version-sync` (release-please heading shape), and the structure validator's git-ignore handling; all wired into `test:classify`.
 
 ### Changed
 
+- **Agent behavior aligned with Claude Code defaults (all tools):** success reporting replaces the "never claim success" phrase bans; question protocol drops "raw text first" and mandatory escape-hatch options (max 4 options); fan-out skills (`review-dev-plan`, `validate`) are offered, not auto-started; `finish` "wait and re-check" no longer sleeps in the shell.
+- **Platform rule** scoped by shell: PowerShell rules apply in PowerShell (Cursor); new § Git Bash for Claude Code's Bash tool.
+- **CI hygiene:** `ci.yml` gains top-level read-only permissions, per-ref concurrency, and `workflow_dispatch`.
+- **Structure validator** skips untracked paths ignored by the repo's tracked `.gitignore` files (e.g. `.claude/worktrees/`); `.gitignore` adds Claude Code runtime paths.
+- Docs (README, CONTRIBUTING incl. A/B→C cutover and rollback, workflow layers, Cloudflare incl. rollback, changesets) describe Model C as the default.
 - Renamed and relocated shared mechanisms per name-the-mechanism: app shell layout tokens (`appViewLayout`), `useAuthBackendConfigured`, `mapProviderUserToAppUser`, account-menu hooks beside `ProfileMenu`, `DevTasksFab` under the tasks feature.
 
 ## [0.39.0] - 2026-08-11

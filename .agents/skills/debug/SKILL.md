@@ -14,7 +14,7 @@ The user does **not** edit code. The user only:
 - Copies and pastes console logs (when not in Cursor Debug Mode; in Debug Mode the **agent** reads logs directly).
 - Performs actions in external dashboards when the agent cannot.
 
-Never claim the issue is fixed. Only the user decides when the issue is resolved.
+Report faithfully: say what was verified and what was not. The user confirms when the issue is resolved.
 
 ---
 

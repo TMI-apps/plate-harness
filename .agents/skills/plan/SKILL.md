@@ -28,7 +28,7 @@ Create a development plan for a feature or job. Research how best to implement i
 ### 0. Branch gate
 
 - [ ] **Plan file:** `DEVELOPMENT_PLAN.md` may be created on any branch per `.cursor/rules/git-workflow/RULE.mdc` § Exceptions (Safe to Edit on Any Branch).
-- [ ] **Implementation:** App-code work follows `.cursor/rules/git-workflow/RULE.mdc` § Mode-aware branch gate (read `src/config/git-workflow.json` first). Route to `implement` from a branch the gate allows (`feature/*` / `fix/*` in Model A; `develop` in Model B).
+- [ ] **Implementation:** App-code work follows `.cursor/rules/git-workflow/RULE.mdc` § Mode-aware branch gate (read `src/config/git-workflow.json` first). Route to `implement` from a branch the **branch gate** row of `.cursor/rules/git-workflow/RULE.mdc` § Mode behavior table allows.
 
 ### 1. Input
 
@@ -114,6 +114,7 @@ Set **Plan review** and **Plan validate** in Summary per [dev-cycle matrix](../r
 
 - Present the plan to the user.
 - Incorporate feedback and update the plan as needed.
+- Next steps that spawn subagents (`review-dev-plan`, `validate` plan-review) are **offered**, not started, unless the user asks for them.
 - IF `plan-grill-auto` is active: **do not wait**. Print the footer, then `review-dev-plan` (when required) → `implement`. User tests the result, not the plan.
 
 **Chat footer (short):**

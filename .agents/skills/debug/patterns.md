@@ -41,8 +41,8 @@ Add new patterns at the bottom as they prove reusable across incidents.
 ## PowerShell: `&&` chaining fails immediately (parser error)
 
 - Symptom: Shell command fails instantly with `The token '&&' is not a valid statement separator`
-- Root cause: This repo runs on **Windows PowerShell**; bash-style `&&` is invalid
-- Fix: Chain with `;` and check `$LASTEXITCODE` after each step, or run separate Shell tool calls
+- Root cause: The shell is **Windows PowerShell** (Cursor terminal); bash-style `&&` is invalid there. Git Bash (Claude Code Bash tool) accepts `&&` — this pattern does not apply
+- Fix (PowerShell): Chain with `;` and check `$LASTEXITCODE` after each step, or run separate Shell tool calls
 - Example: `pnpm build; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; pnpm validate:structure`
 - SSOT: `.cursor/rules/platform/RULE.mdc` § Platform and Commands
 - Tokens: PowerShell, `&&`, parser, Windows
@@ -187,7 +187,7 @@ Add new patterns at the bottom as they prove reusable across incidents.
 
 ---
 
-## Git: Promote fails — main is not an ancestor of develop
+## Git (A/B only): Promote fails — main is not an ancestor of develop
 
 - Symptom: `promote-to-production.yml` fails at "Verify fast-forward preconditions" with `main is not an ancestor of develop`. Local `git diff origin/main origin/develop` may show only small deltas while history is forked.
 - Root cause: Same logical change landed on **`main`** and **`develop`** as **sibling commits** (common in Model B: squash PR merged to `main` while an equivalent commit was pushed to `develop`).

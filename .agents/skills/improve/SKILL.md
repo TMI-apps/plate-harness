@@ -21,7 +21,7 @@ disable-model-invocation: false
 
 **Autonomy bias:** Prefer inferring from repo + `documentation/DOC_APP_VISION.md` + the named area. Ask at most **two** clarifying questions before the audit. Default recommendation; user can say `go` to accept it.
 
-**Feedback first** until a downstream skill’s own decision gate says otherwise. Never claim success without user testing.
+**Feedback first** until a downstream skill’s own decision gate says otherwise. Report what was verified and what was not; the user confirms in-app behavior.
 
 ## What this is NOT
 

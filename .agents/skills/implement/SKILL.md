@@ -32,7 +32,7 @@ Execute a development plan phase by phase. Use `DEVELOPMENT_PLAN.md` as the guid
 
 ### 0. Branch gate
 
-- [ ] Per `.cursor/rules/git-workflow/RULE.mdc` § Branch Strategy — verify branch before code edits; stop if on protected branches per that section.
+- [ ] Per `.cursor/rules/git-workflow/RULE.mdc` § Mode-aware branch gate — verify branch before code edits; stop where the **branch gate** row says stop.
 - [ ] **CRITICAL:** If the plan touches protected files (`.husky/**`, `tsconfig*.json`, `.cursor/rules/**`, `.agents/skills/**`, etc.), **stop** and get explicit user approval before editing them. Full manifest: `.cursor/rules/agent-behavior/RULE.mdc` § Protected Files. Exception: mechanism-rename reference updates in that section. Record consent in **Decisions made** when granted.
 
 ### 1. Load plan
@@ -169,11 +169,11 @@ When all phases are done:
 - [ ] All gates passed
 - [ ] Notes and Decisions sections are up to date
 
-**Tell the user:** “Implementation complete.”
+**Tell the user:** which phases are done, which gates passed (with the commands run), and what is not yet verified (for example the in-app user test).
 
 **Next (mandatory handoff):**
 
-1. Run **`.agents/skills/validate/SKILL.md`** (impl review) on this job unless the user explicitly skips validation.
+1. Offer **`.agents/skills/validate/SKILL.md`** (impl review) on this job; run it when the user accepts.
 2. After the user accepts validation (or waives in **Decisions made**), offer **`.agents/skills/finish/SKILL.md`** when they want to commit — do not commit without explicit request.
 
 Do **not** use **`quick-piv`** for remaining phases when a durable `DEVELOPMENT_PLAN.md` exists.

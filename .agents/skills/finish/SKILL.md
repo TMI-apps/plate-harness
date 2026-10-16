@@ -53,9 +53,9 @@ Call **AskQuestion** once with **exactly** these four options (you may shorten l
 1. **Pause finish —** Stop before version/changelog/commit/push. Tell the user what you observed; wait while they resolve concurrency; do **no** further finish steps until they explicitly ask you to continue.
 2. **Bundle finish —** Re-read `git status` and the **full** diff from disk. Treat the branch as **one** release increment. Widen changelog and commit scope (and the version bump per [Semantic Versioning](#semantic-versioning-ssot) here) so they accurately describe **everything** that will be included in the commit—**explicit joint ownership** of the snapshot. Then continue the normal finish flow from that baseline.
 3. **Stash lane (other thread paused) —** **Only** if the user **explicitly confirms** the other thread or agent is paused: run `git stash push` with flags appropriate so nothing important is left out of the stash (for example include untracked or explicit paths when needed); use a **clear stash message**. Run the remainder of finish on the cleaned tree, then commit and push per this skill (push via `.agents/skills/push/SKILL.md` when applicable). Then `git stash pop`, or `git stash apply` followed by `git stash drop`. If stash apply produces conflicts, **stop and report**; do **not** silently discard work. After a successful apply, briefly tell the user when it is safe to resume the other agent (for example after they have pulled or confirmed the pushed tip).
-4. **Wait and re-check —** Wait **~3 minutes once** for this selection (for example `sleep 180` in the shell—**no** tight polling loops). Then re-read status and full diff from disk. If smoke is **gone** and the tree **matches only this thread’s intended work**, continue finish **without** widening scope. If smoke remains or the diff still includes changes this thread does not own, **do not** commit or push—call **AskQuestion** again with the **same four** options. **Do not** run another automatic ~3 minute wait for Option 4 after one has already run **for the same user selection**; a further wait requires a **new** explicit user pick of Option 4.
+4. **Re-check later —** Stop finish now and tell the user what you observed. Ask them to re-run `finish` once the other thread is idle (do **not** sleep or poll in the shell — Claude Code blocks foreground `sleep`, and timed waits do not prove the tree is clean). On the re-run, re-read status and full diff from disk: if smoke is **gone** and the tree **matches only this thread’s intended work**, continue finish **without** widening scope; otherwise call **AskQuestion** again with the **same four** options.
 
-**Guardrails:** You cannot stop or suspend other agents. Options that depend on another thread being idle (**3**) or on time passing (**4**) rely on **user-stated truth** or on **clock time plus a clean re-read**, not on the assistant controlling other processes. For Option 4, claiming the tree is “only this thread’s work” **must** be justified by a **clean second read** of status and full diff from disk, **not** by assumption.
+**Guardrails:** You cannot stop or suspend other agents. Options that depend on another thread being idle (**3**) or on a later re-run (**4**) rely on **user-stated truth** or on **a clean re-read on the re-run**, not on the assistant controlling other processes. For Option 4, claiming the tree is “only this thread’s work” **must** be justified by a **clean second read** of status and full diff from disk, **not** by assumption.
 
 - remove temporary console logs
 - remove instrumentation
@@ -73,6 +73,8 @@ Call **AskQuestion** once with **exactly** these four options (you may shorten l
     - Would a different team/project still benefit from this guidance?
 
 ## Version and changelog gate
+
+**Applies when** `.cursor/rules/git-workflow/RULE.mdc` § Mode behavior table → **version source** says `finish` (Model A/B). **Model C:** skip this whole section — no `package.json` / `CHANGELOG.md` edits and no `[VERSION]` prefix; release-please builds the release from the PR title.
 
 Before editing `package.json` or `CHANGELOG.md`, classify staged changes per **`scripts/change-classify.cjs`** (matrix SSOT: `documentation/DOC_AGENT_WORKFLOW_LAYERS.md` § Local git).
 
@@ -134,7 +136,7 @@ All projects must follow semantic versioning (MAJOR.MINOR.PATCH):
 
 ## Commit Message Standards (SSOT)
 
-**Format:** `[VERSION] type: Feature/Change Title`
+**Format:** `[VERSION] type: Feature/Change Title` (Model A/B). **Model C:** `type: Feature/Change Title` + body — the squash PR title carries the type for release-please.
 
 **Requirements:**
 - Version number must be first (e.g., `[3.19.0]`)
@@ -162,7 +164,7 @@ Closes #123
 After `git add`, expect hook behavior per **`documentation/DOC_AGENT_WORKFLOW_LAYERS.md`** § Local git (classifier SSOT: `scripts/change-classify.cjs`). Do not duplicate the matrix here.
 
 - **Preview hook test selection:** `pnpm test:staged` (dry-run — does not run tests). **Run hook tests without committing:** `pnpm test:staged:live`. Classifier reads staged files only — `git add` before preview.
-- **CI / merge parity:** `pnpm test:classify && pnpm test:run`. Local related or full pre-commit green is **not** merge-safe — wait for CI `test` job on `develop` (Model A: PR checks; Model B: branch push workflow).
+- **CI / merge parity:** `pnpm test:classify && pnpm test:run`. Local related or full pre-commit green is **not** merge-safe — wait for CI `test` where work lands (per `.cursor/rules/git-workflow/RULE.mdc` § Mode behavior table → **how work lands** / **CI watcher**).
 - **Model B concurrency:** Prefer one active agent per checkout on `develop` (`src/config/git-workflow.json`). Shared-branch contention is higher than feature branches — treat `finish` smoke signals seriously.
 - **Force full locally:** `PRECOMMIT_TEST_FULL=1 pnpm test:staged` (PowerShell: `$env:PRECOMMIT_TEST_FULL=1; pnpm test:staged`).
 - Do **not** use `--no-verify` to avoid slow hooks on app-code commits; fix tests or split commits (docs/migrations separate from `src/`).
@@ -170,7 +172,7 @@ After `git add`, expect hook behavior per **`documentation/DOC_AGENT_WORKFLOW_LA
 
 ## Production promotion (separate from finish)
 
-Per `.cursor/rules/git-workflow/RULE.mdc` § Promote to production — not `finish`, not a squash PR to `main`.
+Per `.cursor/rules/git-workflow/RULE.mdc` § Mode behavior table → **production** (A/B: § Promote to production, never a squash PR to `main`; C: the user merges the PR). Not part of `finish`.
 
 ## User test handoff (mandatory before closure)
 
@@ -191,9 +193,9 @@ After commit (and after push/PR when applicable), output a **handoff card** for 
 - **CI:** <pending | green on PR (markdown link per git-workflow § Pull Requests step 5) | not pushed yet>
 ```
 
-**Forbidden closure phrases** until the user confirms in the app: “implementation complete,” “fixed,” “done,” “should work” — use **“ready for you to test”** instead.
+**Report faithfully** (`.cursor/rules/agent-behavior/RULE.mdc` § Success Validation): say what was verified and what still needs the user's test in the app; the card above lists exactly that.
 
-Squash merge / production: point to § Production promotion above; user tests **staging** before promote. For preview URL discovery after hosting work, see `documentation/DOC_CLOUDFLARE_WORKERS.md`.
+Squash merge / production: point to § Production promotion above; the user tests on **staging** (table → **staging**: `develop` for A/B, the PR preview for C) before production. For preview URL discovery after hosting work, see `documentation/DOC_CLOUDFLARE_WORKERS.md`.
 
 ## Boundaries
 

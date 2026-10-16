@@ -174,9 +174,9 @@ describe("test", () => {
 
 ### Special Considerations
 
-**Edge Functions have unique testing constraints** (branch model SSOT: `.cursor/rules/git-workflow/RULE.mdc` § Mode-aware branch gate; mode: `src/config/git-workflow.json`):
+**Edge Functions have unique testing constraints** (branch model SSOT: `.cursor/rules/git-workflow/RULE.mdc` § Mode behavior table; mode: `src/config/git-workflow.json`):
 
-- **No staging environment**: Edge Functions deploy once and affect both develop and main branches
+- **No staging environment** (any mode): Edge Functions deploy once and affect production and every preview at the same time
 - **Manual testing only**: No automated testing or rollback for functions
 - **High impact**: Bugs in Edge Functions impact the entire app across all branches
 - **Deployment**: Deploy via `supabase functions deploy <function-name>`
@@ -187,18 +187,18 @@ describe("test", () => {
 - Test thoroughly in development before deployment
 - Use manual testing workflows
 - Document test procedures for each function
-- Include explicit release validation before **Promote to production** when Edge Function behavior changed
+- Include explicit release validation before production (table → **production**: A/B promote, C merging the PR) when Edge Function behavior changed
 
 **Frontend Logic Testing** (preferred when possible):
 
-- Test on develop branch first
-- User testing before promoting to production
+- Test on staging first (table → **staging**: `develop` for A/B, the PR preview for C)
+- User testing before production (table → **production**)
 - Easy rollback if issues found
 - Better isolation and testability
 
 ### Release Validation Gate
 
-Before **Promote to production**, verify:
+Before production (§ Mode behavior table → **production**: A/B Promote to production; C merging the PR to `main`), verify:
 - Required CI checks are green
 - Manual happy-path and key error-path tests are completed
 - Any Edge Function-related behavior in scope has been re-tested against the currently deployed function version

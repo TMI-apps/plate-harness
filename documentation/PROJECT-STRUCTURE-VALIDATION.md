@@ -41,7 +41,7 @@ Humans: pre-commit runs `validate:structure:staged` on relevant staged files; ru
 
 - **Wrong folder:** Move the file to an allowed location per `.cursor/rules/file-placement/RULE.mdc` (e.g. pages under `src/pages/<Name>/<Name>Page.tsx`, feature code under `src/features/<feature>/`).
 - **Missing whitelist entry:** Legitimate new structure requires updating `projectStructure.config.cjs` — **protected**; get user approval first.
-- **Stray build artifact:** Add to `.gitignore` and `DEFAULT_IGNORE_PATTERNS` in `scripts/project-structure-validator.js` if a tool writes local state (see file-placement rule § Tooling artifacts).
+- **Stray build artifact:** Add it to the tracked `.gitignore` — the validator skips untracked paths the repo's `.gitignore` files ignore (personal excludes do not count). `DEFAULT_IGNORE_PATTERNS` in `scripts/project-structure-validator.js` is only the fallback when git is unavailable (see file-placement rule § Tooling artifacts).
 
 ### Feature size budget exceeded
 

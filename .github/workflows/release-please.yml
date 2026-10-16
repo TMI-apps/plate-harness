@@ -1,0 +1,63 @@
+# Release PRs for Model C (git-workflow/RULE.mdc § Mode behavior table → version source).
+# - `mode` reads the mode through the single reader (validate-git-workflow.cjs --print-mode).
+# - `release` runs only under model-c; A/B forks see it skipped.
+# - `dispatch-ci` starts ci.yml on the release branch: PRs opened with GITHUB_TOKEN do not
+#   trigger workflows, but a GITHUB_TOKEN workflow_dispatch does, so the required `test`
+#   check reports on the release PR without a PAT (D21). Fallback if that ever fails: a
+#   GitHub App token (see temp_job_git-workflow-model-c D21).
+name: Release Please
+
+on:
+  push:
+    branches: [main]
+
+permissions: {}
+
+jobs:
+  mode:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      mode: ${{ steps.read.outputs.mode }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Read git workflow mode
+        id: read
+        run: |
+          mode="$(node scripts/validate-git-workflow.cjs --print-mode)"
+          echo "mode=$mode" >> "$GITHUB_OUTPUT"
+
+  release:
+    needs: mode
+    if: needs.mode.outputs.mode == 'model-c'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    outputs:
+      prs_created: ${{ steps.release.outputs.prs_created }}
+      pr: ${{ steps.release.outputs.pr }}
+    steps:
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          release-type: node
+
+  dispatch-ci:
+    needs: release
+    if: needs.release.outputs.prs_created == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Run CI on the release branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_BRANCH: ${{ fromJSON(needs.release.outputs.pr).headBranchName }}
+        run: gh workflow run ci.yml --ref "$RELEASE_BRANCH"

@@ -66,16 +66,16 @@ Quick reference guide to all rules and their relationships.
 - Code review process and development process
 - Deployment pointers (links to `DOC_CLOUDFLARE_WORKERS`, `cloud-functions/RULE.mdc`)
 - **Rule routing** to child domain rules (do not duplicate their bodies here)
-- **Minimal branch gate stub** — read `src/config/git-workflow.json`; full Model A / Model B in `git-workflow/RULE.mdc` § Mode-aware branch gate
+- **Minimal branch gate stub** — read `src/config/git-workflow.json`; full per-mode behavior in `git-workflow/RULE.mdc` § Mode behavior table and § Mode-aware branch gate
 
 **Related to:** All other rules (references them in review process)
 
 ---
 
 ### Git workflow (`git-workflow/RULE.mdc`)
-- **Branch and release strategy** (SSOT: Model A default or Model B opt-in — config: `src/config/git-workflow.json`; behavior: `git-workflow/RULE.mdc`)
+- **Branch and release strategy** (SSOT: § Mode behavior table — Model C default, A/B selectable; config: `src/config/git-workflow.json`)
 - Branch protection, PR standards (Model A), merge diagnostics
-- **Promote to production** workflow (both modes)
+- Production per mode (C: user merges the PR; A/B: **Promote to production** workflow)
 - Commit/push flow pointers (`finish` / `push` skills for semver/changelog SSOT)
 
 **Related to:** workflow hub, agent-behavior, platform
@@ -85,7 +85,7 @@ Quick reference guide to all rules and their relationships.
 ### Agent behavior (`agent-behavior/RULE.mdc`)
 - Protected files manifest (single SSOT)
 - Decision questioning protocol
-- Success validation (user-test gate)
+- Success reporting (verified vs unverified)
 - Agent role and control
 
 **Related to:** workflow hub, git-workflow, debugging

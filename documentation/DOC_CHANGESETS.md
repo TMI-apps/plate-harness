@@ -16,11 +16,18 @@ Mode: `src/config/git-workflow.json`. Behavior: `.cursor/rules/git-workflow/RULE
 - Prefer **one active agent per checkout** on `develop` — shared-branch contention is higher than Model A.
 - Pushing to `develop` updates staging — it does **not** ship production.
 
-## On `develop` (both modes)
+## Model C — Claude Code defaults (default for new forks)
+
+- No per-PR bump: `finish` does **not** edit `package.json` or `CHANGELOG.md`, and commits carry no `[VERSION]` prefix.
+- The squash PR title (`type: subject`, enforced by the `pr-title` CI check) becomes the commit on `main`.
+- `.github/workflows/release-please.yml` keeps a release PR open that bumps `package.json` and writes `CHANGELOG.md` from those titles; the user merges it to tag the release. It dispatches `ci.yml` on the release branch so the required `test` check runs there.
+- No `.changeset/` files.
+
+## On `develop` (Model A/B)
 
 - Merging or pushing to `develop` updates staging — it does **not** ship production.
 
-## Production (`main`)
+## Production (`main`, Model A/B)
 
 - Run **Promote to production** (`promote-to-production.yml`) to fast-forward `main` to `develop` after staging verification.
 - Do not squash-merge `develop` into `main` or back-merge `main` into `develop`.

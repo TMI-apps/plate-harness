@@ -21,7 +21,7 @@ Layer model: `documentation/DOC_AGENT_WORKFLOW_LAYERS.md`.
 
 **Package / pattern reuse:** `.agents/skills/dont-reinvent-the-wheel/SKILL.md` (before custom generic subsystems).
 
-**Harness maintenance:** Coherence audit → `.agents/skills/align-harness/SKILL.md`. External intake → drop in `.agents/harness-inbox/` then `.agents/skills/update-harness/SKILL.md`.
+**Harness maintenance:** Coherence audit → `.agents/skills/align-harness/SKILL.md`. Context-cost pruning → `.agents/skills/tighten-harness/SKILL.md`. External intake → drop in `.agents/harness-inbox/` then `.agents/skills/update-harness/SKILL.md`.
 
 ## Rules
 
@@ -56,7 +56,7 @@ Grouped by YAML `alwaysApply`. Include `globs` when present.
 | `.cursor/rules/file-placement/RULE.mdc` | CRITICAL: Before creating any new file or folder, validate placement against projectStructure.config.cjs and architecture rules. Check structure whitelist, verify allowed file patterns, and suggest correct locations if invalid. Applies when user requests file/folder creation or assistant needs to create files. · `alwaysApply: true` |
 | `.cursor/rules/code-style/RULE.mdc` | Global code style and formatting standards for all projects · `alwaysApply: true` |
 | `.cursor/rules/workflow/RULE.mdc` | Development workflow hub — code review, dev process, deployment pointers · `alwaysApply: true` |
-| `.cursor/rules/agent-behavior/RULE.mdc` | Agent decision protocol, success validation, and protected-file consent · `alwaysApply: true` |
+| `.cursor/rules/agent-behavior/RULE.mdc` | Agent decision protocol, success reporting, and protected-file consent · `alwaysApply: true` |
 | `.cursor/rules/testing/RULE.mdc` | Testing standards, patterns, and quality requirements · `alwaysApply: true` |
 | `.cursor/rules/debugging/RULE.mdc` | Debugging strategy, logging, issue analysis, and scientific method debugging · `alwaysApply: true` |
 | `.cursor/rules/security/RULE.mdc` | Security best practices and vulnerability prevention · `alwaysApply: true` |
@@ -65,8 +65,8 @@ Grouped by YAML `alwaysApply`. Include `globs` when present.
 
 | Path | Description |
 |------|-------------|
-| `.cursor/rules/git-workflow/RULE.mdc` | Git branch models (Model A / Model B), PRs, and production promotion · `alwaysApply: false` |
-| `.cursor/rules/platform/RULE.mdc` | Windows/PowerShell command rules and local environment configuration · `alwaysApply: false` |
+| `.cursor/rules/git-workflow/RULE.mdc` | Git branch models (Model A / B / C), PRs, and production promotion · `alwaysApply: false` |
+| `.cursor/rules/platform/RULE.mdc` | Windows shell rules (PowerShell + Git Bash) and local environment configuration · `alwaysApply: false` |
 | `.cursor/rules/database/RULE.mdc` | SQL migration best practices for the configured relational database (this fork: Supabase/PostgreSQL; not client queries or TanStack) · `alwaysApply: false` · `globs: ["**/migrations/**/*.sql"]` |
 | `.cursor/rules/cloud-functions/RULE.mdc` | When to use Edge Functions vs frontend, function organization, and architecture guidelines · `alwaysApply: false` · `globs: ["**/supabase/functions/**", "cloud-functions/**"]` |
 | `.cursor/rules/project-specific/RULE.mdc` | Supabase Edge Function rate limiting (Postgres rate_limits). Not a home for other hosts. · `alwaysApply: false` · `globs: ["**/supabase/functions/**/*.ts"]` |
@@ -75,7 +75,7 @@ Grouped by YAML `alwaysApply`. Include `globs` when present.
 ## Defaults
 
 - **Always read before edit.** Run `pnpm validate:structure` if creating new files in unfamiliar locations.
-- **Git workflow mode:** Read `src/config/git-workflow.json`, then apply `.cursor/rules/git-workflow/RULE.mdc` § Mode-aware branch gate (Model A default / Model B opt-in).
+- **Git workflow mode:** Read `src/config/git-workflow.json`, then apply `.cursor/rules/git-workflow/RULE.mdc` § Mode-aware branch gate. What each mode does: § Mode behavior table (Model C default; A/B selectable).
 - **Name the mechanism before code.** Before adding or copying a function, hook, component, type, file, or feature folder — including a one-line edit — read `.agents/skills/name-the-mechanism/SKILL.md` and follow it.
 - **Layer consistency before code.** Every request to change existing behavior carries an assumption about how the system works — verify it before acting (user can't see the impl). Cues: `.agents/skills/layer-consistency-check/references/workaround-shapes.md` § Request-side cues → run `.agents/skills/layer-consistency-check/SKILL.md` and stop for user choice before writing code.
 - **Plan before non-trivial work.** Anything beyond a one-line fix should start with the `plan` skill (`.agents/skills/plan/SKILL.md`).

@@ -19,7 +19,7 @@ Steps 4, 5, and 7 grade against the plan's **Review contract** (pinned rules, le
 7. **Validate** — repo rules and/or architecture gate when warranted (auto-selects impl-full / gate depth).
 8. **Finish** — local commit, version, changelog.
 9. **Push** — remote sync after commits exist.
-10. **Babysit / post-push CI** — read `src/config/git-workflow.json`. **Model A:** when a PR to `develop` exists after push, run `~/.cursor/skills-cursor/babysit/SKILL.md`. **Model B:** after push to `develop` or `main`, report the commit URL and stop. Do not `gh run watch`. Skip the Model A babysit only when waived in **Decisions made**.
+10. **Babysit / post-push CI** — per `.cursor/rules/git-workflow/RULE.mdc` § Mode behavior table → **CI watcher** (A: babysit the PR to `develop` — Cursor `~/.cursor/skills-cursor/babysit/SKILL.md`, Claude Code app PR monitor; B: report the commit URL and stop; C: app PR monitor on the PR to `main`). Do not `gh run watch`. Skip the Model A babysit only when waived in **Decisions made**.
 11. **User app test** — agent emits **Ready for you to test** handoff (`finish` § User test); user pass/fail closes the loop.
 
 Optional: `prime` when codebase or branch context is unfamiliar.
@@ -34,9 +34,9 @@ Optional: `prime` when codebase or branch context is unfamiliar.
 | Nontrivial generic subsystem; unclear if a package/pattern exists | `dont-reinvent-the-wheel` then continue `plan` / `implement` |
 | Complexity M/L + plan review pending | `review-dev-plan` |
 | Implementing without plan but material design questions | `pattern-review` `lite`; then `plan` or waiver in **Decisions made** |
-| Ready to land | `finish` → `push` → post-push CI (Model A: PR babysit; Model B: report URL and stop) → user test handoff |
+| Ready to land | `finish` → `push` → post-push CI (table → **CI watcher**) → user test handoff |
 | Bug / error / regression (not feature request) | `debug` (§ Chat intake) before `implement` |
-| Pushed; CI unknown | Read mode config — Model A: babysit PR; Model B: watch `develop` `test` run |
+| Pushed; CI unknown | Table → **CI watcher** (A: babysit PR; B: report URL and stop; C: app PR monitor) |
 
 ## Plan depth and gates
 

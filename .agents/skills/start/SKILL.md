@@ -112,34 +112,23 @@ If assistant cannot perform the fork UI step, instruct user exactly what to clic
 
 ### 5) Branch workflow gate
 
-**Template repo (harness maintenance):** stay **`model-a`**. Do **not** offer Model B. Create `feature/<name>` from `develop` as usual for template PRs.
+**Prerequisites:** GitHub CLI `gh` installed and authenticated (`gh auth login`) — the Claude Code desktop PR monitor and auto-merge need it.
 
-**Fork:** create `develop` from `main` once (`git push origin main:develop`). Then ask:
+**Template repo (harness maintenance):** **`model-c`** (D5, `temp_job_git-workflow-model-c`).
 
-> Feature branches (Model A, default) or direct `develop` (Model B)?
+**Fork:** ask once:
 
-Write `src/config/git-workflow.json` accordingly (`"mode": "model-a"` | `"model-b"`). Behavior SSOT: `.cursor/rules/git-workflow/RULE.mdc`.
+> Claude Code defaults — PR to `main`, merge = production (Model C, default), feature branches → `develop` (Model A), or direct `develop` (Model B)?
 
-**Model A:**
+Write `src/config/git-workflow.json` accordingly (`"mode": "model-c"` | `"model-a"` | `"model-b"`). Then walk `.cursor/rules/git-workflow/RULE.mdc` § Mode behavior table → **fork setup**, **`main` ruleset**, **`develop` ruleset** for the chosen column. Behavior SSOT is that table — do not restate it here.
 
-```bash
-git switch develop && git pull origin develop
-git switch -c feature/<name>
-```
+**Model C:** no `develop`. Configure the `main` ruleset (table row), repo settings (squash-only with PR title as commit message, auto-delete head branches, **allow auto-merge**), Cloudflare production branch `main` with previews on all branches (`documentation/DOC_CLOUDFLARE_WORKERS.md`), and the baseline release tag. **Ruleset confirmation gate (C — required):** confirm the live `main` ruleset via `gh api repos/OWNER/REPO/rules/branches/main` (`pull_request` + required `test` and `pr-title` present) before the first merge.
 
-Configure GitHub rulesets: `develop` = PR + `test` + non-ff + deletion; `main` = deletion + non-ff only. See § Branch Protection and § Promote to production.
+**Model A / B:** create `develop` from `main` once (`git push origin main:develop`).
 
-**Model B:**
-
-```bash
-git switch develop && git pull origin develop
-```
-
-Do **not** create `feature/*` for daily work. Configure GitHub rulesets: `develop` = `test` + non-ff + deletion (**no** `pull_request`); `main` = deletion + non-ff only.
-
-**Ruleset confirmation gate (Model B — required):** Before leaving this gate, confirm the live `develop` ruleset matches Model B (user confirmation or `gh api repos/OWNER/REPO/rules/branches/develop` / rulesets API): `pull_request` **absent**; `required_status_checks` (`test`) present; `non_fast_forward` + `deletion` present. Do not proceed on click-path instructions alone.
-
-**First-promotion bootstrap (Model B):** After the promote workflow file exists on `develop`, seed it onto `main` once with a local ff push (`git fetch origin && git checkout main && git merge --ff-only origin/develop && git push origin main`), then use **Promote to production** thereafter. See `.cursor/rules/git-workflow/RULE.mdc` § Promote to production.
+- **Model A:** `git switch develop && git pull origin develop`, then `git switch -c feature/<name>`.
+- **Model B:** `git switch develop && git pull origin develop`; do **not** create `feature/*` for daily work. **Ruleset confirmation gate (B — required):** confirm the live `develop` ruleset matches the table (user confirmation or `gh api repos/OWNER/REPO/rules/branches/develop`): `pull_request` **absent**; `required_status_checks` (`test`) present; `non_fast_forward` + `deletion` present. Do not proceed on click-path instructions alone.
+- **First-promotion bootstrap (A/B):** once the promote workflow file exists on `develop`, `main` is fast-forwarded once — **the user runs** the command in `.cursor/rules/git-workflow/RULE.mdc` § Promote to production § First promotion bootstrap (agents are blocked from writing to `main`). Use **Promote to production** thereafter.
 
 If steps are web-UI only, provide exact click-path and wait for user confirmation.
 

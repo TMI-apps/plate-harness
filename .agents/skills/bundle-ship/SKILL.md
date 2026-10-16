@@ -29,7 +29,7 @@ Orchestration and **bundle intent** only. It does not duplicate version rules, s
 
 ## Preconditions
 
-1. **Same branch, same checkout** — not worktrees, not per-thread branches.
+1. **Same branch, same checkout** — not worktrees, not per-thread branches. (Under Model C parallel work normally lives in separate worktrees, so bundle-ship is rarely needed.)
 2. **Other threads idle** — user has paused or finished other agent chats on this checkout. This skill cannot stop other agents.
 3. User invoked bundle-ship (explicit combined finish + push intent).
 
@@ -103,7 +103,7 @@ After a **successful** commit:
 | Stash other threads’ work and restore after push | *excluded* — use plain `finish` Option 3 if needed |
 | Auto-poll or wait for other threads | *excluded* — user pauses them |
 | Replace `finish` or `push` rules | *excluded* — delegates SSOT |
-| Open PRs or promote to production | *deferred* — after push, open PR per `.cursor/rules/git-workflow/RULE.mdc` § Pull Requests (`gh pr create --base develop`; Summary + Test plan body; verify `baseRefName`; never bare `pull/new/<branch>`) |
+| Open PRs or promote to production | *deferred* — after push, follow `push` § Next (per `.cursor/rules/git-workflow/RULE.mdc` § Mode behavior table → **how work lands**) |
 
 ## Boundaries
 

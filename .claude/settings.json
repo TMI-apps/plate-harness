@@ -110,6 +110,34 @@
       "Bash(git push -f:*)"
     ]
   },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "shell": "bash",
+            "command": "node \"$CLAUDE_PROJECT_DIR/scripts/ensure-deps-installed.cjs\"",
+            "timeout": 300
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "shell": "bash",
+            "command": "node \"$CLAUDE_PROJECT_DIR/scripts/deny-git-write-on-main.cjs\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  },
   "outputStyle": "default",
   "plansDirectory": "./documentation/jobs"
 }

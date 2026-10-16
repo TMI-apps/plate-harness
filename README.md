@@ -147,30 +147,26 @@ pnpm install
 
 ### Step 3: Set up branch workflow for this repo
 
-Keep `main` as production and `develop` as long-lived staging/integration. Mode lives in `src/config/git-workflow.json` (SSOT behavior: `.cursor/rules/git-workflow/RULE.mdc`).
+Mode lives in `src/config/git-workflow.json`; what each mode does is the SSOT table in `.cursor/rules/git-workflow/RULE.mdc` § Mode behavior table. The `start` skill walks the setup.
+
+| Mode | Daily work | Production | Config |
+|------|------------|------------|--------|
+| **Model C** (default — Claude Code defaults) | any branch (one per task / worktree session) → squash PR → `main` | you merge the PR | `"mode": "model-c"` |
+| **Model A** (feature branches + `develop`) | `feature/*` → squash PR → `develop` | **Promote to production** (ff `main` ← `develop`) | `"mode": "model-a"` |
+| **Model B** (direct `develop`) | commit/push on `develop` | **Promote to production** | `"mode": "model-b"` |
+
+Every mode: agents never commit or push to `main` (a Claude Code hook enforces it).
+
+**Model C:** no `develop`. Protect `main` (PR + required `test` and `pr-title` checks), set squash-only merges and allow auto-merge — see the table row **fork setup**.
+
+**Model A / B:** create `develop` once:
 
 ```bash
 git switch -c develop
 git push -u origin develop
 ```
 
-**Choose a mode (fork onboarding):**
-
-| Mode | Daily work | `develop` ruleset | Config |
-|------|------------|-------------------|--------|
-| **Model A** (default — feature branches + PR) | `feature/*` → squash PR → `develop` | PR + `test` + non-ff + deletion | `"mode": "model-a"` |
-| **Model B** (opt-in — direct `develop`) | Commit/push on `develop` | `test` + non-ff + deletion (**no** PR required) | `"mode": "model-b"` |
-
-Both modes: production via **Promote to production** (ff `main` ← `develop`). Never commit app code to `main`.
-
-**Model A** first branch:
-
-```bash
-git switch develop && git pull origin develop
-git switch -c feature/<name>
-```
-
-**Model B:** stay on `develop` after creating it; do not create `feature/*` for daily work.
+Model A then works on `feature/<name>` branches off `develop`; Model B stays on `develop`.
 
 Optional (to pull future plate-harness updates):
 
@@ -235,7 +231,7 @@ Chrome DevTools device mode is enough for width breakpoints; it is **not** enoug
 
 ### You're ready
 
-Start building per your git-workflow mode (`src/config/git-workflow.json`): Model A uses `feature/*` → `develop`; Model B works on `develop`. Promote to `main` when staging looks good.
+Start building per your git-workflow mode (`src/config/git-workflow.json`) — `.cursor/rules/git-workflow/RULE.mdc` § Mode behavior table → **daily branch** and **production**.
 
 ## Installation
 
@@ -331,8 +327,8 @@ This project uses **GTS**, **ESLint**, and **Prettier** together for code qualit
 
 This starter targets **Cloudflare Workers** with static assets, deployed via **Workers Builds** (push-to-deploy). GitHub is the **CI/quality gate only** — it never deploys, and no `CLOUDFLARE_API_TOKEN` secret is needed.
 
-- **GitHub:** runs `ci.yml` and enforces PR + green `test` check on `main`/`develop`.
-- **Cloudflare Workers Builds:** builds and deploys on push (`develop` → preview, `main` → production).
+- **GitHub:** runs `ci.yml`; rulesets per mode (table rows **`main` ruleset** / **`develop` ruleset**). Under Model C, `main` requires a PR plus green `test` and `pr-title` checks; release-please opens release PRs.
+- **Cloudflare Workers Builds:** builds and deploys on push — `main` → production, every other branch → its own preview (Model A/B: `develop` is the stable staging preview).
 
 To connect a fork:
 

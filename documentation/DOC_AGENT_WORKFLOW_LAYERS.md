@@ -183,7 +183,9 @@ Copy `write-adoption-guide/` to other projects and adjust the skill **Configurat
 | dry-run | `pnpm test:staged` | log only |
 | live (no commit) | `pnpm test:staged:live` | same as hook |
 
-**Merge safety:** Related or full pre-commit green is **not** merge-safe. Only the CI `test` job on `develop` is authoritative (Model A: PR checks; Model B: branch push workflow).
+**Merge safety:** Related or full pre-commit green is **not** merge-safe. Only the CI `test` job where work lands is authoritative (`.cursor/rules/git-workflow/RULE.mdc` § Mode behavior table → **how work lands**: Model C the PR to `main`, also gated by `pr-title`; Model A the PR to `develop`; Model B the `develop` push run).
+
+**Worktree sessions (Model C):** the Claude Code SessionStart hook (`scripts/ensure-deps-installed.cjs`) installs dependencies in a new worktree so these hooks run there too. Archive a finished session in the desktop app (or turn on auto-archive after PR merge) to remove its worktree.
 
 **Agent commands:** `pnpm test:staged` (preview after `git add`); `PRECOMMIT_TEST_FULL=1 pnpm test:staged` (force full preview); `pnpm test:classify && pnpm test:run` (CI parity).
 
@@ -202,16 +204,16 @@ When the human only files feature requests or bug reports and tests in the app:
 | Human | Describe goal or bug; test in app; confirm pass/fail |
 | Agent | Full delivery chain — no git/CI coordination required from human |
 
-**Default agent chain:** `router` → plan/feature/debug as needed → `implement` or `quick-piv` → `validate` → `finish` → `push` → **post-push CI** (Model A: babysit PR to `develop`; Model B: report the commit URL and stop — do not `gh run watch`) → **Ready for you to test** handoff (`finish` § User test).
+**Default agent chain:** `router` → plan/feature/debug as needed → `implement` or `quick-piv` → `validate` → `finish` → `push` → **post-push CI** per `.cursor/rules/git-workflow/RULE.mdc` § Mode behavior table → **CI watcher** (A: babysit PR to `develop`; B: report the commit URL and stop; C: desktop app PR monitor on the PR to `main` — never `gh run watch`) → **Ready for you to test** handoff (`finish` § User test).
 
 **Standing protected-file consent:** Optional Cursor **user rule** listing categories agents may edit without per-task ask (e.g. `.agents/skills/**` for workflow glue). Repo `.cursor/rules/agent-behavior/RULE.mdc` § Protected Files stays strict — the user rule is external standing consent, not a repo policy change.
 
-**Test tiers:** See [`DOC_TESTING.md`](./DOC_TESTING.md) and pre-commit tables above; merge safety is CI `test` on `develop`, not pre-commit related mode alone.
+**Test tiers:** See [`DOC_TESTING.md`](./DOC_TESTING.md) and pre-commit tables above; merge safety is CI `test` where work lands (table → **how work lands**), not pre-commit related mode alone.
 
 ## Release and versioning
 
 - Mode-aware changesets: `documentation/DOC_CHANGESETS.md` + conventional commits (`finish` SSOT).
-- Version bump lands with each land on `develop` (Model A: feature PR; Model B: direct `finish` on `develop`). Production promotion (`main`) is a separate **Promote to production** workflow step.
+- Version source per table → **version source**: Model A/B bump with each landing on `develop` via `finish`, and production is a separate **Promote to production** step; Model C has no per-PR bump — release-please opens a release PR on `main`, and merging a PR is the production step.
 
 ## When you change something
 

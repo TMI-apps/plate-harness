@@ -17,6 +17,8 @@ Use this file to pick **one primary skill** (sometimes two in sequence).
 
 **Invocation contract (always):** After you decide the primary skill — and any secondary skill that must run **next** in order — **read that skill’s `SKILL.md` and execute its workflow starting in this same turn.** Invoking means load + follow steps, not naming a path or asking the user which skill file to open. If two skills apply sequentially (for example `plan` → `implement`), finish the first’s applicable step or hand off explicitly per that skill, then read and run the second without ending on a static routing table alone.
 
+**Fan-out exception (subagents):** When the chosen next skill spawns parallel subagents (`review-dev-plan`, `validate`, `improve-skill-library`, …) and the user did not invoke it by name, **offer** it with one line instead of starting it. Direct invocation (`/validate`, "run review-dev-plan") counts as the ask. `plan-grill-auto` keeps its own auto-chain.
+
 ## `/router` — pick next action + skill
 
 **Purpose:** `/router` means “decide the **most logical next step** for this thread, pick the skill, and **do it**.” The user should not have to name the skill.
@@ -63,7 +65,7 @@ Pick **one** primary by the **most blocking** row that applies (top wins). Then 
 | No plan file; quick plan in chat; implement/validate incomplete | `quick-piv` |
 | All planned phases done; full audit not yet run | `validate` |
 | Validated; user/thread signaled landing | `finish` (only when wrap-up is the clear next step — not the default for bare `/router` on new work) |
-| Pushed; CI status unknown | Read `src/config/git-workflow.json`. **Model A:** PR to `develop` open → `babysit`. **Model B:** push to `develop`/`main` → report the commit URL and stop. Do not `gh run watch`. CI is GitHub Actions after the push |
+| Pushed; CI status unknown | Per `.cursor/rules/git-workflow/RULE.mdc` § Mode behavior table → **CI watcher** (A: babysit the PR; B: report the commit URL and stop; C: desktop app PR monitor). Do not `gh run watch`. CI is GitHub Actions after the push |
 
 Align with [dev-cycle matrix](references/dev-cycle-matrix.md). IF active job AND repo/branch context unknown THEN run **`prime`** once, then continue with the chosen skill — do not replace thread continuation with backlog intake.
 
@@ -237,6 +239,7 @@ While inside **plan corridor** (`I`), product/scope forks use **`plan-grill` rai
 | Retro from failures/diffs; persist lessons into rules or skills | `.agents/skills/learn/SKILL.md` |
 | Audit/improve the **agent harness** (AGENTS, rules, skills, INDEX, layers); subagent lenses + no-loss pass | `.agents/skills/align-harness/SKILL.md` |
 | Intake **external** harness content from `.agents/harness-inbox/` | `.agents/skills/update-harness/SKILL.md` |
+| Tighten / prune / de-bloat harness context (CLAUDE.md, AGENTS.md, rules, skills); token cost of always-loaded instructions | `.agents/skills/tighten-harness/SKILL.md` |
 | Grade **or** improve an attached rule/command file (rubric score and/or quality rewrite) | `.agents/skills/rule-quality/SKILL.md` |
 
 ### This repo — integrations
@@ -345,6 +348,7 @@ Choose by **primary outcome** (what must be true when done). If two outcomes are
 
 - **`align-harness`:** **Harness-wide** audit — separation of concerns, SSOT, conflicts, handoffs — via parallel lens subagents and a no-information-loss gate. Edits harness corpus + router/layers spine.
 - **`rule-quality`:** One **rule/command file's** grade or prose. **`consolidate`:** duplication in **`src/` application code**, not skills.
+- **`tighten-harness`:** Context **cost** — cut, merge, relocate, or enforce instructions with a per-cut ledger; behavior must not change. Contradictions it finds → `align-harness`.
 
 ### `rule-quality` vs `review`
 
@@ -370,7 +374,7 @@ Choose by **primary outcome** (what must be true when done). If two outcomes are
 - **`finish`:** Commit-ready locally (version, changelog, staging rules); emits **Ready for you to test** handoff (§ User test).
 - **`bundle-ship`:** Multi-thread same-checkout landing — one bundled `finish` commit, then `push` in one invocation.
 - **`push`:** Remote sync only **after** commits exist; never commit inside push.
-- **`babysit` / post-push CI:** Read `src/config/git-workflow.json`. **Model A:** after successful **`push`** that created or updated a PR to **`develop`**, read and run **`babysit`** (`~/.cursor/skills-cursor/babysit/SKILL.md`) unless waived in **Decisions made**. **Model B:** after successful push to **`develop`** or **`main`**, report the commit URL and stop. Do **not** `gh run watch` or block the checkout on Actions. Do **not** require a PR. If the user later brings a failed check → `ci-investigator` or fix in scope and re-push.
+- **`babysit` / post-push CI:** per `.cursor/rules/git-workflow/RULE.mdc` § Mode behavior table → **CI watcher**. **Model A:** after a **`push`** that created or updated a PR to **`develop`**, babysit it — Cursor: `~/.cursor/skills-cursor/babysit/SKILL.md`; Claude Code: the desktop app's PR monitor — unless waived in **Decisions made**. **Model B:** report the commit URL and stop; no PR. **Model C:** the PR to `main` is watched by the desktop app's PR monitor / Auto-fix. Do **not** `gh run watch` or block the checkout on Actions. If the user later brings a failed check → `ci-investigator` or fix in scope and re-push.
 
 ### `canvas` vs `validate` / reporting
 
@@ -575,6 +579,7 @@ Do **not** run standalone **`pattern-review`** `scan` in the same session if **`
 - `.agents/skills/rule-quality/SKILL.md`
 - `.agents/skills/align-harness/SKILL.md`
 - `.agents/skills/update-harness/SKILL.md`
+- `.agents/skills/tighten-harness/SKILL.md`
 - `.agents/skills/optimize2/SKILL.md`
 - `.agents/skills/react-perf-vite/SKILL.md`
 - `documentation/DOC_REACT_PERF.md` — human overview (links to skill)

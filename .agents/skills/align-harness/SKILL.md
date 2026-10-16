@@ -42,6 +42,7 @@ Domain lenses: [`references/domain-*.md`](references/).
 | [`update-harness`](../update-harness/SKILL.md) | Dropping **external** content into `.agents/harness-inbox/` |
 | [`create-skill`](../create-skill/SKILL.md) | Authoring **one** new skill |
 | [`rule-quality`](../rule-quality/SKILL.md) | Grading **one** rule/command file |
+| [`tighten-harness`](../tighten-harness/SKILL.md) | Cutting harness **context cost** (prune, merge, relocate) without behavior change |
 | [`learn`](../learn/SKILL.md) | Capturing a **lesson** from a session |
 | [`standards-align`](../standards-align/SKILL.md) | Product vs repo standards decision |
 | [`consolidate`](../consolidate/SKILL.md) | `src/` application code duplication |

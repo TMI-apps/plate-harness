@@ -380,7 +380,7 @@ Phases 5–7 below are **retired** — implementation, QA, and completion live i
 6. **Rule Compliance:** Validate against all `.cursor/rules` systematically
 7. **Standards Alignment:** Ask before preserving any diversion from industry standards, framework best practices, or repo conventions
 8. **Progressive Complexity:** Offer options from simplest to most complex
-9. **Validation:** Never claim success without user testing
+9. **Validation:** Report what was verified and what was not; the user confirms in-app behavior
 
 ---
 

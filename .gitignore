@@ -56,3 +56,6 @@ __pycache__/
 
 # Claude Code personal settings (not shared)
 .claude/settings.local.json
+# Claude Code runtime state (desktop worktrees, scheduler lock) — keep out of git and validate:structure
+.claude/worktrees/
+**/.claude/scheduled_tasks.lock

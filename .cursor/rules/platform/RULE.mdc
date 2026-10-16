@@ -1,22 +1,24 @@
 ---
-description: "Windows/PowerShell command rules and local environment configuration"
+description: "Windows shell rules (PowerShell + Git Bash) and local environment configuration"
 alwaysApply: false
 ---
 
 # Platform and Environment
 
-Windows/PowerShell command rules and local environment configuration for this repo.
+Windows shell rules (PowerShell and Git Bash) and local environment configuration for this repo. The two command sections below are **shell-specific**; § Environment Variables and Configuration applies to every shell.
 
 ## Platform and Commands
 
-**Environment:** Windows with PowerShell.
+**Environment:** Windows. Cursor terminal = PowerShell; Claude Code Bash tool = Git Bash.
 
-**Command Rules:**
+**Command Rules (when the shell is PowerShell):**
 - No Unix-style `&&` chaining
 - No Unix-only flags like `rm -rf`
 - Run commands as separate sequential calls (the agent executes them, not the user)
 
 ## Shell/PowerShell Handling
+
+**Applies when the shell is PowerShell** (Cursor terminal). In Git Bash use § Git Bash below.
 
 **Critical - Select-Object Piping Issue:**
 
@@ -54,9 +56,17 @@ command 2>&1; if ($LASTEXITCODE -ne 0) { exit 1 }
 - npm/node commands (lint, test, build)
 - Commands with output filtering
 
-**Notes:**
+**Notes (PowerShell only):**
 - Check `$LASTEXITCODE` (not `$?`) after commands
 - Use `exit $LASTEXITCODE` to preserve original exit code (or `exit 1` for explicit failure)
+
+## Git Bash
+
+**Applies when the shell is Git Bash** (Claude Code Bash tool on Windows).
+
+- `&&` chaining and heredocs are fine.
+- Fail explicitly: `command || exit 1`; check `$?` for the last exit code (same form as `.agents/skills/debug/patterns.md`).
+- Use forward slashes and POSIX paths (`/c/Users/...`); `/dev/null`, not `NUL`.
 
 ## Environment Variables and Configuration
 

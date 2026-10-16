@@ -204,7 +204,7 @@ After changes:
 - Report what changed and what was intentionally not changed
 - Request user validation of behavior
 
-Never claim success without user testing confirmation.
+Report outcomes faithfully: report what was verified and what was not; the user confirms in-app behavior.
 
 ---
 

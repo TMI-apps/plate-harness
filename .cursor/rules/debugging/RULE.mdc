@@ -72,7 +72,7 @@ This rule defines debugging strategies, logging practices, and issue analysis pa
 
 ## Scientific Method Debugging
 
-**Procedure SSOT:** `.agents/skills/debug/SKILL.md` — run that skill for incidents (event chains, hypotheses, unified steps, iterative narrowing). **Never claim the issue is fixed; only the user decides.**
+**Procedure SSOT:** `.agents/skills/debug/SKILL.md` — run that skill for incidents (event chains, hypotheses, unified steps, iterative narrowing). **Say what was verified and what was not; the user confirms the fix.**
 
 **Pre-registered hypothesis loop (optional):** `.agents/skills/hypothesis/SKILL.md` — when naive fixes failed or the user invokes hypothesis mode. Router tiebreak: `.agents/skills/router/SKILL.md` (runtime incident → `debug`; pre-registered experiment loop → `hypothesis`).
 
@@ -86,7 +86,7 @@ Do not duplicate the full scientific-method checklist in this rule. This file ow
 
 **When modifying this rule, check these rules for consistency:**
 
-- `agent-behavior/RULE.mdc` - Protected files and user-test gate
+- `agent-behavior/RULE.mdc` - Protected files and success reporting (verified vs unverified)
 - `testing/RULE.mdc` - Testing patterns and debugging test failures
 - `architecture/RULE.mdc` - Component nesting and structural analysis
 

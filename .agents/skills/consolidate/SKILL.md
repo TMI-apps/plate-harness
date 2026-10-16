@@ -445,7 +445,7 @@ This skill is independently complete but works best in concert with sibling skil
 - This skill does not run broad performance optimization (use `optimize2`).
 - For architectural *location* correctness beyond placement of new shared code, use this skill's **Semantic placement mode** (`references/semantic-placement.md`).
 - This skill does not simplify individual feature workflows (use `challenge`).
-- Never claim success without user testing confirmation.
+- Report outcomes faithfully: report what was verified and what was not; the user confirms in-app behavior.
 - **Commit only via `finish`** when the user requests a commit.
 
 **Next:** After Phase 6 + checks → **`validate`** → **`finish`** when the user wants a commit; hotspot follow-up → **`optimize2`**.
