@@ -53,3 +53,6 @@ build
 __pycache__/
 *.py[cod]
 
+
+# Claude Code personal settings (not shared)
+.claude/settings.local.json

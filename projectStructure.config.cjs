@@ -785,6 +785,8 @@ module.exports = {
     // Markdown documentation files - ONLY README, architecture, and CHANGELOG allowed in root
     { name: "README.md" },
     { name: "AGENTS.md" },
+    { name: "CLAUDE.md" },
+    { name: ".mcp.json" },
     { name: "ARCHITECTURE.md" },
     { name: "CHANGELOG.md" },
     // XML files removed - should be in documentation/ if needed for reference

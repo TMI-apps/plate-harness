@@ -24,6 +24,10 @@
       "Bash(pnpm validate:structure:*)",
       "Bash(pnpm validate:version-sync)",
       "Bash(pnpm validate:app-config)",
+      "Bash(pnpm test:run)",
+      "Bash(pnpm test:run:*)",
+      "Bash(pnpm validate:git-workflow)",
+      "Bash(pnpm modularity:report)",
       "Bash(pnpm validate:docs)",
       "Bash(pnpm validate:docs:*)",
       "Bash(pnpm validate:feature-docs:*)",
@@ -67,6 +71,21 @@
       "Bash(npm:*)",
       "Bash(yarn:*)",
       "Bash(pnpm arch:baseline)",
+      "Edit(./.gitignore)",
+      "Edit(./.gitattributes)",
+      "Edit(./projectStructure.config.cjs)",
+      "Edit(./.eslintrc.json)",
+      "Edit(./eslint.config.js)",
+      "Edit(./eslint.ignores.js)",
+      "Edit(./.dependency-cruiser.cjs)",
+      "Edit(./.dependency-cruiser-baseline.json)",
+      "Edit(./.prettierrc.json)",
+      "Edit(./.editorconfig)",
+      "Edit(./tsconfig*.json)",
+      "Edit(./.cursor/rules/**)",
+      "Edit(./.agents/skills/**)",
+      "Edit(./.husky/**)",
+      "Edit(./.github/workflows/**)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git push:*)",
@@ -83,7 +102,13 @@
       "Bash(del:*)",
       "Bash(mv:*)"
     ],
-    "deny": []
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./.dev.vars*)",
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)"
+    ]
   },
   "outputStyle": "default",
   "plansDirectory": "./documentation/jobs"
