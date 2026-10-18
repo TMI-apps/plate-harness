@@ -1,4 +1,4 @@
-import type { User as SupabaseUser } from "@supabase/supabase-js";
+import type { SupabaseUser } from "@/shared/services/supabaseService";
 import type { User } from "@/features/auth/types/auth.types";
 
 /**

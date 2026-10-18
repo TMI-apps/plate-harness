@@ -1,5 +1,8 @@
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
+/** Supabase types for the rest of the app (this file is the only @supabase import site). */
+export type { AuthError, User as SupabaseUser } from "@supabase/supabase-js";
+
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 // Support both publishable key (new) and anon key (legacy) for backward compatibility
 const supabaseAnonKey =

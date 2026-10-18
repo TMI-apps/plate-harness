@@ -313,9 +313,10 @@ module.exports = {
     },
     exclude: {
       path: [
-        "dist",
-        "build",
-        "coverage",
+        // Anchored: unanchored "dist" also matched node_modules/**/dist/* and hid vendor edges.
+        "^dist/",
+        "^build/",
+        "^coverage/",
         "\\.test\\.[jt]sx?$",
         "\\.spec\\.[jt]sx?$",
         "__tests__",

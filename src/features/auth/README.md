@@ -50,7 +50,7 @@ Returns:
 
 ## Dependencies
 
-- `@/shared/services/supabaseService` – Supabase client, `isSupabaseConfigured`
+- `@/shared/services/supabaseService` – Supabase client, `isSupabaseConfigured`, and the `SupabaseUser` / `AuthError` types (only file allowed to import `@supabase/*`)
 - `@/shared/utils/appOrigin` – absolute app URLs (basename-aware)
 - `@/config/legal` – placeholder Privacy/Terms URLs (`LEGAL_ORIGIN`)
 - `@/shared/hooks/useAuthBackendConfigured` – auth backend readiness for UI
