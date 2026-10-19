@@ -29,7 +29,7 @@ A production-ready harness (boilerplate + agent harness) for building React appl
 
 ### Required
 
-- **Node.js** 20.x or higher - [Download here](https://nodejs.org/)
+- **Node.js** 22.x or higher - [Download here](https://nodejs.org/)
 - **pnpm** 9.15.4 or higher (recommended) or npm/yarn
   - Install globally: `npm install -g pnpm`
 - **Git** - Required for cloning the repository and git hooks
@@ -334,7 +334,7 @@ To connect a fork:
 
 1. Rename `name` in [`wrangler.jsonc`](./wrangler.jsonc).
 2. In the Cloudflare dashboard, connect the repo (Build `pnpm install && pnpm run build`, Deploy `npx wrangler deploy`, Root directory **empty**).
-3. Add build variables: `NODE_VERSION=20`, `CLOUDFLARE_ACCOUNT_ID`, and your `VITE_*` keys.
+3. Add build variables: `NODE_VERSION=22`, `CLOUDFLARE_ACCOUNT_ID`, and your `VITE_*` keys.
 4. Add the deployed origin to Supabase Auth URLs.
 
 The template is **fork-safe**: no account id or custom domain is committed. Full checklist, Pages migration mapping, OAuth URLs, and troubleshooting: **[documentation/DOC_CLOUDFLARE_WORKERS.md](./documentation/DOC_CLOUDFLARE_WORKERS.md)**.

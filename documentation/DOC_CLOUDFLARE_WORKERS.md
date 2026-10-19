@@ -44,7 +44,7 @@ For coding agents completing the **"Put your app online (Cloudflare hosting)"** 
    Model A: squash merge for `feature/*` PRs. Model B: **staging may deploy on push before CI `test` is green** — production still promote-gated. On `main`: promote workflow's `GITHUB_TOKEN` can ff with no PAT/bypass.
 3. `package.json` already has `deploy` and `preview:worker` scripts and `wrangler` as a devDependency — no change needed.
 
-**Dashboard hand-off (agent usually cannot do via API — Workers Builds needs a user API token, not wrangler OAuth):** give the user exact click-path → Cloudflare → **Workers & Pages → Create → Workers → Connect to Git** → Production branch `main`; Build command `pnpm install && pnpm run build`; Deploy command `npx wrangler deploy`; **Root directory EMPTY** (a stale value causes `root directory not found`); Build variables `NODE_VERSION=20`, `CLOUDFLARE_ACCOUNT_ID`, plus every `VITE_*` the app needs; enable **non-production branch builds** for `develop` (stable staging) and optional per-`feature/*` previews.
+**Dashboard hand-off (agent usually cannot do via API — Workers Builds needs a user API token, not wrangler OAuth):** give the user exact click-path → Cloudflare → **Workers & Pages → Create → Workers → Connect to Git** → Production branch `main`; Build command `pnpm install && pnpm run build`; Deploy command `npx wrangler deploy`; **Root directory EMPTY** (a stale value causes `root directory not found`); Build variables `NODE_VERSION=22` (wrangler 4 needs Node 22+), `CLOUDFLARE_ACCOUNT_ID`, plus every `VITE_*` the app needs; enable **non-production branch builds** for `develop` (stable staging) and optional per-`feature/*` previews.
 
 **Auth:** add the production URL + a wildcard preview pattern (e.g. `https://*.<your-subdomain>.workers.dev/**`) to Supabase **Authentication → URL configuration** (Site URL + Redirect URLs), so per-branch preview URLs keep working without per-branch edits. For Google, add matching JavaScript origins and callback paths per [DOC_SUPABASE_GOOGLE_OAUTH.md](./DOC_SUPABASE_GOOGLE_OAUTH.md) (include the app's `/auth/callback` route).
 
@@ -62,7 +62,7 @@ For coding agents completing the **"Put your app online (Cloudflare hosting)"** 
 | Build output | Plain `vite build` → `dist/` (`assets.directory: "./dist"`) |
 | SPA routing (React Router) | `assets.not_found_handling: "single-page-application"` |
 | Preview URLs | `preview_urls: true`, `workers_dev: true` |
-| Node version | `.node-version` = `20` |
+| Node version | `.node-version` = `22` (wrangler 4 requires Node 22+) |
 | Emergency local deploy | `pnpm deploy` (`pnpm build && wrangler deploy`) |
 | Local Workers preview | `pnpm preview:worker` (`pnpm build && wrangler dev`) |
 
@@ -91,7 +91,7 @@ In the Cloudflare dashboard → **Workers & Pages → Create → Workers → Con
 | Build command | `pnpm install && pnpm run build` |
 | Deploy command | `npx wrangler deploy` |
 | **Root directory** | **EMPTY (repo root)** — a stale root directory causes `Failed: root directory not found` |
-| Build variables | `NODE_VERSION=20`, `CLOUDFLARE_ACCOUNT_ID=<your account id>`, plus build-time `VITE_*` (e.g. `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`) |
+| Build variables | `NODE_VERSION=22`, `CLOUDFLARE_ACCOUNT_ID=<your account id>`, plus build-time `VITE_*` (e.g. `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`) |
 
 Then enable **non-production branch builds**: Model C — **all branches** (each PR's preview is its staging; worktree branch names vary, so do not filter by prefix); Model A/B — `develop` (stable staging URL), optionally per-`feature/*` previews. Check the Workers Builds plan's build minutes and concurrency: every pushed branch costs a build.
 

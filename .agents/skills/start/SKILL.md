@@ -65,7 +65,7 @@ git --version
 
 Required versions:
 
-- Node.js 20+
+- Node.js 22+
 - pnpm 9.15.4+
 - Git
 
