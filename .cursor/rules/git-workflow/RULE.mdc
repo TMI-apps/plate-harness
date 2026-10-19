@@ -30,7 +30,7 @@ Where the version and changelog come from: § Mode behavior table → **version 
 | **"land on main / promote / release" means** | run § Promote to production | same as A | merge the PR — **never** dispatch promote |
 | **`main` ruleset** | `deletion` + `non_fast_forward` only | same as A | `pull_request` (squash only) + required `test` and `pr-title` (source: GitHub Actions) + `non_fast_forward` + `deletion`; no bypass actors; no required approvals; branches need not be up to date |
 | **`develop` ruleset** | `pull_request` + required `test` + `non_fast_forward` + `deletion` | no `pull_request`; required `test` + `non_fast_forward` + `deletion` (not a pre-land gate: a bad push can exist and deploy staging before CI finishes) | none (`develop` does not exist) |
-| **fork setup** | create `develop` from `main`; rulesets; § First promotion bootstrap | same as A | rulesets; squash-only + PR title as commit message; allow auto-merge; Cloudflare production branch `main` with previews on all branches; baseline `vX.Y.Z` tag + GitHub release |
+| **fork setup** | create `develop` from `main`; rulesets; § First promotion bootstrap | same as A | rulesets; squash-only + PR title as commit message; allow auto-merge; Cloudflare production branch `main` with previews on all branches; baseline release is automatic (`release-please.yml` `bootstrap` job) |
 
 **Invariants in every mode:** agents never commit or push to `main` (a Claude Code hook enforces it); no force-push to protected branches; **under C, never relax the `main` ruleset**.
 

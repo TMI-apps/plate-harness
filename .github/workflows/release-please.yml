@@ -1,5 +1,9 @@
 # Release PRs for Model C (git-workflow/RULE.mdc § Mode behavior table → version source).
 # - `mode` reads the mode through the single reader (validate-git-workflow.cjs --print-mode).
+# - `bootstrap` (model-c only) creates the baseline GitHub release `v<package.json version>`
+#   once, when the repo has no release yet, so release-please has a starting point and no
+#   person has to tag by hand (D29). It tags the commit that set that version, so later
+#   commits still land in the next release. No-op once any release exists.
 # - `release` runs only under model-c; A/B forks see it skipped.
 # - `dispatch-ci` starts ci.yml on the release branch: PRs opened with GITHUB_TOKEN do not
 #   trigger workflows, but a GITHUB_TOKEN workflow_dispatch does, so the required `test`
@@ -31,8 +35,35 @@ jobs:
           mode="$(node scripts/validate-git-workflow.cjs --print-mode)"
           echo "mode=$mode" >> "$GITHUB_OUTPUT"
 
-  release:
+  bootstrap:
     needs: mode
+    if: needs.mode.outputs.mode == 'model-c'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Create baseline release when none exists
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          if [ -n "$(gh release list --limit 1 --json tagName --jq '.[].tagName')" ]; then
+            echo "A release exists; nothing to bootstrap."
+            exit 0
+          fi
+          version="$(node -p "require('./package.json').version")"
+          sha="$(git log -1 --format=%H -G'"version":' -- package.json)"
+          echo "Creating baseline release v$version at $sha"
+          gh release create "v$version" --target "$sha" --title "v$version" \
+            --notes "Baseline release for release-please (created by the Model C bootstrap job)."
+
+  release:
+    needs: [mode, bootstrap]
     if: needs.mode.outputs.mode == 'model-c'
     runs-on: ubuntu-latest
     permissions:

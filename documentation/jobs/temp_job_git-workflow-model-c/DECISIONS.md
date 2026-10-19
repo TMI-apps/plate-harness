@@ -1,7 +1,7 @@
 # Decisions — git-workflow-model-c
 
 Job: `temp_job_git-workflow-model-c`
-Updated: 2026-10-16
+Updated: 2026-10-19
 
 Goal: add **Model C** — a workflow mode that is exactly Claude Code's default behavior — then strip or rewire repo enforcements so Claude Code is not hampered by them.
 
@@ -37,6 +37,7 @@ Goal: add **Model C** — a workflow mode that is exactly Claude Code's default 
 | D26 | `main` write guard vs the rule's bootstrap ff-push and emergency-on-main path                             | closed | Keep the guard; it always blocks Claude (no override). The user runs the bootstrap ff-push and any emergency commit on `main` themselves; the rule sections are rewritten to say so                                                                                                                           | validate        | user pick (recommended). Rejected: env-var override after consent (bypass path an agent could use); drop the guard (A/B `main` has no server-side PR requirement, so a mistaken push would deploy production unchecked).                                                                                                                                        |
 | D27 | Action pinning                                                                                            | closed | Keep the repo's existing `@vN` tag pins for all actions; no Dependabot, no SHA pins                                                                                                                                                                                                                           | validate        | user pick (recommended under weighting rule: no Claude default → existing repo behavior). Supersedes the SHA-pin + Dependabot part of plan amendment 14. Avoids protected `projectStructure.config.cjs` edit.                                                                                                                                                   |
 | D28 | Production gate under Model C                                                                             | closed | CI-only required checks (`test` + `pr-title`), no required approvals; merge to `main` stays a user act (manual merge or the desktop app's per-PR auto-merge toggle)                                                                                                                                           | validate        | user pick. Matches Claude desktop default (auto-merge is opt-in per PR). Rejected: 1 required approval (solo repo can't approve own PRs; blocks app auto-merge).                                                                                                                                                                                                |
+| D29 | Baseline release for release-please                                                                       | closed | `bootstrap` job in `release-please.yml` (model-c only): when the repo has no GitHub release, create `v<package.json version>` at the commit that set that version, using `GITHUB_TOKEN`; no-op afterwards                                                                                                     | user            | user ask (2026-10-19): agent-first, no manual GitHub steps. Rejected: manual tag + release in the GitHub UI (human step per repo/fork; this cloud session could not push tags); manifest `bootstrap-sha` (D15 keeps simple mode). Tagging the version commit, not HEAD, keeps later commits in the next release.                                                |
 
 ## Open
 
@@ -61,3 +62,4 @@ Goal: add **Model C** — a workflow mode that is exactly Claude Code's default 
 - 2026-10-16 — D21–D25 closed via review-dev-plan (user: dispatch CI; promote recommendations weighted toward Claude defaults, else existing repo)
 - 2026-10-16 — D27, D28 closed via validate (user picks); D26 opened (user asked for plain-language consequence of dropping the guard)
 - 2026-10-16 — D26 closed via validate (user: keep guard, user runs bootstrap/emergency commands)
+- 2026-10-19 — D29 closed (user: agent-first baseline release via workflow job)
