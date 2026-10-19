@@ -25,7 +25,7 @@ Where the version and changelog come from: § Mode behavior table → **version 
 | **commit timing** | only via `finish` | only via `finish` | when the user asks — directly or via `finish` |
 | **version source** | `finish` bumps `package.json` + `CHANGELOG.md` per landing | same as A | release-please release PR built from conventional PR titles; no per-PR bump |
 | **CI watcher** | babysit the PR checks | report the commit URL and stop (no `gh run watch`) | Claude Code desktop PR monitor / Auto-fix (no `gh run watch`) |
-| **staging** | `develop` stable preview (+ per-PR previews) | `develop` preview (may deploy before `test` is green) | per-PR preview URL (frontend only; previews share the production Supabase project) |
+| **staging** | `develop` stable preview (+ per-PR previews) | `develop` preview (may deploy before `test` is green) | per-PR preview URL on a separate **staging Supabase project** (previews never touch production data; see `documentation/DOC_CLOUDFLARE_WORKERS.md` § Staging backend) |
 | **production** | Promote to production (ff `main` ← `develop`) | same as A | the user merges the PR (manually or with the app's per-PR auto-merge toggle) |
 | **"land on main / promote / release" means** | run § Promote to production | same as A | merge the PR — **never** dispatch promote |
 | **`main` ruleset** | `deletion` + `non_fast_forward` only | same as A | `pull_request` (squash only) + required `test` and `pr-title` (source: GitHub Actions) + `non_fast_forward` + `deletion`; no bypass actors; no required approvals; branches need not be up to date |

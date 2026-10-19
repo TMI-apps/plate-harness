@@ -38,13 +38,13 @@ For complete project structure guidelines, refer to `architecture/RULE.mdc`.
 
 **Branch model (general):** `.cursor/rules/git-workflow/RULE.mdc` § Mode behavior table (`src/config/git-workflow.json`). **This section** is Edge Function deploy semantics only.
 
-**Production and every preview share ONE Supabase project** (any mode: A/B `main` + `develop` staging; C `main` + per-PR previews).
+**Two Supabase projects: production (`main`) and staging (every preview).** Setup: `documentation/DOC_CLOUDFLARE_WORKERS.md` § Staging backend.
 
-- Frontend code deploys separately per branch (production vs each preview)
-- Edge Functions deploy ONCE (manually, `supabase functions deploy`) and affect production and all previews at the same time
-- No staging environment for Edge Functions in any mode — a PR preview tests frontend only and calls the already-deployed functions
-- No automated testing or rollback for functions
-- Bugs in Edge Functions impact the entire app across all branches
+- Frontend code deploys separately per branch (production vs each preview); previews are built against the staging project
+- Edge Functions deploy manually per project (`supabase functions deploy <name> --project-ref <ref>`): to **staging** while the PR is open, to **production** only after the PR merges
+- A preview therefore tests the PR's own function changes end to end, without touching production
+- No automated testing or rollback for functions — keep the previous version's source in git so a redeploy restores it
+- A bad production deploy still affects the whole production app, so deploy to staging and test on the preview first
 
 **Consequence:** Edge Functions are MORE fragile than frontend code in this architecture.
 
@@ -175,7 +175,7 @@ When considering adding an Edge Function, ask:
 
 **Edge Functions Testing Considerations:**
 
-- No staging for Edge Functions in any mode: a deploy hits production and every preview at once; PR previews test frontend only
+- Deploy to the **staging** project first and test on the PR preview; deploy to production only after the PR merges
 - Test locally first with `supabase functions serve`, then deploy via `supabase functions deploy <function-name>`
 - Consider impact before adding new functions
 - Treat production releases (table → **production**) as a separate verification gate when function-adjacent frontend behavior changed

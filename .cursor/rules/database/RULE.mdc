@@ -273,6 +273,15 @@ CREATE TRIGGER trigger_name
 
 ---
 
+## Staging first
+
+Previews run against a separate **staging** Supabase project (`documentation/DOC_CLOUDFLARE_WORKERS.md` § Staging backend).
+
+- Apply a PR's new migrations to **staging** while the PR is open; test on the preview URL.
+- Apply them to **production** only after the PR merges, from the same `supabase/migrations/` files (never edit the schema in the dashboard, so staging and production cannot drift).
+- Make migrations backwards-compatible (add before you remove): old production code keeps running between the migration and the frontend deploy, and the free plan has no point-in-time recovery.
+- Staging holds fake or seed data only; never copy production rows into it.
+
 ## Testing Migrations
 
 ### Before Committing
