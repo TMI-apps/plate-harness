@@ -29,17 +29,11 @@ Layer model: `documentation/DOC_AGENT_WORKFLOW_LAYERS.md`.
 
 **Short "what for" (SSOT):** YAML `description` on each `RULE.mdc`. Rows below are a portable copy for tools that load `AGENTS.md` only (e.g. Claude Code). When editing a description, update the YAML first, then this catalog.
 
-**Deep topic map (Cursor):** `.cursor/rules/INDEX.md` — richer topic bullets; not the short-description SSOT.
+**Topic map + consistency matrix** (open when editing a rule): `.cursor/rules/INDEX.md`.
 
 ### `@` imports (Claude/Codex)
 
-Cursor loads `alwaysApply: true` rules directly from `.mdc` frontmatter, so no rule body is imported here (avoids double-load).
-
-**Verified 2026-08-12:** Cursor does **not** expand these `@` lines — it injects `AGENTS.md` verbatim. Treat the paths below as pointers you must **open yourself** when you need them; do not assume their contents are already in context. Tools that do expand `@` imports (Claude Code) get them inlined.
-
-@.cursor/rules/INDEX.md
-
-Claude-specific behavioral reminders (thin pointers):
+No rule body is imported here: Cursor loads `alwaysApply: true` rules from frontmatter, so importing them would double-load. Cursor injects this file verbatim without expanding `@` lines (verified 2026-08-12) — open these paths yourself there; Claude Code inlines them.
 
 @.claude/rules/file-placement.md
 @.claude/rules/git-workflow.md

@@ -5,111 +5,42 @@ alwaysApply: true
 
 # Workflow Standards
 
-Thin hub for development workflow, code review, and process requirements. Domain detail lives in child rules — do not duplicate here.
+Thin hub: domain detail lives in the linked rules and docs. Never re-grow this file with domain bodies — add a sibling `.cursor/rules/<category>/RULE.mdc` and one row below.
 
-**Maintenance:** Never re-grow this file with domain bodies (git, agent behavior, platform, etc.). Extract new concerns to a sibling `.cursor/rules/<category>/RULE.mdc` and add one row to § Rule routing.
-
-## Rule routing
+## Where things live (SSOT)
 
 | Concern | SSOT |
 |---------|------|
-| Branch model, PRs, promote, commit/push flow | `git-workflow/RULE.mdc` |
-| Protected files, decision protocol, success reporting (verified vs unverified) | `agent-behavior/RULE.mdc` |
-| PowerShell, env vars, shell crash prevention | `platform/RULE.mdc` |
-| Semver, changelog, commit format | `git-workflow/RULE.mdc` § Mode behavior table → **version source** (A/B: `.agents/skills/finish/SKILL.md`; C: release-please) |
-| Reductive strategy / debugging | `debugging/RULE.mdc` |
-| API doc research | `api-integration/RULE.mdc` |
-
-## Branch gate (minimal)
-
-Read `src/config/git-workflow.json`, then apply `.cursor/rules/git-workflow/RULE.mdc` § Mode-aware branch gate. Do not infer mode from the current branch.
-
-## SSOT Map
-
-| Topic | SSOT Location |
-|-------|----------------|
-| Semantic versioning, commit format, conventional commit types | `git-workflow/RULE.mdc` § Mode behavior table → **version source** (A/B: `.agents/skills/finish/SKILL.md`) |
-| Branch strategy, PRs, production | `git-workflow/RULE.mdc` (§ Mode behavior table, § Mode-aware branch gate; mode: `src/config/git-workflow.json`) |
-| Protected files, agent behaviors | `agent-behavior/RULE.mdc` |
-| PowerShell / local environment | `platform/RULE.mdc` |
-| Architecture patterns, layer rules, code placement | `architecture/RULE.mdc` |
-| Project structure, file whitelist | `projectStructure.config.cjs` |
-| Dependency/architecture enforcement | `.dependency-cruiser.cjs` |
+| Branch model, PRs, production, commit timing | `git-workflow/RULE.mdc` § Mode behavior table (mode: `src/config/git-workflow.json`) |
+| Semver, changelog, commit format | same table → **version source** (A/B: `.agents/skills/finish/SKILL.md`; C: release-please) |
+| Protected files, decision protocol, success reporting | `agent-behavior/RULE.mdc` |
+| Shell rules, env vars | `platform/RULE.mdc` |
+| Architecture, code placement | `architecture/RULE.mdc`; whitelist `projectStructure.config.cjs`; layers `.dependency-cruiser.cjs` |
+| Reductive strategy, debugging | `debugging/RULE.mdc` |
+| API / vendor research | `api-integration/RULE.mdc` |
 | Dev task backlog / onboarding | `src/config/app-tasks.json` + `src/features/tasks/README.md` |
-| App vision & goals | `documentation/DOC_APP_VISION.md` |
+| App vision | `documentation/DOC_APP_VISION.md` |
 | Agent workflow layers | `documentation/DOC_AGENT_WORKFLOW_LAYERS.md` |
-| Supabase + Google OAuth setup | `documentation/DOC_SUPABASE_GOOGLE_OAUTH.md` |
-| Feature-local README enforcement | `documentation/DOC_FEATURE_LOCAL_README.md` |
+| Frontend hosting (Cloudflare Workers) | `documentation/DOC_CLOUDFLARE_WORKERS.md` + `wrangler.jsonc` |
+| Edge / cloud functions deploys | `cloud-functions/RULE.mdc` |
 
-## Code Review Process
+## Branch gate
 
-### Review Checklist
-- [ ] Version and changelog per `git-workflow/RULE.mdc` § Mode behavior table → **version source** (A/B: changelog updated for user-facing changes and matches the `[VERSION]`-first commit message — `finish/SKILL.md`; C: conventional PR title, release-please does the rest)
-- [ ] Code follows style guidelines (`code-style/RULE.mdc`)
-- [ ] Architecture patterns are followed (`architecture/RULE.mdc`)
-- [ ] Architecture documentation updated (if structural changes)
-- [ ] Tests are included and passing (`testing/RULE.mdc`)
-- [ ] Security considerations addressed (`security/RULE.mdc`)
-- [ ] Documentation changes are limited to required contract docs only
-- [ ] Feature-local README updated when `src/features/*` code changed
-- [ ] No console.log or debug code left behind
-- [ ] Linting passes (GTS or project-specified tool)
+Read `src/config/git-workflow.json`, then apply `git-workflow/RULE.mdc` § Mode-aware branch gate. Do not infer the mode from the current branch.
 
-### Review Focus Areas
-- Functionality, code quality, performance, security, testing
+## During development
 
-## Development Process
+- **Agents:** commit only per the table's **commit timing** row (A/B: only in `finish`, never during `plan`/`implement`; C: when the user asks, directly or via `finish`). Humans may commit freely on the branch their mode allows.
+- Write tests per `testing/RULE.mdc` § When to use TDD / What to test and how.
+- Deploy functions yourself when a change requires it, and verify the deploy succeeded.
 
-### Before Starting Work
-- Understand requirements clearly; check existing patterns; plan before coding
+## Before handing off / review checklist
 
-### During Development
-
-**Agents:** Commit timing per `git-workflow/RULE.mdc` § Mode behavior table → **commit timing** (A/B: never during `plan` or `implement` — commits happen in **`finish`** only; C: when the user asks, directly or via `finish`).
-
-**Humans:** May commit frequently on the branch allowed by the current git-workflow mode (`src/config/git-workflow.json`); still use `finish` when agents wrap up work.
-
-- Write tests per `testing/RULE.mdc` § When to use TDD / What to Test
-- Refactor as you go; follow established patterns
-
-### Before Submitting
-
-- Changelog and version sync: per **version source** row (A/B: **`finish/SKILL.md`**, not during plan/implement; C: release-please)
-- Run linters and tests; review your own code
-- Update only required docs: `ARCHITECTURE.md`, `src/features/*/README.md`, and `CHANGELOG.md` when the **version source** row says `finish`
-- Do not create new docs by default; deep docs need explicit user approval
-- If feature code changed: stage README updates and run `pnpm validate:feature-docs:staged`
-
-## Deployment Process
-
-### Cloudflare Workers (frontend SPA)
-- **SSOT:** `documentation/DOC_CLOUDFLARE_WORKERS.md` + `wrangler.jsonc`
-- Push-to-deploy via Workers Builds; which branch is staging vs production: `git-workflow/RULE.mdc` § Mode behavior table → **staging** / **production** (SSOT for setup: `documentation/DOC_CLOUDFLARE_WORKERS.md`)
-
-### Cloud Functions Deployment
-- Deploy yourself when changes require it; verify success
-- **SSOT:** `cloud-functions/RULE.mdc` — deploy commands, lint, Supabase Edge workflow
-
-## Superseded sections (moved to child rules)
-
-- **Git workflow, branch strategy, PRs, promote** → `git-workflow/RULE.mdc`
-- **Agent behaviors, protected files** → `agent-behavior/RULE.mdc`
-- **Platform, PowerShell, env vars** → `platform/RULE.mdc`
-- **Reductive strategy** → `debugging/RULE.mdc`
-- **Documentation lookup** → `api-integration/RULE.mdc`
-
-Commit/changelog examples: **`.agents/skills/finish/SKILL.md`** § Commit Message Standards.
-
----
+- [ ] Version + changelog per the **version source** row (A/B: `[VERSION]`-first commit via `finish`; C: conventional PR title)
+- [ ] `code-style`, `architecture`, `testing`, `security` rules followed; lint, type-check, tests pass
+- [ ] Only required docs touched: `ARCHITECTURE.md` (structural changes), `src/features/*/README.md` (staged with feature code), `CHANGELOG.md` when the version-source row says `finish`. New deep docs need explicit user approval.
+- [ ] No leftover debug code (but keep debugging logs until the user confirms — `debugging/RULE.mdc`)
 
 ## Related Rules
 
-**When modifying this rule, check these rules for consistency:**
-
-- `git-workflow/RULE.mdc`, `agent-behavior/RULE.mdc`, `platform/RULE.mdc` — child domain rules
-- `code-style/RULE.mdc`, `architecture/RULE.mdc`, `testing/RULE.mdc`, `security/RULE.mdc`
-- `cloud-functions/RULE.mdc` — deployment processes
-
-**Rules that reference this rule:**
-
-- All other rules may be referenced in code review processes
+When modifying this rule, check `git-workflow`, `agent-behavior`, `platform`, `code-style`, `architecture`, `testing`, `security`, `cloud-functions`, and `api-integration`.

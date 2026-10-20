@@ -19,7 +19,7 @@ Database migrations must be safe for both fresh database resets and incremental 
 | Layer | Location | SSOT |
 | ----- | -------- | ---- |
 | Schema, RLS, functions, triggers | `supabase/migrations/*.sql` | **This rule** |
-| RLS policy performance (`(select auth.uid())`, etc.) | Migrations + | `security/RULE.mdc` |
+| RLS policy performance (`(select auth.uid())`, etc.) | Migrations | **This rule** § RLS policy performance |
 | Supabase client calls | `features/*/services/`, `shared/services/supabaseService.ts` | `architecture/RULE.mdc` |
 | Cached server state (reads, invalidation) | `features/*/hooks/` + query keys | `architecture/RULE.mdc`, `documentation/DOC_TANSTACK_QUERY.md` |
 | Auth session | `features/auth/hooks/` | Supabase `onAuthStateChange` — not TanStack |
@@ -34,7 +34,7 @@ When adding a table the frontend will query:
 
 - [ ] `CREATE TABLE` with explicit types, `NOT NULL` / defaults where appropriate, and foreign keys
 - [ ] `ALTER TABLE … ENABLE ROW LEVEL SECURITY` in the same migration (or immediately after create)
-- [ ] RLS policies for each operation the app needs (`SELECT`, `INSERT`, `UPDATE`, `DELETE`) — see `security/RULE.mdc` for `(select auth.uid())` syntax
+- [ ] RLS policies for each operation the app needs (`SELECT`, `INSERT`, `UPDATE`, `DELETE`) — see § RLS policy performance for `(select auth.uid())` syntax
 - [ ] Indexes on columns used in filters, joins, and sort (e.g. `user_id`, FK columns, `created_at` for `.order()`)
 - [ ] Regenerate TypeScript types after applying locally: `supabase gen types typescript --local > src/shared/types/database.types.ts` (then type `createClient<Database>()` when wired)
 - [ ] Verify policies with a non-service-role client (anon + authenticated), not only in the SQL editor as `postgres`
@@ -216,7 +216,7 @@ WHERE archived_at IS NULL;
 
 ### Policy Management
 
-Enable RLS when creating user-facing tables. Policy **performance** patterns (subquery `auth.uid()`) are SSOT in `security/RULE.mdc`.
+Enable RLS when creating user-facing tables. Policy **performance** patterns (subquery `auth.uid()`): § RLS policy performance below.
 
 ```sql
 -- ✅ Enable RLS on new tables
@@ -225,7 +225,7 @@ ALTER TABLE example_table ENABLE ROW LEVEL SECURITY;
 -- ✅ Drop policies safely before recreate
 DROP POLICY IF EXISTS "Users can read own rows" ON example_table;
 
--- ✅ Create policies — use (select auth.uid()) per security/RULE.mdc
+-- ✅ Create policies — use (select auth.uid()) per § RLS policy performance
 CREATE POLICY "Users can read own rows" ON example_table
   FOR SELECT
   USING ((select auth.uid()) = user_id);
@@ -505,17 +505,92 @@ Before committing a migration, verify:
 
 ---
 
+## RLS policy performance
+
+**SSOT** for Supabase/Postgres RLS policy performance.
+
+### Critical Rules
+
+**1. Always Use Subquery Syntax for `auth.uid()` and `auth.jwt()`**
+
+**❌ BAD:** `auth.uid() = user_id` (re-evaluated per row)  
+**✅ GOOD:** `(select auth.uid()) = user_id` (cached, evaluated once)
+
+**Pattern:** Always wrap `auth.uid()` and `auth.jwt()` in `(select ...)` subqueries.
+
+**2. Never Create Multiple Permissive Policies for Same Role/Action**
+
+**❌ BAD:** Two separate SELECT policies  
+**✅ GOOD:** One SELECT policy with OR logic
+
+**Example:**
+```sql
+-- ✅ GOOD: Combined policy
+CREATE POLICY "Users can read data" ON table_name
+  FOR SELECT USING (
+    (select auth.uid()) = user_id OR
+    is_admin_user((select auth.uid()))
+  );
+```
+
+**3. Never Use `FOR ALL` When You Have Specific Operation Policies**
+
+**❌ BAD:** `FOR ALL` + `FOR SELECT` (overlaps, causes performance issues)  
+**✅ GOOD:** Split `FOR ALL` into separate INSERT/UPDATE/DELETE policies
+
+**Example:**
+```sql
+-- ✅ GOOD: Separate policies
+CREATE POLICY "Users can read" ON table_name FOR SELECT USING (...);
+CREATE POLICY "Admins can insert" ON table_name FOR INSERT WITH CHECK (...);
+CREATE POLICY "Admins can update" ON table_name FOR UPDATE USING (...);
+CREATE POLICY "Admins can delete" ON table_name FOR DELETE USING (...);
+```
+
+### RLS Policy Checklist
+
+Before creating/modifying RLS policies:
+- [ ] Uses `(select auth.uid())` not `auth.uid()`
+- [ ] Uses `(select auth.jwt())` not `auth.jwt()` (if applicable)
+- [ ] No multiple permissive policies for same role/action
+- [ ] No `FOR ALL` when `FOR SELECT` exists (split into separate policies)
+- [ ] Function calls use cached auth: `is_admin_user((select auth.uid()))`
+
+### Quick Verification
+
+After creating policies, check for issues:
+```sql
+-- Check for multiple policies
+SELECT tablename, cmd, COUNT(*) 
+FROM pg_policies 
+WHERE schemaname = 'public' 
+GROUP BY tablename, cmd 
+HAVING COUNT(*) > 1;
+
+-- Check for non-optimized auth.uid()
+SELECT tablename, policyname 
+FROM pg_policies 
+WHERE (qual LIKE '%auth.uid()%' AND qual NOT LIKE '%SELECT auth.uid()%')
+   OR (with_check LIKE '%auth.uid()%' AND with_check NOT LIKE '%SELECT auth.uid()%');
+```
+
+### Performance Impact
+
+- **Before:** `auth.uid()` called 1000 times for 1000 rows = slow
+- **After:** `(select auth.uid())` called once per query = fast
+- **Multiple policies:** PostgreSQL evaluates ALL policies = slow
+- **Single combined policy:** One evaluation = fast
+
 ## Related Rules
 
 **When modifying this rule, check these rules for consistency:**
 
-- `security/RULE.mdc` - RLS policy performance and verification (policies are created in migrations)
+- `security/RULE.mdc` - Database verification (MCP-first) and authorization principles
 - `workflow/RULE.mdc` - Development processes and testing workflows
 - `architecture/RULE.mdc` - Service/hook layers, TanStack Query patterns (not SQL)
 - `documentation/DOC_TANSTACK_QUERY.md` - Query keys, invalidation, client cache (not SQL)
 - `api-integration/RULE.mdc` - Researching a new/unfamiliar backend or API before writing migrations against it
 
 **Rules that reference this rule:**
-- `security/RULE.mdc` - References RLS policy patterns (which are often created in migrations)
 - `workflow/RULE.mdc` - May reference migration testing as part of development workflow
 

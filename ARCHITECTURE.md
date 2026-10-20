@@ -75,7 +75,7 @@ Use **`@/`** path aliases only — never relative parent imports (`../`). Full m
 // ✅ Good
 import { Button } from "@/components/common/Button";
 import { useAuth } from "@/features/auth/hooks/useAuth";
-import { supabase } from "@/services/supabaseService";
+import { getSupabase } from "@/shared/services/supabaseService";
 
 // ❌ Bad
 import { Button } from "../../../components/common/Button";
@@ -340,26 +340,7 @@ These rules are defined in `eslint.config.js` using GTS's flat config format.
 
 ## TypeScript Path Aliases
 
-**Canonical (use for new code):** `.cursor/rules/architecture/RULE.mdc` — the **`@/`** prefix maps under `src/` and is the enforced style (no `../` chains).
-
-| Pattern | Resolves to |
-|---------|-------------|
-| `@/components/*` | `src/components/*` |
-| `@/pages/*` | `src/pages/*` |
-| `@/hooks/*` | `src/shared/hooks/*` |
-| `@/services/*` | `src/shared/services/*` |
-| `@/utils/*` | `src/shared/utils/*` |
-| `@/types/*` | `src/shared/types/*` |
-| `@/config/*` | `src/config/*` |
-| `@/context/*` | `src/shared/context/*` |
-| `@/theme/*` | `src/shared/theme/*` |
-| `@/routes/*` | `src/routes/*` |
-| `@/lib/*` | `src/lib/*` |
-| `@/ai-capabilities/*` | `src/ai-capabilities/*` |
-
-**Feature modules:** import with `@/features/<feature>/...` (e.g. `@/features/auth/hooks/useAuth`).
-
-**Canonical alias:** `@/*` → `src/*` only (`tsconfig.app.json`, `vite.config.ts`, `vitest.config.ts`, root `tsconfig.json`). Import shared utilities as `@/shared/utils/...`, features as `@/features/<feature>/...`.
+`@/*` → `src/*` is the only alias (`tsconfig.app.json`, mirrored in `vite.config.ts` / `vitest.config.ts`). Mirror the filesystem: `@/components/common/Button`, `@/shared/utils/queryKeys`, `@/features/auth/hooks/useAuth`. Never use `../` parent imports.
 
 ## API Integration
 

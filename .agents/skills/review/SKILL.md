@@ -158,7 +158,7 @@ At the end, sum the points and compute a percentage.
 - Shared logic is extracted (to hooks/helpers) when it appears in multiple places
 
 **F4. Complexity metrics (0–5)**
-- Meets the thresholds in `.cursor/rules/code-style/RULE.mdc` § Complexity Standards (enforced by `eslint.config.js`)
+- Meets the thresholds in `.cursor/rules/code-style/RULE.mdc` § Complexity (enforced by `eslint.config.js`)
 
 ---
 
