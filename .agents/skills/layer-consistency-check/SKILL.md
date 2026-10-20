@@ -61,7 +61,7 @@ Per [`documentation/DOC_AGENT_WORKFLOW_LAYERS.md`](../../../documentation/DOC_AG
 4. **Naming first (shape #5).** Read `.agents/skills/name-the-mechanism/SKILL.md` and apply it before writing the name. The one-off skip does not apply. If the name or copy count still violates that skill, stop with WARNING.
 5. **Other shapes.** Skip a genuinely one-off exception with no recurring cost.
 6. If a non-naming shape still clears that filter → post **WARNING, WORKAROUND** from [`references/alert-template.md`](references/alert-template.md) → **stop** until the user chooses.
-7. If the user picks the **structural alternative**: IF scope is XS/S THEN `quick-piv`; IF multi-phase/migration/contracts THEN `plan` (cite router § implement vs quick-piv). If they pick the workaround → implement as asked.
+7. If the user picks the **structural alternative**: IF scope is XS/S THEN `quick-piv`; IF multi-phase/migration/contracts THEN `plan` (cite `router/references/tiebreaks.md` § `implement` vs `quick-piv`). If they pick the workaround → implement as asked.
 8. **When invoked from `improve`:** treat the IMPROVE finding text + target name as the proactive cue; run the one-beat check before any code.
 
 ---
@@ -116,5 +116,5 @@ Next: owner pick workaround vs structural alternative → then implement / plan 
 - [`pattern-review`](../pattern-review/SKILL.md) — industry precedent (complementary lens)
 - [`standards-align`](../standards-align/SKILL.md) — should/how industry align on existing scope
 - [`consolidate`](../consolidate/SKILL.md) — semantic placement repair (post-hoc)
-- [`router`](../router/SKILL.md) § `pattern-review` vs `layer-consistency-check`
+- [`router` tiebreaks](../router/references/tiebreaks.md) § `pattern-review` vs `layer-consistency-check`
 - [`learn`](../learn/SKILL.md) — persist lessons from resolved workaround debates

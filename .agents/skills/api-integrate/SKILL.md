@@ -17,7 +17,7 @@ Two phases, same discipline as this repo's retired `airtable-inspect` skill, gen
 
 **Next:** Hand off to [`.agents/skills/plan/SKILL.md`](../plan/SKILL.md) § Investigate / Foundation validation for file-level integration work.
 
-**Use this skill when** researching an **unfamiliar or new** vendor/API. **Use a stack plugin skill instead** (`supabase`, `cloudflare`, `wrangler`, etc.) when **operating inside a stack you're already on** — see [`.agents/skills/router/SKILL.md`](../router/SKILL.md) § External API research vs stack plugin skills. If a fork has its own vendor-specific skill that's more specific than this generic path, prefer that.
+**Use this skill when** researching an **unfamiliar or new** vendor/API. **Use a stack plugin skill instead** (`supabase`, `cloudflare`, `wrangler`, etc.) when **operating inside a stack you're already on** — see [`.agents/skills/router/references/tiebreaks.md`](../router/references/tiebreaks.md) § External API research. If a fork has its own vendor-specific skill that's more specific than this generic path, prefer that.
 
 ## Security (both phases)
 
@@ -96,6 +96,6 @@ Add a new vendor by adding a new `references/vendor-<slug>.md` file — do not g
 ## Related
 
 - [`.agents/skills/plan/SKILL.md`](../plan/SKILL.md) § Optional: Foundation validation — POC gate after this skill's research is done
-- [`.agents/skills/router/SKILL.md`](../router/SKILL.md) § External API research vs stack plugin skills
+- [`.agents/skills/router/references/tiebreaks.md`](../router/references/tiebreaks.md) § External API research
 - [`.cursor/rules/api-integration/RULE.mdc`](../../../.cursor/rules/api-integration/RULE.mdc) — globs-scoped principles this skill implements (`alwaysApply: false`)
 - `README.md` — env vars for currently configured vendors (Supabase, Airtable)

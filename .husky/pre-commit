@@ -2,11 +2,6 @@
 # SSOT: scripts/change-classify.cjs, scripts/test-staged.cjs
 # Policy: documentation/DOC_AGENT_WORKFLOW_LAYERS.md § Local git
 
-# Copy changelog to public/documentation for build
-# Note: Manual copy recommended - copy CHANGELOG.md to public/documentation/CHANGELOG.md
-# echo "Copying changelog..."
-# pnpm run copy-changelog
-
 # Linting (includes complexity checks via ESLint)
 # Complexity SSOT: eslint.config.js
 pnpm lint-staged || exit 1

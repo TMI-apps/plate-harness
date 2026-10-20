@@ -399,7 +399,7 @@ Fresh clones ship onboarding tasks (Supabase, Hosting, App vision, Airtable opti
 If you're unsure where to put code:
 1. Is it reusable UI? → `src/components/common/`
 2. Is it feature-specific? → `src/features/[feature]/`
-3. Is it shared across features? → `src/shared/` (or `src/utils/` only when appropriate)
+3. Is it shared across features? → `src/shared/`
 4. Is it a route screen? → `src/pages/`
 5. Is it a layout? → `src/layouts/`
 
