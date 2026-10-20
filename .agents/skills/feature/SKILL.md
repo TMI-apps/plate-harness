@@ -326,7 +326,7 @@ Verify the PLAN complies before implementation:
 - [ ] Planned file placements comply with `projectStructure.config.cjs`
 - [ ] Planned layer boundaries respect `architecture/RULE.mdc`
 - [ ] No planned circular dependencies
-- [ ] Planned complexity within thresholds (SSOT: `.eslintrc.json` lines 65-70)
+- [ ] Planned complexity within thresholds (SSOT: `eslint.config.js` complexity rules)
 - [ ] No unresolved ambiguity remains
 - [ ] Any standards or best-practice divergence is documented with explicit user confirmation
 

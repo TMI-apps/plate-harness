@@ -238,16 +238,15 @@ When writing code, ask these questions in order:
 
 ## Automated Architecture Enforcement
 
-Project uses automated architecture enforcement via ESLint + Dependency-Cruiser. Rules enforced at code level, preventing violations before commit.
+Project uses automated architecture enforcement via Dependency-Cruiser (layers, cycles) and ESLint (`eslint.config.js`: per-folder `no-restricted-imports`, complexity, styling). Rules enforced at code level, preventing violations before commit.
 
 ### Enforcement Tools
 
 | Tool | Purpose | When It Runs |
 |------|---------|--------------|
 | `project-structure-validator.js` | Folder structure whitelist enforcement | CLI (pre-commit + CI/CD) |
-| `eslint-plugin-boundaries` | Layer boundary enforcement | Real-time (IDE + pre-commit) |
-| `eslint-plugin-import` | Circular dependency prevention, import ordering | Real-time (IDE + pre-commit) |
-| `dependency-cruiser` | Deep analysis, stakeholder reports, CI validation | CI/CD + on-demand |
+| `dependency-cruiser` (`pnpm arch:check`) | Layer boundaries, circular dependencies, stack ports; known violations ratcheted via `.dependency-cruiser-baseline.json` | pre-commit (staged) + CI |
+| ESLint (`eslint.config.js`) | Feature component/hook import restrictions, complexity, hardcoded-styling warnings | IDE + pre-commit + CI |
 | `validate-feature-size.js` (+ `feature-size-lib.js`) | Feature size / granularity budgets (per-layer + per-feature file counts) | CLI; CI (`validate:feature-size`); pre-commit (`validate:feature-size:staged`) |
 | `validate-feature-docs.js` (+ `feature-readme-lib.js`) | Feature-local `README.md` presence (and optional strict headings) | CLI; CI (`validate:feature-docs:strict`); pre-commit (`validate:feature-docs:staged`) |
 
@@ -333,7 +332,7 @@ Use `pnpm validate:structure` to validate:
 
 Use path aliases, not relative imports.
 
-### When ESLint Shows "boundaries/element-types" Error
+### When `pnpm arch:check` Reports a Layer Violation
 
 This means importing from a forbidden layer. Solutions:
 1. Move the code to the appropriate layer
@@ -342,7 +341,7 @@ This means importing from a forbidden layer. Solutions:
 
 ### Exception Handling
 
-For legitimate cross-layer imports (rare cases), use ESLint disable comments with required justification:
+For legitimate cross-layer imports (rare cases), regenerate the dependency-cruiser baseline (`pnpm arch:baseline`, protected file — ask first) with a justification in the PR:
 - Exceptions require code review approval
 - Must include justification comment
 - Must reference ticket/issue
@@ -357,7 +356,6 @@ For legitimate cross-layer imports (rare cases), use ESLint disable comments wit
 ### Architecture Checking Commands
 
 **Full Validation (Comprehensive):**
-- `pnpm validate:all` - Full structure + architecture check
 - `pnpm validate:structure` - Full structure validation
 - `pnpm validate:feature-size` - Feature size / granularity validation
 - `pnpm arch:check` - Full architecture check (includes cross-feature import rules)
@@ -365,10 +363,8 @@ For legitimate cross-layer imports (rare cases), use ESLint disable comments wit
 - `pnpm arch:graph` - Generate SVG dependency graph
 - `pnpm arch:graph:html` - Generate HTML report for stakeholders
 - `pnpm arch:validate` - Full validation (lint + architecture)
-- `pnpm lint:arch` - ESLint architecture rules only
 
 **Staged Files Only (Fast, for commits):**
-- `pnpm validate:all:staged` - Staged structure + architecture check
 - `pnpm validate:structure:staged` - Staged structure validation only
 - `pnpm validate:feature-size:staged` - Feature size validation for touched features (counts whole feature)
 - `pnpm arch:check:staged` - Architecture check (runs full, but reports staged)
@@ -592,7 +588,7 @@ When reducing code complexity through refactoring, all changes must comply with 
 4. Extract code using appropriate refactoring technique
 5. Use path aliases for all imports
 6. Verify layer boundaries after extraction
-7. Run `pnpm lint:arch` to verify architecture compliance
+7. Run `pnpm arch:check` to verify architecture compliance
 
 **For detailed guidance:** See `.agents/skills/optimize2/SKILL.md` (unified checklist and architecture compliance during refactors)
 

@@ -14,7 +14,7 @@ Systematically analyze code for optimization opportunities across four levels: D
 
 **Key Insight:** Fixing at the wrong level wastes effort. A complex function might need a design change (Level 1), not refactoring (Level 4). Always assess all levels before acting.
 
-**SSOT:** `.eslintrc.json` (lines 65-70) is the single source of truth for complexity thresholds.
+**SSOT:** `eslint.config.js` complexity rules (table: `code-style/RULE.mdc` § Complexity Standards).
 
 ## Workflow Overview
 
@@ -82,16 +82,7 @@ When NOT to refactor (accept complexity instead):
 
 ### Complexity Metrics
 
-**SSOT:** `.eslintrc.json` (lines 65-70)
-
-| Metric | Threshold | ESLint Rule |
-|--------|-----------|-------------|
-| Cyclomatic Complexity | ≤ 10 | `complexity` |
-| Cognitive Complexity | ≤ 15 | `sonarjs/cognitive-complexity` |
-| Nesting Depth | ≤ 4 | `max-depth` |
-| Function Length | ≤ 100 lines | `max-lines-per-function` |
-| Parameters | ≤ 5 | `max-params` |
-| Statements | ≤ 20 | `max-statements` |
+Thresholds: `.cursor/rules/code-style/RULE.mdc` § Complexity Standards (SSOT `eslint.config.js`).
 
 ---
 
@@ -486,7 +477,7 @@ Please choose options for each level (e.g., "1D 2D 3A 4B"):
 4. Run type check: Ensure TypeScript compiles
 5. Run architecture checks (if extracting code):
    - Folder structure: `pnpm validate:structure`
-   - Import boundaries: `pnpm lint:arch`
+   - Import boundaries: `pnpm arch:check`
 6. Re-analyze complexity: Verify metrics improved (if refactoring)
 7. Manual verification: Quick smoke test of affected features
 
@@ -577,7 +568,7 @@ When extracting code, place in correct layer:
 - [ ] No upward imports
 - [ ] Folder structure whitelist respected
 - [ ] Folder structure validated (`pnpm validate:structure`)
-- [ ] ESLint architecture rules pass (`pnpm lint:arch`)
+- [ ] Architecture rules pass (`pnpm arch:check`)
 
 ---
 
