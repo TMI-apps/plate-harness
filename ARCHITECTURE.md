@@ -12,9 +12,7 @@ src/
 ├── components/          # App-level components
 │   └── common/          # Reusable UI components (pure components)
 │       ├── Button/
-│       ├── Card/
 │       ├── Input/
-│       ├── Modal/
 │       ├── ProfileMenu/   # Cross-layout shell; uses auth profile hooks
 │       └── Topbar/
 ├── config/              # Configuration files (app-tasks JSON, legal URLs)
@@ -31,13 +29,11 @@ src/
 ├── shared/              # Shared across features
 │   ├── context/         # React contexts (AuthContext, QueryProvider)
 │   ├── hooks/           # Cross-feature hooks
-│   ├── services/        # Shared services (Supabase client, Airtable client)
-│   ├── types/           # Shared types
+│   ├── services/        # Shared services (Supabase client)
 │   ├── utils/           # Shared utility functions (redirectUtils, queryKeys, etc.)
 │   └── theme/           # MUI theme configuration
-│       ├── defaultTheme.ts    # Default theme (preserved)
-│       ├── themeLoader.ts      # Theme loading and persistence
-│       └── theme.ts            # Theme export (uses loader)
+│       ├── defaultTheme.ts    # Theme tokens + component overrides
+│       └── theme.ts            # Theme export
 ```
 
 ## Server State Management (TanStack Query)

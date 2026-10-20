@@ -7,7 +7,7 @@ import type { AuthContextValue } from "@/features/auth/types/auth.types";
 
 /**
  * Creates a QueryClient for tests with retry disabled.
- * Use this instead of the app's createQueryClient to avoid flaky tests from retries.
+ * Use this instead of the app's queryClient to avoid flaky tests from retries.
  */
 export const createTestQueryClient = (): QueryClient =>
   new QueryClient({

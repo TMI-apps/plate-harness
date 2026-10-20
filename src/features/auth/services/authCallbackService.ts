@@ -7,8 +7,6 @@ import { mapAuthError } from "./authErrorMessages";
 
 import { OAUTH_CALLBACK_ERROR_MESSAGE } from "@/features/auth/types/authMessages";
 
-export { OAUTH_CALLBACK_ERROR_MESSAGE };
-
 export const checkSupabaseConfigured = (navigate: NavigateFunction): boolean => {
   if (!isSupabaseConfigured()) {
     void navigate("/", { replace: true });

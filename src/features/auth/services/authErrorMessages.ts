@@ -1,12 +1,6 @@
 import type { AuthError } from "@supabase/supabase-js";
 import { getErrorMessage } from "@/shared/utils/errorUtils";
-import {
-  DUPLICATE_SIGNUP_MESSAGE,
-  PASSWORD_RESET_SENT_MESSAGE,
-  GENERIC_AUTH_ERROR_MESSAGE,
-} from "@/features/auth/types/authMessages";
-
-export { DUPLICATE_SIGNUP_MESSAGE, PASSWORD_RESET_SENT_MESSAGE };
+import { GENERIC_AUTH_ERROR_MESSAGE } from "@/features/auth/types/authMessages";
 
 const INVALID_CREDENTIALS_MESSAGES = [
   "invalid login credentials",
