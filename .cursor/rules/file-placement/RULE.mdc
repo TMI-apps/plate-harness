@@ -203,7 +203,7 @@ Examples:
 
 ### Subdirectories in Documentation
 
-Subdirectories in `documentation/` (e.g., `documentation/Authentication-main-app/`) are allowed for:
+Subdirectories in `documentation/` (e.g., `documentation/handoffs/`) are allowed for:
 - Reference material and code examples
 - Grouped documentation by topic
 - Legacy documentation folders

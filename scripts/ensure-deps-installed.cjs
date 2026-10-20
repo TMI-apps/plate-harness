@@ -2,7 +2,7 @@
 /**
  * Claude Code SessionStart hook: make sure the session's working tree has dependencies and
  * husky hooks, so the pre-commit split (DOC_AGENT_WORKFLOW_LAYERS § Local git) runs in every
- * worktree session too (temp_job_git-workflow-model-c D9/D10).
+ * worktree session too.
  *
  * Why stdin `cwd`: in desktop worktree sessions the hook process starts in the main checkout;
  * only the hook input's `cwd` points at the session's worktree.

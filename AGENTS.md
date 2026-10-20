@@ -33,7 +33,7 @@ Layer model: `documentation/DOC_AGENT_WORKFLOW_LAYERS.md`.
 
 ### `@` imports (Claude/Codex)
 
-Cursor loads `alwaysApply: true` rules directly from `.mdc` frontmatter, so no rule body is imported here (avoids double-load; `temp_job_harness-skills` D14).
+Cursor loads `alwaysApply: true` rules directly from `.mdc` frontmatter, so no rule body is imported here (avoids double-load).
 
 **Verified 2026-08-12:** Cursor does **not** expand these `@` lines — it injects `AGENTS.md` verbatim. Treat the paths below as pointers you must **open yourself** when you need them; do not assume their contents are already in context. Tools that do expand `@` imports (Claude Code) get them inlined.
 
