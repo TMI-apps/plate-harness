@@ -34,8 +34,8 @@ Match case-insensitively in frontmatter `description`, `## Triggers`, routing ta
 
 1. **Observable trigger:** `IF [user phrase \| artifact present \| lifecycle gate] THEN [action/skill]`.
 2. **Universal rule:** drop the conditional; use a direct imperative.
-3. **Routing clause:** move tiebreak to `router/SKILL.md`; skill body links to router, does not re-decide.
-4. **Rewrite delegation:** single-file tighten → `rule-quality` Mode B; new skill description → `create-skill` § descriptions.
+3. **Routing clause:** move tiebreak to `router/references/tiebreaks.md`; skill body links to it, does not re-decide.
+4. **Rewrite delegation:** single-file tighten → `rule-quality` Mode B; new skill description → `create-skill` § 5. Tune the description.
 
 ### Before / after
 

@@ -3,7 +3,8 @@ import { queryClient } from "@/shared/utils/queryClient";
 import { getAppOrigin, getAppUrl } from "@/shared/utils/appOrigin";
 import type { User, LoginCredentials, SignUpCredentials } from "@/features/auth/types/auth.types";
 import { mapProviderUserToAppUser } from "@/shared/utils/userUtils";
-import { DUPLICATE_SIGNUP_MESSAGE, mapAuthError } from "./authErrorMessages";
+import { DUPLICATE_SIGNUP_MESSAGE } from "@/features/auth/types/authMessages";
+import { mapAuthError } from "./authErrorMessages";
 
 const getConfigurationError = (): Error =>
   new Error("Authentication requires Supabase to be configured.");
@@ -80,34 +81,6 @@ export const logout = async (): Promise<{ error: Error | null }> => {
     return { error: null };
   } catch (error) {
     return {
-      error: new Error(mapAuthError(error)),
-    };
-  }
-};
-
-export const getCurrentUser = async (): Promise<{
-  user: User | null;
-  error: Error | null;
-}> => {
-  if (!isSupabaseConfigured()) {
-    return { user: null, error: null };
-  }
-
-  try {
-    const {
-      data: { user: authUser },
-      error,
-    } = await getSupabase().auth.getUser();
-
-    if (error) {
-      return { user: null, error: new Error(mapAuthError(error)) };
-    }
-
-    const user = mapProviderUserToAppUser(authUser);
-    return { user, error: null };
-  } catch (error) {
-    return {
-      user: null,
       error: new Error(mapAuthError(error)),
     };
   }

@@ -1,7 +1,7 @@
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export const MIN_PASSWORD_LENGTH = 6;
-export const MAX_PASSWORD_LENGTH = 128;
+const MIN_PASSWORD_LENGTH = 6;
+const MAX_PASSWORD_LENGTH = 128;
 
 export const validateEmail = (email: string): string | null => {
   const trimmed = email.trim();

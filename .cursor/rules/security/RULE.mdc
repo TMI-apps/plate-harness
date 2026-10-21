@@ -5,243 +5,29 @@ alwaysApply: true
 
 # Security Standards
 
-## Purpose
+Standard secure-coding practice applies (parameterized queries, output escaping, least privilege, input validation at boundaries, no secrets or PII in logs). This rule covers what is specific to this repo.
 
-This rule defines security best practices, vulnerability prevention, and secure coding standards.
+## Database verification
 
-## Database Verification
+Never assume tables, columns, types, or constraints from memory — verify before writing a query or migration.
 
-### Critical Requirement
-- **NEVER** assume database structures, tables, or field names without verification
-- **When an MCP (Model Context Protocol) server for the configured database is available**, check the schema using MCP tools before making assumptions (see `api-integration/RULE.mdc` for the general MCP-first principle)
-- **When no matching MCP server is configured, or a matched server is unusable** (`needsAuth`, `error`, `loading`, or a tool call fails after one retry — see `api-integration/RULE.mdc` and `.agents/skills/api-integrate/SKILL.md`), use the migration file last applied to the **target environment** (`supabase/migrations/` in this fork) or a schema export instead of relying on memory — never skip verification entirely, only the MCP-specific mechanism changes
-- Verify table names, column names, and data types before writing queries
-- Don't rely on memory or assumptions about database structure
+1. **MCP first:** if an MCP server for the database is available and a tool call succeeds, list the tables and schema with it (general principle: `api-integration/RULE.mdc`).
+2. **Fallback:** if no server matches, or it is unusable (`needsAuth`, `error`, `loading`, or a call fails after one retry — `.agents/skills/api-integrate/SKILL.md`), read the migration last applied to the **target environment** (`supabase/migrations/`) or a schema export. Don't assume the newest migration file matches production when they may differ. Never skip verification.
+3. Check column names, types, constraints, and relationships against what the code expects.
 
-### Verification Process
-1. Check for a matching MCP server. If available and a tool call succeeds, use it to list tables and schemas. If no server matches, or a matched server is unusable (see Critical Requirement above), read the migration file last applied to the target environment or a schema export instead — prefer schema export or live MCP over assuming the newest file in `supabase/migrations/` reflects production when they may differ.
-2. Verify column names and types before querying
-3. Check constraints and relationships
-4. Validate data structure matches expectations
+RLS policy syntax and performance (Supabase/Postgres): `database/RULE.mdc` § RLS policy performance.
 
-## Authentication & Authorization
+## Authorization
 
-### Authentication
-- Never store passwords in plain text
-- Use secure password hashing (bcrypt, Argon2)
-- Implement proper session management
-- Use secure, HTTP-only cookies for sessions
+- Enforce authorization on the server (RLS, Edge Functions). Client-side checks are UX only — never trust them.
+- New user-facing tables get RLS enabled with a policy per operation the app needs (`database/RULE.mdc`).
 
-### Authorization
-- Always verify user permissions before operations
-- Use principle of least privilege
-- Validate authorization at the API boundary
-- Never trust client-side authorization checks
+## Secrets
 
-### Row Level Security (RLS) Performance
-
-**(Postgres/Supabase-specific — this fork's backend.)** A fork on a different backend should treat this section as conditional, not universal.
-
-**SSOT:** This section defines RLS policy performance best practices for Supabase.
-
-#### Critical Rules
-
-**1. Always Use Subquery Syntax for `auth.uid()` and `auth.jwt()`**
-
-**❌ BAD:** `auth.uid() = user_id` (re-evaluated per row)  
-**✅ GOOD:** `(select auth.uid()) = user_id` (cached, evaluated once)
-
-**Pattern:** Always wrap `auth.uid()` and `auth.jwt()` in `(select ...)` subqueries.
-
-**2. Never Create Multiple Permissive Policies for Same Role/Action**
-
-**❌ BAD:** Two separate SELECT policies  
-**✅ GOOD:** One SELECT policy with OR logic
-
-**Example:**
-```sql
--- ✅ GOOD: Combined policy
-CREATE POLICY "Users can read data" ON table_name
-  FOR SELECT USING (
-    (select auth.uid()) = user_id OR
-    is_admin_user((select auth.uid()))
-  );
-```
-
-**3. Never Use `FOR ALL` When You Have Specific Operation Policies**
-
-**❌ BAD:** `FOR ALL` + `FOR SELECT` (overlaps, causes performance issues)  
-**✅ GOOD:** Split `FOR ALL` into separate INSERT/UPDATE/DELETE policies
-
-**Example:**
-```sql
--- ✅ GOOD: Separate policies
-CREATE POLICY "Users can read" ON table_name FOR SELECT USING (...);
-CREATE POLICY "Admins can insert" ON table_name FOR INSERT WITH CHECK (...);
-CREATE POLICY "Admins can update" ON table_name FOR UPDATE USING (...);
-CREATE POLICY "Admins can delete" ON table_name FOR DELETE USING (...);
-```
-
-#### RLS Policy Checklist
-
-Before creating/modifying RLS policies:
-- [ ] Uses `(select auth.uid())` not `auth.uid()`
-- [ ] Uses `(select auth.jwt())` not `auth.jwt()` (if applicable)
-- [ ] No multiple permissive policies for same role/action
-- [ ] No `FOR ALL` when `FOR SELECT` exists (split into separate policies)
-- [ ] Function calls use cached auth: `is_admin_user((select auth.uid()))`
-
-#### Quick Verification
-
-After creating policies, check for issues:
-```sql
--- Check for multiple policies
-SELECT tablename, cmd, COUNT(*) 
-FROM pg_policies 
-WHERE schemaname = 'public' 
-GROUP BY tablename, cmd 
-HAVING COUNT(*) > 1;
-
--- Check for non-optimized auth.uid()
-SELECT tablename, policyname 
-FROM pg_policies 
-WHERE (qual LIKE '%auth.uid()%' AND qual NOT LIKE '%SELECT auth.uid()%')
-   OR (with_check LIKE '%auth.uid()%' AND with_check NOT LIKE '%SELECT auth.uid()%');
-```
-
-#### Performance Impact
-
-- **Before:** `auth.uid()` called 1000 times for 1000 rows = slow
-- **After:** `(select auth.uid())` called once per query = fast
-- **Multiple policies:** PostgreSQL evaluates ALL policies = slow
-- **Single combined policy:** One evaluation = fast
-
-## Input Validation
-
-### Sanitization
-- Validate and sanitize all user inputs
-- Use allowlists over denylists when possible
-- Validate data types and ranges
-- Reject invalid input early
-
-### SQL Injection Prevention
-- Use parameterized queries/prepared statements
-- Never concatenate user input into SQL queries
-- Use ORM query builders when available
-
-### XSS Prevention
-- Escape output appropriately for context (HTML, JavaScript, CSS)
-- Use Content Security Policy (CSP) headers
-- Sanitize user-generated content
-- Use framework's built-in escaping mechanisms
-
-## Data Protection
-
-### Sensitive Data
-- Never log sensitive information (passwords, tokens, PII)
-- Encrypt sensitive data at rest
-- Use HTTPS for all data in transit
-- Implement proper key management
-
-### Secrets Management
-- Never commit secrets to version control
-- Use environment variables or secret management services
-- Rotate secrets regularly
-- Use different secrets for different environments
-- **Note**: There may be env files in the repo that you might not be able to see - respect their restrictions
-
-## Examples
-
-### ✅ Good Example
-
-```typescript
-// Input validation and parameterized queries
-export async function getUserById(userId: string): Promise<User> {
-  // Validate input
-  if (!userId || typeof userId !== "string") {
-    throw new Error("Invalid user ID");
-  }
-  
-  // Use parameterized query
-  const user = await db.query(
-    'SELECT id, email, name FROM users WHERE id = $1',
-    [userId]
-  );
-  
-  if (!user) {
-    throw new Error("User not found");
-  }
-  
-  return user;
-}
-
-// Proper authorization check
-export async function deleteUser(
-  requestingUserId: string,
-  targetUserId: string,
-): Promise<void> {
-  // Verify authorization
-  const requester = await getUserById(requestingUserId);
-  if (!requester.isAdmin && requester.id !== targetUserId) {
-    throw new Error("Unauthorized");
-  }
-  
-  await db.query('DELETE FROM users WHERE id = $1', [targetUserId]);
-}
-```
-
-### ❌ Bad Example
-
-```typescript
-// Bad: SQL injection, no validation, no authorization
-export async function getUserById(userId: string) {
-  // Dangerous: SQL injection vulnerability
-  const user = await db.query(
-    `SELECT * FROM users WHERE id = '${userId}'`
-  );
-  return user;
-}
-
-export async function deleteUser(userId: string) {
-  // No authorization check
-  await db.query(`DELETE FROM users WHERE id = '${userId}'`);
-}
-```
-
-## Security Headers
-
-### HTTP Headers
-- Implement Content Security Policy (CSP)
-- Use HTTPS-only cookies
-- Set appropriate CORS headers
-- Include security headers (X-Content-Type-Options, X-Frame-Options)
-
-## Dependency Management
-
-### Updates
-- Keep dependencies up to date
-- Monitor for security vulnerabilities
-- Use dependency scanning tools
-- Review dependency changes before updating
-
----
+- `VITE_*` variables are compiled into the browser bundle: only publishable values (Supabase URL and publishable/anon key). Server secrets live in Supabase Edge Function secrets or Cloudflare settings — catalog: `platform/RULE.mdc`.
+- Never commit secrets; `.env` is gitignored, `.env.example` holds placeholders only.
+- There may be env files you can't see — respect their restrictions.
 
 ## Related Rules
 
-**When modifying this rule, check these rules for consistency:**
-
-- `architecture/RULE.mdc` - Security boundaries and architectural patterns
-- `code-style/RULE.mdc` - Code style for security-related code
-- `workflow/RULE.mdc` - Security review processes
-- `cloud-functions/RULE.mdc` - Security considerations for function organization
-- `api-integration/RULE.mdc` - General MCP-first principle this rule's Database Verification section implements
-
-**SSOT Status:**
-- This rule is the **SSOT** for security best practices, including RLS policy performance optimization
-
-**Rules that reference this rule:**
-- `architecture/RULE.mdc` - May reference security patterns
-- `testing/RULE.mdc` - May reference security testing requirements
-- `cloud-functions/RULE.mdc` - References security considerations
-- `project-specific/RULE.mdc` - References RLS patterns for rate limiting tables
-
+When modifying this rule, check `architecture`, `code-style`, `workflow`, `cloud-functions`, `database`, `project-specific`, and `api-integration` (MCP-first principle).

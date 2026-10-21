@@ -54,14 +54,12 @@
   "stack": [
     {
       "id": "MUI",
-      "fileCount": 38,
+      "fileCount": 36,
       "busywork": "high",
       "files": [
         "src/App.tsx",
         "src/components/common/Button/Button.tsx",
-        "src/components/common/Card/Card.tsx",
         "src/components/common/Input/Input.tsx",
-        "src/components/common/Modal/Modal.tsx",
         "src/components/common/PageLoadingState/PageLoadingState.tsx",
         "src/components/common/QueryErrorBoundary/QueryErrorBoundary.tsx",
         "src/features/auth/components/EmailAuthForm.tsx",
@@ -94,7 +92,7 @@
         "src/pages/tasks/TasksPage.tsx",
         "src/shared/theme/appViewLayout.ts",
         "src/shared/theme/defaultTheme.ts",
-        "src/shared/theme/themeLoader.ts"
+        "src/shared/theme/theme.ts"
       ]
     },
     {

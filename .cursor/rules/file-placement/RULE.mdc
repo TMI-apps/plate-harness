@@ -5,276 +5,49 @@ alwaysApply: true
 
 # File Placement Validation Rule
 
-## Purpose
-
-Ensures files/folders are created in correct locations per `projectStructure.config.cjs` and architecture rules.
-
-**BEFORE creating any file/folder**, you MUST:
-
-1. Check `projectStructure.config.cjs` for allowed locations
-2. Validate against `.cursor/rules/architecture/RULE.mdc`
-3. Confirm placement matches whitelist patterns
-4. Suggest corrections if invalid
-
-## Validation Process
+Every file and folder must be allowed by the whitelist in `projectStructure.config.cjs` (enforced: `pnpm validate:structure`, staged in pre-commit, full in CI). Layer placement follows `.cursor/rules/architecture/RULE.mdc` § Code placement and § Edge-case placement.
 
-1. **Check structure**: Run `pnpm validate:structure` or check `projectStructure.config.cjs`
-2. **Determine location** per file type:
-   - **Page Component** (`.tsx`) → `src/pages/<PageName>/<PageName>Page.tsx` (prefer named files, NOT `index.tsx`)
-   - Component (`.tsx`) → `src/components/common/` or `src/features/*/components/`
-   - Hook/Service/Util (`.ts`) → `src/shared/{hooks|services|utils}/` or `src/features/*/{hooks|services}/`
-   - Types (`.ts`) → `src/features/*/types/` for feature-specific types; `src/shared/types/` for cross-feature types (see `architecture/RULE.mdc`)
-   - Edge Function → `supabase/functions/<name>/index.ts`
-   - Cloud Function → `cloud-functions/<name>/`
-   - Feature docs (`.md`) → `src/features/*/README.md` or `src/features/*/docs/*.md`
-   - Docs (`.md`) → See Documentation Placement section below
-   - Migration (`.sql`) → `supabase/migrations/*.sql`
-   - Layout hooks (`.ts`) → `src/shared/hooks/`. Name per `.agents/skills/name-the-mechanism/SKILL.md`.
-   - Route guards (`.tsx`) → `src/routes/guards/`
-   - Feature context (`.tsx`) → `src/features/*/context/`
-   - Feature state slice (`.ts`) → `src/features/*/store/`
-   - Validation schema (`.ts`) → `src/features/*/types/*.schema.ts` or `src/shared/utils/validation/`
-   - Data transformer (`.ts`) → Consumer's `services/` or `src/shared/utils/transformers/`
-   - Agent project skill → `.agents/skills/<name>/SKILL.md` (one `SKILL.md` per folder per `projectStructure.config.cjs`; optional `patterns.md` on any skill folder the whitelist already permits — `debug` is one current user, not the only legal name)
-3. **Validate**: Directory exists in config, file pattern allowed, matches whitelist
-4. **If invalid**: Identify violation, suggest correct location, explain why, offer to create
+## Before creating a file
 
-## Examples
+1. Pick the location (architecture rule; the conventions below). When unsure, run `pnpm validate:structure`.
+2. If the location is not allowed, say so, suggest the correct one, and explain why. Do not edit `projectStructure.config.cjs` to accommodate it — that is a protected file, changed only for a legitimate new structure with user approval.
+3. Adding many files to one feature: also run `pnpm validate:feature-size` (waivers: `featureBudgets.config.cjs` with a required `reason`).
 
-Names below illustrate the pattern. They are not the only legal files.
-
-**Page Component**: `ChatPage.tsx` → `src/pages/chat/ChatPage.tsx` (prefer named files, NOT `src/pages/chat/index.tsx`)
-- ✅ CORRECT: `src/pages/files/FilesPage.tsx`
-- ❌ WRONG: `src/pages/files/index.tsx` (causes ambiguity in editor tabs)
-- ❌ WRONG: `src/pages/index.ts` (barrel files NOT allowed for pages - use direct imports)
+## Conventions the validator does not explain
 
-**Component**: `UserProfile.tsx` → Check if feature-specific (`src/features/users/components/`) or reusable (`src/components/common/`)
-- ⚠️ NOTE: Avoid `src/pages/*/components/` unless page truly has multiple page-specific components
+- **Pages:** `src/pages/<area>/<Name>Page.tsx` — named files, not `index.tsx` (ambiguous editor tabs), and no barrels in `pages/`. Avoid `src/pages/*/components/` unless a page truly has several page-only components.
+- **Backend:** migrations `supabase/migrations/*.sql`; Edge Functions `supabase/functions/<capability>/index.ts`; other runtimes `cloud-functions/<name>/`.
+- **Agent skills:** `.agents/skills/<name>/SKILL.md` (one per folder; optional `references/` and `patterns.md` where the whitelist permits).
+- **Temporary files:** prefix with `temp_` (planning notes, investigation findings, drafts, one-off test data, migration trackers) so they are easy to find and delete. Not for source, config, permanent docs, or SQL migrations.
 
-**Root file**: `config.yaml` → Not whitelisted, suggest `documentation/` or update config
+## Documentation placement
 
-**Temp directory**: `temp/` → Not allowed, suggest `.gitignore` or `documentation/temp/`
+- **Feature docs:** `src/features/<feature>/README.md` is required and must be staged with that feature's code changes (`pnpm validate:feature-docs:staged`; contract: `documentation/DOC_FEATURE_LOCAL_README.md`). `src/features/<feature>/docs/*.md` only with explicit user approval; prefer code comments and tests.
+- **Temporary / job docs:** `documentation/jobs/temp_job_<name>/` (e.g. `DEVELOPMENT_PLAN.md`, `DECISIONS.md` — the `grill-me` / `plan-grill` ledger) or `documentation/temp/`.
+- **Permanent docs:** files directly in `documentation/` must be `DOC_<NAME>.md` (validator-enforced). **Ask** the user before creating one; when in doubt, place it in `documentation/temp/` — it can be promoted later.
+- **Subfolders** of `documentation/` (e.g. `handoffs/`) group reference material and don't need the `DOC_` prefix.
 
-**Edge function**: `supabase/functions/<capability>/index.ts`
+## File moves and renames
 
-## Integration
+The agent does the move itself — don't hand it to the user just because an IDE can update imports (unless they ask to).
 
-Run `pnpm validate:structure` before creating files. Run `pnpm validate:feature-size` when adding many files to an existing feature. Update `projectStructure.config.cjs` only for legitimate new structures (with approval). Per-feature size waivers go in `featureBudgets.config.cjs` with a required `reason` (see `.cursor/rules/architecture/RULE.mdc` § Feature granularity).
+1. Find every reference to the old path and symbol: imports in and of the file, barrels, lazy imports, registries, tests, config, docs.
+2. Confirm the destination is allowed; move it (`git mv` keeps history; keep LF endings).
+3. Update all references, then search for stale ones.
+4. Verify proportionally: type-check plus the relevant lint, tests, structure, and architecture checks.
 
-## Error Prevention
-
-**DO NOT**:
-- ❌ Create files in unallowed locations
-- ❌ Create directories not in the whitelist
-- ❌ Use file patterns not allowed in that directory
-- ❌ Modify `projectStructure.config.cjs` to accommodate violations
-- ❌ Skip validation "because it's just a small file"
+Never leave a compatibility husk or stale filename to avoid a verified rename.
 
-**DO**:
-- ✅ **ALWAYS check structure BEFORE creating** (this is mandatory, not optional)
-- ✅ **STOP and validate** if unsure about placement
-- ✅ Suggest correct locations when user requests invalid placement
-- ✅ Explain architecture reasoning
-- ✅ Update config only for legitimate new structures (with user approval)
-- ✅ Reference this rule explicitly when validating placement
-- ✅ **Mark temporary files** with `temp_` prefix (see Temporary Files section below)
+## Tooling artifacts (build / deploy CLIs)
 
-## Temporary Files
+When tooling writes local state (e.g. Wrangler → `.wrangler/`, Claude Code → `.claude/worktrees/`):
 
-**IMPORTANT:** When creating files that are NOT intended to be permanent project artifacts, use the `temp_` prefix.
-
-### What Qualifies as Temporary
+1. Add the path to the tracked **`.gitignore`** (protected — ask). The validator skips untracked paths ignored by tracked `.gitignore` files; personal excludes (`.git/info/exclude`, global) don't count, so results match on every machine. Tracked files are always validated.
+2. Optional fallback for runs without git: add it to `DEFAULT_IGNORE_PATTERNS` in `scripts/project-structure-validator.js`.
+3. Whitelist any new root config file (e.g. `wrangler.jsonc`) in `projectStructure.config.cjs`.
 
-Use `temp_` prefix for:
-- 📋 **Planning documents**: Decision summaries, migration checklists, implementation plans
-- 🔍 **Investigation notes**: Debug findings, analysis results, research summaries
-- 📝 **Draft documentation**: Files created during discussion that may be consolidated later
-- 🧪 **Test artifacts**: Temporary test data, mock files, one-off scripts
-- 🔄 **Migration helpers**: Files tracking progress that will be deleted after completion
-
-Do NOT use `temp_` prefix for:
-- ✅ Permanent documentation (README, architecture docs, feature docs)
-- ✅ Configuration files
-- ✅ Source code files
-- ✅ Migration SQL files (these are permanent)
-
-### Naming Convention
-
-```
-temp_<descriptive-name>.<extension>
-
-Examples:
-- temp_pages-structure-decisions.md       ← Planning doc
-- temp_migration-checklist.md             ← Migration tracker
-- temp_debug-findings.md                  ← Investigation notes
-- temp_api-response-sample.json           ← Test data
-```
-
-### Why This Matters
-
-- Makes it clear which files are safe to delete
-- Prevents temporary planning docs from cluttering permanent documentation
-- Easy to search/filter: `git ls-files | grep temp_`
-- Helps with cleanup: `find . -name "temp_*" -type f`
-
-## Documentation Placement
-
-**CRITICAL:** Documentation files have strict placement rules based on their permanence.
-
-### Temporary Documentation
-
-**Temporary documentation MUST be placed in one of these locations:**
+Otherwise `pnpm validate:structure` fails after the first local build. See `documentation/DOC_CLOUDFLARE_WORKERS.md`.
 
-- `documentation/jobs/` - For job/feature-related temporary docs
-- `documentation/temp/` - For general temporary docs
-- `documentation/jobs/temp_job_<name>/` - For grouped temporary docs
+## Related
 
-**Examples:**
-- ✅ **CORRECT**: `documentation/jobs/temp_job_<name>/ANALYSIS.md`
-- ✅ **CORRECT**: `documentation/jobs/temp_job_<name>/DECISIONS.md` (shared ledger — `grill-me` / `plan-grill`)
-- ✅ **CORRECT**: `documentation/jobs/temp_job_<name>/DEVELOPMENT_PLAN.md`
-- ✅ **CORRECT**: `documentation/jobs/<feature-slug>_implementation.md`
-- ✅ **CORRECT**: `documentation/temp/<topic>_notes.md`
-- ❌ **WRONG:** ad-hoc **bug-analysis.md** (or similar) placed directly in `documentation/` root instead of `documentation/jobs/` or `documentation/temp/`
-- ❌ **WRONG:** **MY_NOTES.md** (or similar) at `documentation/` root without **DOC_** prefix for permanent root-level docs
-
-**What qualifies as temporary documentation:**
-- 📋 Planning documents (implementation plans, analysis, design decisions)
-- 🔍 Investigation notes (bug analysis, debugging findings)
-- 📝 Draft documentation created during development
-- 🔄 Migration helpers and progress tracking files
-
-### Feature-Local Documentation (Preferred for Feature Work)
-
-When documentation is about a specific feature's behavior, API, flows, or constraints, keep it colocated with the feature:
-
-- `src/features/<feature>/README.md` - Required feature overview and maintenance notes
-- `src/features/<feature>/docs/*.md` - Optional deep dives, ADRs, and edge-case guides (explicit user approval required)
-- `src/features/<group>/<feature>/README.md` - Same rule for nested features
-
-**Maintenance rule:**
-- If feature code changes are staged, stage updates to that feature's `README.md` in the same commit
-- Pre-commit enforcement: `pnpm validate:feature-docs:staged`
-- Full-repository enforcement: `pnpm validate:feature-docs` (presence) or `pnpm validate:feature-docs:strict` (required `## Purpose`, `## Structure`, `## Dependencies`); CI runs strict after install (see `documentation/DOC_FEATURE_LOCAL_README.md`)
-- Default: do not create new deep docs; prefer code comments/tests unless cross-file knowledge requires a doc
-
-**Use `documentation/` for cross-feature docs only:**
-- Global architecture guides
-- Multi-feature migration plans
-- Temporary planning docs (`documentation/jobs/`, `documentation/temp/`)
-
-### Permanent Documentation (DOC_ Prefix Required)
-
-**CRITICAL: Root-level documentation files in `documentation/` MUST have the `DOC_` prefix.**
-
-This naming convention:
-- Enforces explicit approval for permanent documentation
-- Makes permanent docs easily identifiable
-- Prevents accidental creation of root-level docs
-- Is validated by `projectStructure.config.cjs` (hard enforcement)
-
-**Naming convention:**
-```
-documentation/DOC_<DESCRIPTIVE_NAME>.md
-
-Examples:
-- DOC_ARCHITECTURE_MIGRATION.md
-- DOC_TESTING_GUIDE.md
-- DOC_FEATURE_*.md
-```
-
-**What qualifies as permanent documentation:**
-- ✅ Architecture documentation (`DOC_ARCHITECTURE_*.md`)
-- ✅ Feature documentation (`DOC_FEATURE_*.md`)
-- ✅ Project guides (`DOC_ARCHITECTURE_MIGRATION.md`, etc.)
-- ⚠️ Boilerplate-only docs removed when setup wizard was replaced by dev task backlog
-
-**Workflow for permanent documentation:**
-1. **STOP** before creating any file directly in `documentation/`
-2. **ASK** the user: "Should this be permanent documentation with DOC_ prefix?"
-3. **WAIT** for explicit approval
-4. **USE** the `DOC_` prefix: `documentation/DOC_<name>.md`
-
-**If unsure, default to temporary placement:**
-- When in doubt, create in `documentation/jobs/` or `documentation/temp/`
-- User can rename with DOC_ prefix later if it should be permanent
-- Better to err on the side of temporary placement
-- If uncertain whether a new deep doc is needed, ask the user first and avoid creating it by default
-
-### Subdirectories in Documentation
-
-Subdirectories in `documentation/` (e.g., `documentation/handoffs/`, `documentation/Authentication-main-app/`) are allowed for:
-- Reference material and code examples
-- Grouped documentation by topic
-- Legacy documentation folders
-
-Files within subdirectories do NOT require the DOC_ prefix.
-
-### Why This Matters
-
-- **Hard enforcement**: `projectStructure.config.cjs` only allows `DOC_*.md` at root level
-- **Pre-commit validation**: Violations caught before commit via `pnpm validate:structure:staged`
-- Makes it easy to identify temporary files for cleanup (`documentation/jobs/`, `documentation/temp/`)
-- Prevents cluttering the main documentation folder with temporary files
-- Ensures permanent documentation is intentional and approved
-- Easy cleanup: `find documentation/jobs -name "temp_*"` or `find documentation/temp`
-
-## File Moves and Renames
-
-**The AI assistant may move, rename, or relocate files.** Do not delegate a rename to the user merely because the IDE can update imports.
-
-**Required workflow:**
-
-1. Read the file and search for all imports, exports, string references, registrations, tests, config entries, and documentation that name its old path or symbol.
-2. Confirm the destination is allowed by `projectStructure.config.cjs` and the architecture rules.
-3. Move or rename the file with the available filesystem or shell tool. Preserve LF line endings and file history where the tool supports it.
-4. Update references in both directions:
-   - Imports **in** the moved file
-   - Imports **of** the moved file
-   - Barrel exports, lazy imports, route/config registries, tests, and path strings
-5. Search for stale references to the old path and old symbol.
-6. Run proportional verification: type-check plus relevant lint, tests, structure, and architecture checks.
-
-Use an IDE rename when the user explicitly wants to perform the move themselves; it is an option, not a requirement. Never keep a compatibility husk or stale filename solely to avoid doing a verified rename.
-
-## Workflow
-
-**STOP → CHECK → VALIDATE → CREATE**
-
-Always validate placement before creating. If invalid, suggest correct location per architecture rules.
-
-### Tooling artifacts (build / deploy CLIs)
-
-When adding deployment, build, or agent tooling that writes local state (e.g. Cloudflare Wrangler → `.wrangler/`, Claude Code → `.claude/worktrees/`):
-
-1. Add the path to the tracked **`.gitignore`** — the validator skips untracked paths that the repo's `.gitignore` files ignore (`createGitIgnoredChecker`). Personal excludes (`.git/info/exclude`, global excludes) do **not** count, so results match on every machine.
-2. Optional fallback for runs without git: add the same path to **`DEFAULT_IGNORE_PATTERNS`** in `scripts/project-structure-validator.js` (same pattern as `dist/`, `.firebase/`).
-3. Whitelist any new **root config files** in `projectStructure.config.cjs` (e.g. `wrangler.jsonc`)
-
-Tracked files are always validated, even if they match `.gitignore`. Otherwise `pnpm validate:structure` fails after the first local build. See `documentation/DOC_CLOUDFLARE_WORKERS.md`.
-
-## Related Files
-
-When updating this rule, also check:
-- `scripts/project-structure-validator.js` - Main validator implementation
-- `scripts/feature-readme-lib.js` / `scripts/validate-feature-docs.js` / `scripts/validate-feature-docs-staged.js` - Feature-local README enforcement
-- `scripts/feature-size-lib.js` / `scripts/validate-feature-size.js` / `scripts/validate-feature-size-staged.js` - Feature size / granularity enforcement
-- `featureBudgets.config.cjs` - Feature size budget SSOT
-- `documentation/DOC_FEATURE_LOCAL_README.md` - Option 1 contract and pipeline
-- `projectStructure.config.cjs` - Structure configuration file
-- `package.json` - Scripts that call the validator (validate:structure)
-- `documentation/PROJECT-STRUCTURE-VALIDATION.md` - User documentation
-- `ARCHITECTURE.md` - Architecture documentation
-- `.cursor/rules/architecture/RULE.mdc` - Architecture standards and structure
-
-## Related Rules
-
-- `.cursor/rules/architecture/RULE.mdc` - Architecture standards and structure
-- `projectStructure.config.cjs` - Whitelist of allowed files/folders
-- `scripts/project-structure-validator.js` - Validation tool
-
-## SSOT Status
-
-- This rule: SSOT for file creation workflow
-- `architecture/RULE.mdc`: SSOT for project structure
-- References `projectStructure.config.cjs` for whitelist implementation
+When changing this rule, check `architecture/RULE.mdc`, `projectStructure.config.cjs`, `scripts/project-structure-validator.js`, and `documentation/PROJECT-STRUCTURE-VALIDATION.md`.

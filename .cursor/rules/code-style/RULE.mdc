@@ -5,357 +5,61 @@ alwaysApply: true
 
 # Code Style Standards
 
-## Quick Reference: Critical Rules
+## Enforced by tooling (don't hand-check — run the command)
 
-**CRITICAL**: These rules must be followed without exception:
+- **Formatting** — Prettier (`.prettierrc.json`: double quotes, `(x) => x` arrow parens, LF line endings, width 100). `pnpm format`.
+- **Lint** — `eslint.config.js` (flat config, extends GTS; SSOT): `===`, no `var`, `prefer-const`; feature components can't import feature services, feature hooks can't import feature components, and `components/common` can't import features (error); `react-hooks/rules-of-hooks` (error), `react-hooks/exhaustive-deps` (warn); hardcoded `sx` colors/sizes (warn); `@tanstack/query/exhaustive-deps` (warn); complexity (warn, below). `pnpm lint` / `pnpm lint:fix`.
+- **Types** — TypeScript `strict` plus `noUnusedLocals` / `noUnusedParameters` (prefix intentionally unused params with `_`). `pnpm type-check`.
+- **Layers, cycles, `@/` alias** — dependency-cruiser (`pnpm arch:check`) and `architecture/RULE.mdc`.
 
-- **Double quotes**: ALWAYS use `"` not `'` for strings
-- **Path aliases**: Always use `@/` prefix (e.g., `@/hooks/*`, `@/components/*`) - never relative imports
-  - **SSOT:** See `architecture/RULE.mdc` for complete path alias mappings
-- **TypeScript strict mode**: REQUIRED (`strict: true`)
-- **Arrow functions**: Always use parentheses: `(x) => x`
-- **Equality**: Use `===` (never `==`)
-- **Variables**: Use `const`/`let` (never `var`)
-- **No `any`**: Explicit types required
-- **Complexity**: Functions ≤ 10 cyclomatic, ≤ 15 cognitive, ≤ 100 lines, ≤ 4 nesting
-- **Names**: before adding or copying any symbol, read `.agents/skills/name-the-mechanism/SKILL.md` and follow it (one-off edits included)
+Pre-commit runs these on staged files; CI runs them in full. Fix errors; warnings are acceptable but don't add new ones.
 
-See detailed sections below for complete guidance.
+## Naming
 
-## Naming Conventions
+What a name means, and when a copy must be extracted, is `.agents/skills/name-the-mechanism/SKILL.md` — read it before adding or copying any symbol, one-off edits included. Syntax:
 
-Syntax for identifiers and file names in `src/` (and the same syntax for new symbols elsewhere). What the name means, and when to extract a copy, is `.agents/skills/name-the-mechanism/SKILL.md`. Do not restate that skill here.
+- camelCase variables/functions, UPPER_SNAKE_CASE constants, PascalCase types/interfaces (no `I` prefix unless it adds clarity). Interfaces for objects, types for unions.
+- Files: components `ItemList.tsx`, hooks `useItems.ts`, services `itemService.ts`, types `item.types.ts` (case and suffix only — not destinations).
+- **Generic core, contextual edge:** a reusable control takes its role name from the skill (e.g. `TextInput`); context (`label`, validation, data binding) stays in props, the caller, or a thin wrapper (e.g. `ItemDescriptionField`). No plugin registries or unused ports until a second consumer exists.
 
-### Generic core, contextual edge
+## TypeScript
 
-Do not add plugin registries, unused ports, or other extension machinery until a second consumer exists. That limit does not waive name-the-mechanism.
+- No `any`: use a narrow type, `unknown`, or a local interface. Last resort for third-party gaps: `// eslint-disable-next-line @typescript-eslint/no-explicit-any` with a one-line justification.
+- Explicit return types on exported and async functions; JSDoc on exported functions and types (explain *why*, not *what*).
+- Catch errors as `unknown` and narrow; mark intentionally un-awaited promises with `void`.
+- Services are pure functions — no React hooks.
+- Imports: external first, then `@/` internal; `import type` for types; prefer named exports. Before importing a package, confirm it is in `package.json` — types for wrapped libraries often come from the wrapper (e.g. TipTap via `mui-tiptap`).
 
-- Context stays in props, the caller, or a thin wrapper (`label`, validation, data binding).
-- A reusable control uses the role name from the skill. The examples `TextInput` and `ItemDescriptionField` illustrate that split. They are not required file names.
+## Reuse and extraction
 
-### Variables and Functions
-- Use camelCase for variables and functions
-- Use descriptive names. What they mean: `.agents/skills/name-the-mechanism/SKILL.md`
-- Avoid abbreviations unless widely understood
+- Search for an existing component/hook/utility before adding one, and say which ones you checked.
+- When extracting to a new file, trace **every** usage of each moved state, setter, and function (watch error-clearing callbacks, resets, and setters used in handlers): each either moves with the extraction or is exposed in its return value/props. Then confirm every reference in the original file still resolves.
 
-### Constants
-- Use UPPER_SNAKE_CASE for constants
-- Group related constants together
+## Styling scope
 
-### Types and Interfaces
-- Use PascalCase for types and interfaces
-- Prefix interfaces with `I` only if it adds clarity
-- Use descriptive names that indicate **category** structure
-- **Interfaces for objects, types for unions**
+Before implementing a styling change, **ask which scope** the user wants, recommending global theme (the usual intent), and wait for the answer:
 
-### File Naming
+| Scope | Where | Use for |
+|-------|-------|---------|
+| Global theme | `src/shared/theme/defaultTheme.ts` (SSOT for palette, typography, tokens, component overrides) | Design tokens; variants of a standard MUI component (`components.MuiButton.styleOverrides`) |
+| Component | Inside a custom component's file | Unique styling of a custom component |
+| Instance | `sx` prop | Layout and spacing only (margins, padding, position) — never colors or typography |
 
-These names illustrate case and suffix only. They are not destinations.
+## Complexity
 
-- Components: `ItemList.tsx` (PascalCase)
-- Hooks: `useItems.ts` (camelCase, `use` prefix)
-- Services: `itemService.ts` (camelCase)
-- Types: `item.types.ts` (camelCase, `.types.ts` suffix)
-- Shared file names: `.agents/skills/name-the-mechanism/SKILL.md`. The samples above illustrate case and suffix only.
+Thresholds (SSOT `eslint.config.js`, warnings in `pnpm lint`):
 
-## Formatting
+| Metric | Limit |
+|--------|-------|
+| Cyclomatic complexity | ≤ 10 |
+| Cognitive complexity | ≤ 15 |
+| Nesting depth | ≤ 4 |
+| Function length | ≤ 100 lines (excluding blanks and comments) |
+| Parameters | ≤ 3 (use an options object) |
+| Statements | ≤ 15 |
 
-**SSOT:** Formatting is handled by Prettier. See project `.prettierrc` configuration.
-
-**Critical exceptions** (not handled by Prettier):
-- **Double quotes**: ALWAYS use `"` not `'` (see Quick Reference)
-- **Arrow functions**: Always use parentheses: `(x) => x` (see Quick Reference)
-
-### Line Endings
-- **IMPORTANT**: Always use Linux/Unix line endings: LF (`\n`)
-- Never use Windows line endings (CRLF) in code files
-- Configure your editor and Git to use LF line endings
-
-## Documentation
-
-### JSDoc/TSDoc
-- Document all exported functions and classes
-- Include parameter descriptions and return types
-- Use comments to explain "why", not "what"
-
-## Code Reuse
-
-### Before Adding New Code
-- **Prefer small, reusable components and hooks**
-- Before adding new functionality, search for existing components/hooks/utilities that can be reused
-- When explaining changes, note which existing pieces were checked for reuse
-- Copy counts: `.agents/skills/name-the-mechanism/SKILL.md`
-
-## Code Extraction Guidelines
-
-### When Extracting Code to New Files (Hooks, Components, Utilities)
-
-1. **Trace all usages**: For every piece of state, setter, or function being extracted:
-   - Search the original file for ALL usages
-   - Each usage must either:
-     - Move into the new extraction, OR
-     - Be exposed in the return interface/props
-   - Pay special attention to: error clearing callbacks, reset functions, state setters used in event handlers
-
-2. **Verify the consumer still compiles**: After extraction, check that every reference in the original file has a valid source—either from the new import or remaining local code.
-
-### Import Guidelines
-
-When adding external package imports:
-
-1. **Verify the package is installed**: Check `package.json` dependencies
-2. **Types may come from wrappers**: If using a library through a wrapper (e.g., TipTap through `mui-tiptap`), types often come from the wrapper, not the original package
-3. **When in doubt, use inline types**: Define types locally rather than importing from potentially unavailable packages. **`any` is still forbidden** — use a narrow type, `unknown`, or a local interface; only as last resort for third-party gaps, `// eslint-disable-next-line @typescript-eslint/no-explicit-any` with a one-line justification.
-
-## Code Organization
-
-### Imports
-
-**Style Concerns (this section):**
-- Group imports: external libraries first, then internal modules
-- Sort imports alphabetically within groups
-- Remove unused imports
-- **Type imports**: Use `import type {...}` and place after regular imports in each group
-
-**Architecture Concerns (SSOT: `architecture/RULE.mdc`):**
-- **Path aliases**: Always use `@/` prefix, never relative imports — violations are **errors**
-  - **SSOT:** See `architecture/RULE.mdc` for complete path alias mappings and folder structure
-- **Import direction**: See `architecture/RULE.mdc` for layer boundaries and import direction rules (downward only: pages → components → hooks → services → utils → types)
-- **Layer boundaries**: See `architecture/RULE.mdc` for what each layer can/cannot import from
-
-```typescript
-// ✅ CORRECT — alias shape only, not a required hook name
-import { useAuth } from "@/features/auth/hooks/useAuth";
-import { Button } from "@/components/common/Button";
-import { userService } from "@/shared/services/userService";
-import { fetchUserProfile } from "@/features/auth/services/userProfileService";
-
-// ❌ WRONG
-import { useAuth } from "../../features/auth/hooks/useAuth"; // Use path alias instead
-import { Button } from "../../components/common/Button"; // Use path alias instead
-import * as itemService from "../services/itemService"; // Use path alias; prefer hooks over direct service imports
-import { useAuth } from "@features/auth/hooks/useAuth"; // Use @/features/... not @features/...
-```
-
-**For complete import rules:** See `architecture/RULE.mdc` for import direction, layer boundaries, and architectural best practices.
-
-### Exports
-- Use named exports over default exports when possible
-- Export types and interfaces explicitly
-
-## Styling Scope Standards
-
-### The Problem
-
-When a user requests a styling change (e.g., "change button color"), there are multiple places to apply it. Without asking, the assistant may apply the change at the wrong scope, leading to inconsistency and maintenance debt.
-
-### CRITICAL: Always Ask About Scope First
-
-**Before implementing any styling change, determine the appropriate scope by asking the user.**
-
-### Styling Hierarchy (most specific to most global):
-
-| Level | Location | Use For | Avoid |
-|-------|----------|---------|-------|
-| **Instance** | `sx` prop on specific usage | Layout/spacing (margins, padding, positioning) | Colors, typography, visual styling |
-| **Component** | Inside component file | Custom components with unique styling not in theme | Standard MUI components that should be consistent |
-| **Global Theme** | `src/shared/theme/defaultTheme.ts` | Colors, typography, component overrides, design tokens | One-off layout adjustments |
-
-### Decision Tree
-
-```
-Is this a design token change? (color, typography, spacing value, shadow, border)
-├─ YES → Global Theme (defaultTheme.ts)
-└─ NO → Is this a component variant? (all buttons of type X should look different)
-    ├─ YES → Theme Component Override (defaultTheme.ts → components.MuiButton.styleOverrides)
-    └─ NO → Is this layout/spacing for this specific instance?
-        ├─ YES → Instance Level (sx prop)
-        └─ NO → Is this a custom component with unique styling?
-            ├─ YES → Component Definition (inside component file)
-            └─ NO → Ask user for clarification
-```
-
-### Default Assumption
-
-When users request styling changes without specifying scope:
-- **Assume Global Theme** (most common intent)
-- **Always ask to confirm** before implementing
-- **Explain the hierarchy** so users can make informed decisions
-
-### When User Requests Styling Changes
-
-**Step 1: Identify the change type**
-- Design token (color, typography, shadow)? → Global Theme
-- Component appearance change? → Theme Component Override
-- Layout/spacing only? → Instance (`sx` prop)
-
-**Step 2: Ask the user** (required):
-
-> "At what level should this styling change be applied?
-> - **Instance level**: Only this specific usage
-> - **Component level**: All usages of this custom component
-> - **Global theme level**: All instances across the app (recommended for consistency)"
-
-**Step 3: Wait for confirmation** before implementing
-
-**Step 4: Implement at the correct level** per the decision tree
-
-### Implementation Rules
-
-```typescript
-// ✅ CORRECT: Theme file for colors, typography, component appearance
-// src/shared/theme/defaultTheme.ts
-MuiButton: {
-  styleOverrides: {
-    contained: {
-      background: "linear-gradient(...)",
-      color: "#ffffff",
-    },
-  },
-},
-
-// ✅ CORRECT: sx prop for layout/spacing only
-<Button sx={{ mt: 2, ml: 1 }}>Submit</Button>
-
-// ❌ WRONG: sx prop for colors/visual styling
-<Button sx={{ backgroundColor: "blue", color: "white" }}>Submit</Button>
-
-// ❌ WRONG: Inline styles for design tokens
-<Button style={{ backgroundColor: "blue" }}>Submit</Button>
-```
-
-### SSOT Reference
-
-The theme file (`src/shared/theme/defaultTheme.ts`) is the **Single Source of Truth** for:
-- All color definitions (palette)
-- Typography (font families, sizes, weights)
-- Component style overrides
-- Design tokens (spacing, shadows, borders)
-
-See the theme file header for detailed principles.
-
-## Linting Standards
-
-### ESLint Configuration (SSOT)
-
-**CRITICAL:** `eslint.config.js` (flat config) is the **Single Source of Truth** for all linting rules enforced by the pre-commit hook.
-
-ESLint enforces the following rules (in addition to complexity):
-
-- **Unused Variables/Imports**: 
-  - Unused imports and variables are **errors** (`@typescript-eslint/no-unused-vars`, via GTS)
-  - Prefix unused variables/parameters with `_` to suppress warnings (e.g., `_messageId`, `_isLoadingLimit`)
-  - **Always remove unused imports** - they add no value and clutter the code
-
-- **Import Order** (convention, not lint-enforced):
-  - Groups: builtin → external → internal → parent → sibling → index → type
-  - React imports first, then `@/**` path aliases
-
-- **Architecture Boundaries**:
-  - Enforced by dependency-cruiser (`pnpm arch:check`) and the `no-restricted-imports` blocks in `eslint.config.js`
-  - Prevents importing from forbidden layers (see `architecture/RULE.mdc`)
-
-- **React Hooks**:
-  - `react-hooks/rules-of-hooks` (error) and `react-hooks/exhaustive-deps` (warning)
-  - All dependencies must be included in dependency arrays
-  - Use `user` not `user?.uid` if accessing `user` properties
-
-- **TypeScript Type Safety**:
-  - Enforced by TypeScript compiler (`tsc --noEmit` in pre-commit)
-  - All type errors must be fixed before commit
-  - Optional properties must be marked with `?` in interfaces
-
-### Default Linting Tool: GTS (Google TypeScript Style)
-- **Default**: Use `npx gts lint --fix` for TypeScript projects
-- GTS provides consistent formatting and style enforcement
-- Run linting before committing code
-- Fix all linter errors (warnings are acceptable)
-
-### Override Option
-- Projects may specify alternative linting tools if needed
-- Document the chosen linting tool in project documentation
-- Ensure linting is automated and runs before commits
-- Common alternatives: ESLint, Biome, etc.
-
-### Complexity Standards
-
-**SSOT:** `eslint.config.js` (complexity rules) (enforced by ESLint during `pnpm lint`)
-
-When writing code, adhere to these complexity limits to ensure maintainability:
-
-| Metric | Limit | Guideline |
-|--------|-------|-----------|
-| Cyclomatic Complexity | ≤ 10 | Max branches/paths per function |
-| Cognitive Complexity | ≤ 15 | Max mental effort to understand |
-| Nesting Depth | ≤ 4 | Max `if`/`for`/`while` nesting levels |
-| Function Length | ≤ 100 lines | Excluding blank lines and comments |
-| Parameters | ≤ 5 | Use options object for more |
-| Statements | ≤ 20 | Max statements per function |
-
-**Reducing Complexity:**
-- Extract helper functions for complex logic
-- Use early returns to reduce nesting
-- Replace nested conditionals with guard clauses
-- Use options objects instead of many parameters
-- Split large functions by responsibility
-
-**Reference:** See `.agents/skills/optimize2/SKILL.md` for detailed refactoring workflow and examples.
-
-### TypeScript Configuration
-- **REQUIRED**: All TypeScript projects must use strict mode (see Quick Reference)
-- Enable `strict: true` in `tsconfig.json`
-
-### TypeScript Best Practices
-See Quick Reference for critical rules. Additional guidelines:
-- **Explicit return types**: Required for async functions
-- **Services**: Pure functions only (no React hooks)
-
-```typescript
-export interface User {
-  id: string;
-  email: string;
-}
-
-export const fetchData = async (id: string): Promise<User | null> => {
-  // Pure function, no hooks
-};
-```
-
-## TypeScript/React Standards
-
-When working with TypeScript and React:
-
-### Component Structure
-- Clear import order (external libraries first, then internal modules)
-- JSDoc for all exported interfaces and types
-- Explicit return types for all exported functions
-- Use `readonly` for props that must not change
-
-### State Management
-- Explicit typing of state using generics: `useState<Type | null>(null)`
-- Use `useCallback` for functions passed as dependencies
-- Use `useEffect` for side-effects like data fetching
-- Use `void` to indicate when promises are intentionally not awaited
-
-### Error Handling
-- Catch errors with `unknown` type and check the type
-- Provide meaningful error messages
-- Handle loading and error states explicitly
-
----
+Reduce with early returns/guard clauses, helper extraction, and options objects; full workflow in `.agents/skills/optimize2/SKILL.md`.
 
 ## Related Rules
 
-**When modifying this rule, check these rules for consistency:**
-
-- `architecture/RULE.mdc` - May reference naming conventions for architectural patterns
-- `testing/RULE.mdc` - May reference code style for test files
-- `workflow/RULE.mdc` - May reference formatting standards in review process
-- `.agents/skills/optimize2/SKILL.md` - Detailed complexity reduction / optimization workflow
-- `.agents/skills/layer-consistency-check/SKILL.md` — stops if name-the-mechanism is violated. The naming rule itself is `.agents/skills/name-the-mechanism/SKILL.md`.
-
-**Rules that reference this rule:**
-- All other rules may reference code style standards
-
-**SSOT:**
-- Complexity thresholds: `eslint.config.js` (complexity rules)
+When modifying this rule, check `architecture`, `testing`, `workflow`, `.agents/skills/optimize2/SKILL.md`, and `.agents/skills/layer-consistency-check/SKILL.md`.

@@ -22,7 +22,6 @@
       "Bash(pnpm validate:structure)",
       "Bash(pnpm validate:structure:*)",
       "Bash(pnpm validate:version-sync)",
-      "Bash(pnpm validate:app-config)",
       "Bash(pnpm test:run)",
       "Bash(pnpm test:run:*)",
       "Bash(pnpm validate:git-workflow)",

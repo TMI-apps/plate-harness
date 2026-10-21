@@ -41,4 +41,4 @@ Measure **replaceability** (busywork to add/remove/swap a module). **Do not** tr
 
 Two tables (or a short summary of them) + worse/better vs last informational baseline if present + optional deferred opportunities. No composite score.
 
-Definitions: `documentation/jobs/temp_job_codebase-modularity/SCORE_DEFINITIONS.md`.
+Definitions: [`references/score-definitions.md`](references/score-definitions.md).

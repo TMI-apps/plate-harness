@@ -209,7 +209,7 @@ Identify **subjective** choices requiring user input.
 - [ ] Determine feature structure (feature-based vs shared) - `architecture/RULE.mdc`
 - [ ] Choose layer placement (components/hooks/services/utils) - `architecture/RULE.mdc`
 - [ ] Understand import direction (downward only) - `architecture/RULE.mdc`
-- [ ] Select path aliases (@/hooks/*, @/components/*, etc.) - `architecture/RULE.mdc`
+- [ ] Imports use the `@/` alias (`architecture/RULE.mdc` § Folder structure)
 - [ ] Decide: feature-specific vs shared code - `architecture/RULE.mdc`
 
 ### 3.1a Don't reinvent the wheel (proactive — when applicable)
@@ -326,7 +326,7 @@ Verify the PLAN complies before implementation:
 - [ ] Planned file placements comply with `projectStructure.config.cjs`
 - [ ] Planned layer boundaries respect `architecture/RULE.mdc`
 - [ ] No planned circular dependencies
-- [ ] Planned complexity within thresholds (SSOT: `eslint.config.js` (complexity rules))
+- [ ] Planned complexity within thresholds (SSOT: `eslint.config.js` complexity rules)
 - [ ] No unresolved ambiguity remains
 - [ ] Any standards or best-practice divergence is documented with explicit user confirmation
 

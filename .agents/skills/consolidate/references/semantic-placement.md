@@ -2,7 +2,7 @@
 
 Complement automated architecture enforcement by identifying **semantic** violations and code-organization issues that scripts cannot detect, and by guiding refactoring **moves**. Focuses on architectural intent and refactoring execution, not duplicate checks already covered by tooling. (Formerly the `architecture-repair2` skill.)
 
-**Prerequisite:** Run **`.agents/skills/validate/SKILL.md`** (gate depth) first (or confirm `pnpm validate:structure`, `pnpm lint`, `pnpm arch:check` are green). This mode assumes tool-caught violations are already fixed; it focuses on what tools miss.
+**Prerequisite:** Run **`.agents/skills/validate/SKILL.md`** (gate depth) first (or confirm `pnpm validate:structure`, `pnpm arch:check` are green). This mode assumes tool-caught violations are already fixed; it focuses on what tools miss.
 
 ---
 
@@ -112,7 +112,7 @@ Output template:
 ## Important notes
 
 - **Complementary, not duplicate:** semantic violations tools cannot detect.
-- **Run tools first:** `pnpm validate:structure`, `pnpm lint`, `pnpm arch:check` before this mode.
+- **Run tools first:** `pnpm validate:structure`, `pnpm arch:check` before this mode.
 - **Path aliases required** (`@/`); **whitelist compliance** — never modify the whitelist to accommodate a violation.
 - **Baseline respect:** existing violations in `.dependency-cruiser-baseline.json` are ignored; focus on new ones.
 - **Architecture rules immutable:** violations mean code is wrong, not the rules.
