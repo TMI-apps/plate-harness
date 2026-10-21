@@ -4,9 +4,6 @@
 #   once, when the repo has no release yet, so release-please has a starting point and no
 #   person has to tag by hand (D29). It tags the commit that set that version, so later
 #   commits still land in the next release. No-op once any release exists.
-#   Manual run (workflow_dispatch, also usable by agents): creates the release for the
-#   current package.json version when that tag has no release yet (e.g. a hand-set
-#   version after a cutover); no-op when it exists.
 # - `release` runs only under model-c; A/B forks see it skipped.
 # - `dispatch-ci` starts ci.yml on the release branch: PRs opened with GITHUB_TOKEN do not
 #   trigger workflows, but a GITHUB_TOKEN workflow_dispatch does, so the required `test`
@@ -17,7 +14,6 @@ name: Release Please
 on:
   push:
     branches: [main]
-  workflow_dispatch:
 
 permissions: {}
 
@@ -55,18 +51,12 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
-          EVENT: ${{ github.event_name }}
         run: |
-          version="$(node -p "require('./package.json').version")"
-          if [ "$EVENT" = "workflow_dispatch" ]; then
-            if gh release view "v$version" >/dev/null 2>&1; then
-              echo "Release v$version exists; nothing to do."
-              exit 0
-            fi
-          elif [ -n "$(gh release list --limit 1 --json tagName --jq '.[].tagName')" ]; then
+          if [ -n "$(gh release list --limit 1 --json tagName --jq '.[].tagName')" ]; then
             echo "A release exists; nothing to bootstrap."
             exit 0
           fi
+          version="$(node -p "require('./package.json').version")"
           sha="$(git log -1 --format=%H -G'"version":' -- package.json)"
           echo "Creating baseline release v$version at $sha"
           gh release create "v$version" --target "$sha" --title "v$version" \
