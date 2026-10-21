@@ -25,11 +25,12 @@ Updated: 2026-10-21
 | D16 | 1.11 color lint | closed | Keep MUI sx rules | walkthrough | UI-kit difference |
 | D17 | 2.1 .eslintrc.json | closed | Remove + repoint refs to eslint.config.js | walkthrough | protected files approved |
 | D18 | 2.2 + 2.3 lint:arch | closed | Remove script; docs name arch:check + no-restricted-imports | walkthrough | verified broken |
-| D19 | 3.1 Airtable | closed | Keep as optional module; label it | walkthrough | deliberate difference from bronze |
+| D19 | 3.1 Airtable | closed | Keep as optional module; label it | walkthrough | deliberate difference from bronze (absent there); kept over the other branch's removal at merge |
 | D20 | 3.2 hooks | closed | Remove useUserProfile, useUpdateUserProfile; keep useAnchorMenuState | walkthrough | MUI ProfileMenu uses it |
-| D21 | 3.3 doc folders | closed | Trim Authentication-main-app to reference + entreefederatie.ts; remove claude_outputs | walkthrough | |
+| D21 | 3.3 doc folders | closed | Remove Authentication-main-app entirely; remove claude_outputs | walkthrough | revised at merge of claude/modest-turing-cn0yo7 (was: trim to reference) |
 | D22 | 3.4 MUI debug pattern | closed | Keep | walkthrough | |
 | D23 | ESLint deps | closed | Remove 10 unused devDependencies | walkthrough | bronze lint verified 0 errors |
+| D25 | Plate base | closed | Build on claude/modest-turing-cn0yo7 (6bbb8ed: model-c cutover + tighten), not main | user | merged into this branch; .eslintrc refs in projectStructure.config.cjs still open (protected) |
 | D24 | Cloudflare | closed | Connect plate to Workers Builds after this lands; Worker named plate-harness | walkthrough | user does dashboard step |
 
 ## Open
@@ -45,3 +46,4 @@ Updated: 2026-10-21
 - 2026-10-21 — D4 closed via grill-me (asked)
 - 2026-10-21 — D5 closed via grill-me (asked)
 - 2026-10-21 — D6–D24 closed in item-by-item walkthrough; implemented on branch `claude/intelligent-mccarthy-6juqge` (0.41.0)
+- 2026-10-21 — D25: merged claude/modest-turing-cn0yo7; D19 confirmed, D21 revised

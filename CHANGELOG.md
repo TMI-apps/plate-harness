@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.41.0] - 2026-10-21
 
-Generic improvements ported from bronze-plate-harness (audit: `documentation/jobs/temp_job_plate-bronze-diff/`).
+Model C cutover, harness tightening and dead-code cleanup, plus generic improvements ported from bronze-plate-harness (audit: `documentation/jobs/temp_job_plate-bronze-diff/`).
 
 ### Added
 
@@ -33,7 +33,9 @@ Generic improvements ported from bronze-plate-harness (audit: `documentation/job
 - `.eslintrc.json` (ignored by ESLint 10) and the broken `pnpm lint:arch` script.
 - Unused ESLint devDependencies: `@eslint/js`, `eslint-config-prettier`, `eslint-import-resolver-typescript`, `eslint-plugin-boundaries`, `eslint-plugin-import`, `eslint-plugin-react`, `eslint-plugin-react-refresh`, `eslint-plugin-unused-imports`, `globals`, `typescript-eslint`.
 - Unused hooks `useUserProfile` and `useUpdateUserProfile` (plus the orphaned `updateUserProfile` and `UserProfileUpdate`).
-- Copied app code under `documentation/Authentication-main-app/` (reference doc and `entreefederatie.ts` kept) and `documentation/claude_outputs/`.
+- `documentation/Authentication-main-app/`, `documentation/claude_outputs/`, `DOC_ARCHITECTURE_MIGRATION_INSTRUCTIONS.md` and completed job plans.
+- Dead app code found with knip: `Card`, `Modal`, `themeLoader` (custom-theme localStorage API), duplicate Supabase init path and unused exports/types.
+- Always-loaded rules and skills tightened (router tiebreaks moved to `router/references/tiebreaks.md`).
 
 ## [0.40.0] - 2026-10-16
 
