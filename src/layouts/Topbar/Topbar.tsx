@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ProfileMenu } from "@/components/common/ProfileMenu";
+import { ProfileMenu } from "@/layouts/ProfileMenu";
 
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";

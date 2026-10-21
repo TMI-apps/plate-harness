@@ -1,9 +1,9 @@
 import { useAuthContext } from "@/shared/context/AuthContext";
 import { useAuthBackendConfigured } from "@/shared/hooks/useAuthBackendConfigured";
 import { useUserProfileQuery } from "@/features/auth/hooks/useUserProfileQuery";
-import { ProfileMenuContent } from "./ProfileMenu/ProfileMenuContent";
-import { ProfileMenuTrigger } from "./ProfileMenu/ProfileMenuTrigger";
-import { getAnchorMenuProps } from "./ProfileMenu/anchorMenuProps";
+import { ProfileMenuContent } from "./ProfileMenuContent";
+import { ProfileMenuTrigger } from "./ProfileMenuTrigger";
+import { getAnchorMenuProps } from "./anchorMenuProps";
 import { useAccountMenuActions } from "@/shared/hooks/useAccountMenuActions";
 import { useAnchorMenuState } from "@/shared/hooks/useAnchorMenuState";
 

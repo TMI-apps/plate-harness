@@ -166,7 +166,7 @@ src/
 │   ├── types/    # Shared type definitions
 │   ├── context/  # Cross-feature context providers
 │   └── theme/    # Theme configuration and design tokens
-├── layouts/      # Page wrappers (Header/Footer/Sidebar)
+├── layouts/      # App shell (Header/Footer/Sidebar, account menu) — may compose features
 ├── pages/        # Route-level components (only used for routing/connecting features)
 ├── routes/       # Route definitions and guards
 ├── store/        # Global state composition (Redux/Zustand/Context setup)

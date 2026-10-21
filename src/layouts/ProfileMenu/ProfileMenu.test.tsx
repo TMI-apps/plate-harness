@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createDefaultAuthContextValue, renderWithProviders } from "tests/test-utils";
-import { ProfileMenu } from "@/components/common/ProfileMenu";
+import { ProfileMenu } from "@/layouts/ProfileMenu";
 import { useAuthContext } from "@/shared/context/AuthContext";
 import { useUserProfileQuery } from "@/features/auth/hooks/useUserProfileQuery";
 import { useAuthBackendConfigured } from "@/shared/hooks/useAuthBackendConfigured";

@@ -73,7 +73,7 @@ describe("moduleOrComponentName", () => {
 | `shared/utils`, domain pure functions | Unit | `describe` / `it`, no render | `src/shared/utils/dateFormatters.test.ts` |
 | Feature `services/` | Unit + mocks | `vi.mock` for Supabase / APIs | `src/features/auth/services/authService.test.ts` |
 | Feature `hooks/` | Hook | `renderHookWithProviders` | `src/features/auth/hooks/useAuthRedirect.test.tsx` |
-| `components/` | Component | `renderWithProviders` or plain `render` | `src/components/common/ProfileMenu/ProfileMenu.test.tsx` |
+| `components/` | Component | `renderWithProviders` or plain `render` | `src/layouts/ProfileMenu/ProfileMenu.test.tsx` |
 | `scripts/` (tooling) | Unit | `node:test` + `assert` | `scripts/change-classify.test.cjs` |
 
 ---

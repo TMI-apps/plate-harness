@@ -362,7 +362,7 @@ This project follows a strict feature-based architecture. See [ARCHITECTURE.md](
 ```
 src/
 ├── assets/          # Static assets and global styles
-├── components/      # App-level shared UI (Topbar, ProfileMenu, etc.)
+├── components/      # App-level shared UI primitives
 │   └── common/
 ├── config/          # App config (e.g. dev task JSON)
 ├── features/        # Feature modules (auth, tasks, etc.)
@@ -372,7 +372,7 @@ src/
 │   │   ├── services/
 │   │   └── types/
 │   └── tasks/
-├── layouts/         # Layout components
+├── layouts/         # App shell (MainLayout, Topbar, ProfileMenu)
 ├── pages/           # Route-level page components (subfolder per page)
 ├── routes/          # Router config and guards
 └── shared/          # Cross-feature utilities, services, theme, context

@@ -20,7 +20,7 @@ User authentication and session management via Supabase.
 | Components | `components/` | `SignInPanel`, `EmailAuthForm` |
 | Types | `types/` | `User`, `UserProfile`, `AuthContextValue`, credentials types |
 
-**Cross-layout UI:** `ProfileMenu` lives in `@/components/common/ProfileMenu` (shell widget used by Topbar). Shared viewport/form layout tokens live in `@/shared/theme/appViewLayout`.
+**Cross-layout UI:** `ProfileMenu` lives in `@/layouts/ProfileMenu` (app-shell account menu used by Topbar). Shared viewport/form layout tokens live in `@/shared/theme/appViewLayout`.
 
 ## Main API
 
