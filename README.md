@@ -2,6 +2,8 @@
 
 A production-ready harness (boilerplate + agent harness) for building React applications with TypeScript, Vite, Material-UI, and Supabase. It enforces strict architectural rules and includes authentication as an example feature.
 
+**Live (production, `main`):** https://plate-harness.tom-fab.workers.dev — deployed by Cloudflare Workers Builds; every other branch gets its own preview URL. No Supabase project is connected, so sign-in is disabled there.
+
 ## Features
 
 - ⚡️ **Vite** - Fast build tool and dev server
