@@ -51,7 +51,7 @@ Store rate limit counters in a `rate_limits` table with:
 
 ### Row Level Security
 
-**SSOT:** See `security/RULE.mdc` for RLS policy patterns.
+**SSOT:** See `database/RULE.mdc` § RLS policy performance for RLS policy patterns.
 
 Enable RLS on `rate_limits` table. Create policy blocking all client access (service role bypasses RLS, allowing Edge Functions access while blocking clients).
 
@@ -141,7 +141,7 @@ Delete records older than 24 hours using:
 
 ### Security Rules
 
-**SSOT:** See `security/RULE.mdc` for RLS policy patterns.
+**SSOT:** See `database/RULE.mdc` § RLS policy performance for RLS policy patterns.
 
 Protect `rate_limits` table with RLS policy blocking all client access.
 
@@ -203,7 +203,7 @@ Migration: Replaced with Supabase PostgreSQL table and Edge Function implementat
 ## Related Rules
 
 **When modifying this rule, check these rules for consistency:**
-- `security/RULE.mdc` - **SSOT** for RLS policy patterns
+- `database/RULE.mdc` - **SSOT** for RLS policy patterns (§ RLS policy performance)
 - `cloud-functions/RULE.mdc` - Edge Functions architecture and when to use them
 - `database/RULE.mdc` - Database migration patterns for rate_limits table
 

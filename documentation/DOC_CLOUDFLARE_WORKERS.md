@@ -10,7 +10,7 @@ Deploy this Vite + React SPA to **Cloudflare Workers** with static assets, using
 |--------|----------------|
 | **GitHub (this repo)** | Source + `wrangler.jsonc`. `ci.yml` runs type-check / lint / tests / build on every PR + push to `main` and `develop`. Rulesets depend on git-workflow mode (`src/config/git-workflow.json`) — see ruleset table below. **No deploy workflow. No `CLOUDFLARE_API_TOKEN` secret.** Production per `.cursor/rules/git-workflow/RULE.mdc` § Mode behavior table → **production** (C: merging the PR; A/B: Promote workflow fast-forwards `main` to `develop`). |
 | **Cloudflare Workers Builds** | Builds and deploys on push. `main` → production; every other branch → its own preview (Model C relies on these per-PR previews; A/B also use `develop` as the stable staging preview). Account, build command, and `VITE_*`/`CLOUDFLARE_ACCOUNT_ID` env live in the dashboard connection. |
-| **Supabase** | Same project for preview and production (accepted, temp_job_git-workflow-model-c D24): **previews read and write production data**, and Edge Functions have no staging in any mode. Auth URLs include the deployed origin(s). |
+| **Supabase** | Same project for preview and production (accepted trade-off): **previews read and write production data**, and Edge Functions have no staging in any mode. Auth URLs include the deployed origin(s). |
 
 Push → Cloudflare builds & deploys. GitHub blocks bad merges. There is no GitHub → Cloudflare deploy step.
 

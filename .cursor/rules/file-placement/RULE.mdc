@@ -5,60 +5,49 @@ alwaysApply: true
 
 # File Placement Validation Rule
 
-**STOP → CHECK → VALIDATE → CREATE.** Before creating any file or folder (however small), confirm the location and file pattern are allowed by `projectStructure.config.cjs` and `architecture/RULE.mdc`. Run `pnpm validate:structure` if unsure; run `pnpm validate:feature-size` when adding many files to a feature. If the placement is invalid, say which rule it violates, suggest the correct location, and offer to create it there.
+Every file and folder must be allowed by the whitelist in `projectStructure.config.cjs` (enforced: `pnpm validate:structure`, staged in pre-commit, full in CI). Layer placement follows `.cursor/rules/architecture/RULE.mdc` § Code placement and § Edge-case placement.
 
-Never modify `projectStructure.config.cjs` to fit a violation. Update it only for a legitimate new structure, with user approval. Per-feature size waivers go in `featureBudgets.config.cjs` with a required `reason`.
+## Before creating a file
 
-## Where files go
+1. Pick the location (architecture rule; the conventions below). When unsure, run `pnpm validate:structure`.
+2. If the location is not allowed, say so, suggest the correct one, and explain why. Do not edit `projectStructure.config.cjs` to accommodate it — that is a protected file, changed only for a legitimate new structure with user approval.
+3. Adding many files to one feature: also run `pnpm validate:feature-size` (waivers: `featureBudgets.config.cjs` with a required `reason`).
 
-| File | Location |
-|------|----------|
-| Page component | `src/pages/<PageName>/<PageName>Page.tsx` — named files, **not** `index.tsx` (ambiguous editor tabs); no barrel `src/pages/index.ts` |
-| Component | Feature-specific `src/features/*/components/`; reusable `src/components/common/`. Avoid `src/pages/*/components/` unless the page truly has several page-specific components |
-| Hook / service / util | `src/shared/{hooks,services,utils}/` or `src/features/*/{hooks,services}/` |
-| Types | `src/features/*/types/` (feature) or `src/shared/types/` (cross-feature) |
-| Layout hook | `src/shared/hooks/` |
-| Route guard | `src/routes/guards/` |
-| Feature context / state slice | `src/features/*/context/` / `src/features/*/store/` |
-| Validation schema | `src/features/*/types/*.schema.ts` or `src/shared/utils/validation/` |
-| Data transformer | Consumer's `services/` or `src/shared/utils/transformers/` |
-| Edge function | `supabase/functions/<name>/index.ts` |
-| Cloud function | `cloud-functions/<name>/` |
-| Migration | `supabase/migrations/*.sql` |
-| Feature docs | `src/features/*/README.md` (required), `src/features/*/docs/*.md` (optional, needs user approval) |
-| Agent project skill | `.agents/skills/<name>/SKILL.md` (one per folder; optional `patterns.md` where the whitelist permits — `debug` is one current user, not the only legal name) |
-| Other docs | § Documentation below |
+## Conventions the validator does not explain
 
-Names follow `.agents/skills/name-the-mechanism/SKILL.md`; the file names above illustrate case and suffix only. Edge cases: `architecture/RULE.mdc` § Edge-case placement. Root files and temp dirs that are not whitelisted (`config.yaml`, `temp/`) → suggest `documentation/` or `documentation/temp/`, or `.gitignore`.
+- **Pages:** `src/pages/<area>/<Name>Page.tsx` — named files, not `index.tsx` (ambiguous editor tabs), and no barrels in `pages/`. Avoid `src/pages/*/components/` unless a page truly has several page-only components.
+- **Backend:** migrations `supabase/migrations/*.sql`; Edge Functions `supabase/functions/<capability>/index.ts`; other runtimes `cloud-functions/<name>/`.
+- **Agent skills:** `.agents/skills/<name>/SKILL.md` (one per folder; optional `references/` and `patterns.md` where the whitelist permits).
+- **Temporary files:** prefix with `temp_` (planning notes, investigation findings, drafts, one-off test data, migration trackers) so they are easy to find and delete. Not for source, config, permanent docs, or SQL migrations.
 
-## Temporary files
+## Documentation placement
 
-Planning docs, investigation notes, drafts, throwaway test data, and migration trackers get a `temp_` prefix (`temp_migration-checklist.md`). Source, config, permanent docs, and migration SQL do not. This marks what is safe to delete (`git ls-files | grep temp_`).
-
-## Documentation
-
-- **Temporary** docs go in `documentation/jobs/` (grouped: `documentation/jobs/temp_job_<name>/`, which holds `DEVELOPMENT_PLAN.md` and `DECISIONS.md`) or `documentation/temp/`. Never ad-hoc files in the `documentation/` root.
-- **Feature-specific** docs stay with the feature (`src/features/<feature>/README.md`). Stage README updates in the same commit as feature code changes (`pnpm validate:feature-docs:staged`; CI runs `validate:feature-docs:strict`, which requires `## Purpose`, `## Structure`, `## Dependencies` — see `documentation/DOC_FEATURE_LOCAL_README.md`). Do not create new deep docs unless cross-file knowledge needs one.
-- **Permanent** root-level docs in `documentation/` must be named `DOC_<NAME>.md` (the validator enforces it). **Ask the user and wait for approval** before creating one; when unsure, place the doc in `documentation/jobs/` or `documentation/temp/`. Files inside subdirectories of `documentation/` do not need the prefix.
-- Use `documentation/` only for cross-feature docs: global architecture guides, multi-feature migration plans, temporary planning docs.
+- **Feature docs:** `src/features/<feature>/README.md` is required and must be staged with that feature's code changes (`pnpm validate:feature-docs:staged`; contract: `documentation/DOC_FEATURE_LOCAL_README.md`). `src/features/<feature>/docs/*.md` only with explicit user approval; prefer code comments and tests.
+- **Temporary / job docs:** `documentation/jobs/temp_job_<name>/` (e.g. `DEVELOPMENT_PLAN.md`, `DECISIONS.md` — the `grill-me` / `plan-grill` ledger) or `documentation/temp/`.
+- **Permanent docs:** files directly in `documentation/` must be `DOC_<NAME>.md` (validator-enforced). **Ask** the user before creating one; when in doubt, place it in `documentation/temp/` — it can be promoted later.
+- **Subfolders** of `documentation/` (e.g. `handoffs/`) group reference material and don't need the `DOC_` prefix.
 
 ## File moves and renames
 
-You may move and rename files; do not push a rename onto the user because the IDE could do it. Use an IDE rename only when the user wants to do it themselves.
+The agent does the move itself — don't hand it to the user just because an IDE can update imports (unless they ask to).
 
-1. Find every import, export, string reference, registration, test, config entry, and doc that names the old path or symbol.
-2. Confirm the destination is allowed by the whitelist and architecture rules.
-3. Move with the filesystem or shell tool, preserving LF endings and history where the tool allows.
-4. Update references in both directions: imports in the moved file, imports of it, barrels, lazy imports, route/config registries, tests, path strings.
-5. Search for stale references to the old path and symbol, then run proportionate checks (type-check plus relevant lint, tests, structure, architecture).
+1. Find every reference to the old path and symbol: imports in and of the file, barrels, lazy imports, registries, tests, config, docs.
+2. Confirm the destination is allowed; move it (`git mv` keeps history; keep LF endings).
+3. Update all references, then search for stale ones.
+4. Verify proportionally: type-check plus the relevant lint, tests, structure, and architecture checks.
 
-Never keep a compatibility husk or stale filename just to avoid a verified rename.
+Never leave a compatibility husk or stale filename to avoid a verified rename.
 
 ## Tooling artifacts (build / deploy CLIs)
 
 When tooling writes local state (e.g. Wrangler → `.wrangler/`, Claude Code → `.claude/worktrees/`):
 
-1. Add the path to the tracked `.gitignore`. The validator skips untracked paths that tracked `.gitignore` files ignore; `.git/info/exclude` and global excludes do not count, so results match on every machine. Optional fallback without git: `DEFAULT_IGNORE_PATTERNS` in `scripts/project-structure-validator.js`.
-2. Whitelist any new root config file in `projectStructure.config.cjs` (e.g. `wrangler.jsonc`).
+1. Add the path to the tracked **`.gitignore`** (protected — ask). The validator skips untracked paths ignored by tracked `.gitignore` files; personal excludes (`.git/info/exclude`, global) don't count, so results match on every machine. Tracked files are always validated.
+2. Optional fallback for runs without git: add it to `DEFAULT_IGNORE_PATTERNS` in `scripts/project-structure-validator.js`.
+3. Whitelist any new root config file (e.g. `wrangler.jsonc`) in `projectStructure.config.cjs`.
 
-Tracked files are always validated, even if `.gitignore` matches them. See `documentation/DOC_CLOUDFLARE_WORKERS.md`.
+Otherwise `pnpm validate:structure` fails after the first local build. See `documentation/DOC_CLOUDFLARE_WORKERS.md`.
+
+## Related
+
+When changing this rule, check `architecture/RULE.mdc`, `projectStructure.config.cjs`, `scripts/project-structure-validator.js`, and `documentation/PROJECT-STRUCTURE-VALIDATION.md`.

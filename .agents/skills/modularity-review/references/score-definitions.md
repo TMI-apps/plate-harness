@@ -10,7 +10,7 @@ Two scores, never blended. The **graph** is dependency-cruiser. The **gate** is 
 |------|-----------------|
 | MUI | `src/components/common/**`, `src/shared/theme/**` |
 | Supabase | `src/shared/services/supabaseService.ts` |
-| Airtable | `src/shared/services/airtableService.ts` |
+| Airtable | `src/shared/services/airtableService.ts` (not shipped; create it when a fork reads Airtable at runtime) |
 | Vite | none — not gated (`import.meta.env` is app-wide) |
 
 ## Gate vs measure

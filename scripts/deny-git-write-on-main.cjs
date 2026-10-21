@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Claude Code PreToolUse (Bash) hook: agents never write to `main` in any git workflow mode
- * (git-workflow/RULE.mdc § Mode behavior table invariants; temp_job_git-workflow-model-c D25/D26).
+ * (git-workflow/RULE.mdc § Mode behavior table invariants).
  * Blocks `git commit` while `main` is checked out, and any `git push` whose destination is `main`.
  * No override: the user runs bootstrap/emergency commands on `main` themselves.
  *

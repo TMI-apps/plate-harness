@@ -118,5 +118,5 @@ This skill's job ends at a clear, honest recommendation — it does not install 
 ## Related
 
 - [`plan`](../plan/SKILL.md) — primary Investigate call site
-- [`router`](../router/SKILL.md) § `dont-reinvent-the-wheel` vs `pattern-review` vs `api-integrate`
+- [`router` tiebreaks](../router/references/tiebreaks.md) § `dont-reinvent-the-wheel` vs `pattern-review` vs `api-integrate`
 - [`documentation/DOC_AGENT_WORKFLOW_LAYERS.md`](../../../documentation/DOC_AGENT_WORKFLOW_LAYERS.md) § Don't reinvent the wheel

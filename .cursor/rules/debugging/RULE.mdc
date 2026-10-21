@@ -5,10 +5,6 @@ alwaysApply: true
 
 # Debugging and Logging
 
-## Purpose
-
-This rule defines debugging strategies, logging practices, and issue analysis patterns for effective problem-solving.
-
 ## Logs
 
 - Do not remove debugging logs until the user confirms they are no longer needed.
@@ -63,12 +59,7 @@ This rule defines debugging strategies, logging practices, and issue analysis pa
 
 ### User Testing Instructions
 
-**When instructing the user to test something:**
-
-- **ALWAYS provide explicit next steps for BOTH success AND failure scenarios.**
-- Format: "If SUCCESS → do X" and "If FAILURE → do Y"
-- Never leave the user without a clear path forward for either outcome.
-- Include what to check, what to report, or what to try next for each case.
+When asking the user to test something, give the next step for **both** outcomes — "If SUCCESS → X", "If FAILURE → Y" — including what to check or report.
 
 ## Scientific Method Debugging
 
@@ -80,18 +71,6 @@ This rule defines debugging strategies, logging practices, and issue analysis pa
 
 Do not duplicate the full scientific-method checklist in this rule. This file owns **logging**, **API troubleshooting**, **scope reduction**, and **user test instructions** above.
 
----
-
 ## Related Rules
 
-**When modifying this rule, check these rules for consistency:**
-
-- `agent-behavior/RULE.mdc` - Protected files and success reporting (verified vs unverified)
-- `testing/RULE.mdc` - Testing patterns and debugging test failures
-- `architecture/RULE.mdc` - Component nesting and structural analysis
-
-**Rules that reference this rule:**
-- `workflow/RULE.mdc` - Hub; links here for reductive strategy
-- `architecture/RULE.mdc` - Performance cost risk references reductive strategy
-- `.agents/skills/debug/SKILL.md` - Complete Scientific Method Debugging process (SSOT for debugging commands)
-
+When modifying this rule, check `agent-behavior`, `testing`, `architecture`, and `.agents/skills/debug/SKILL.md`.

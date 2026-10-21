@@ -21,7 +21,6 @@ Central navigation for plate-harness documentation. For authoritative rules and 
 | **Agent: lightweight PIV (quick-piv)** | [`.agents/skills/quick-piv/SKILL.md`](../.agents/skills/quick-piv/SKILL.md) |
 | **Agent skill: persist lessons (learn)** | [`.agents/skills/learn/SKILL.md`](../.agents/skills/learn/SKILL.md) |
 | **Architecture** | [ARCHITECTURE.md](../ARCHITECTURE.md) |
-| **Architecture migration** | [DOC_ARCHITECTURE_MIGRATION_INSTRUCTIONS.md](./DOC_ARCHITECTURE_MIGRATION_INSTRUCTIONS.md) |
 | **Agent: human onboarding (start)** | [`.agents/skills/start/SKILL.md`](../.agents/skills/start/SKILL.md) |
 | **App vision & goals (fillable)** | [DOC_APP_VISION.md](./DOC_APP_VISION.md) |
 | **Dev task backlog** | [src/features/tasks/README.md](../src/features/tasks/README.md) |

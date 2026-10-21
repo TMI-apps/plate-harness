@@ -5,7 +5,7 @@ description: >-
   code, the agent states the suspected root cause, predicts what a successful fix
   proves, and pre-registers what a FAILED fix would teach. IF the user invokes
   hypothesis mode OR naive fixes already failed ≥1 THEN use this skill; ELSE use
-  `debug` (router § debug vs hypothesis). Especially for non-obvious, intermittent,
+  `debug` (router tiebreaks § debug vs hypothesis). Especially for non-obvious, intermittent,
   or repeatedly failed bugs.
 ---
 
@@ -92,4 +92,4 @@ For a one-line obvious typo or a clear stack trace pointing at a single line, ju
 | Obvious one-line fix | Fix directly |
 | Persist reusable bug class | `.agents/skills/debug/patterns.md` via `finish` or `learn` |
 
-**Router tiebreak:** `.agents/skills/router/SKILL.md` § `debug` vs `hypothesis`.
+**Router tiebreak:** `.agents/skills/router/references/tiebreaks.md` § `debug` vs `hypothesis`.

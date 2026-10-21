@@ -5,56 +5,61 @@ alwaysApply: true
 
 # Code Style Standards
 
-## Quick Reference
+## Enforced by tooling (don't hand-check — run the command)
 
-- **Enforced by Prettier / ESLint / tsc** (`pnpm lint`, `pnpm type-check`; `.eslintrc.json` and `.prettierrc.json` are SSOT): double quotes, arrow-function parentheses `(x) => x`, `===`, no `var`, TypeScript `strict`, LF line endings, complexity limits (cyclomatic ≤ 10, cognitive ≤ 15, ≤ 100 lines, nesting ≤ 4, ≤ 5 parameters, ≤ 20 statements).
-- **Path aliases:** `@/` only, never relative parent imports. Mappings and layer boundaries: `architecture/RULE.mdc` (SSOT).
-- **No `any`:** use a narrow type, `unknown`, or a local interface. Last resort for third-party gaps: `// eslint-disable-next-line @typescript-eslint/no-explicit-any` with a one-line justification.
-- **Names:** before adding or copying any symbol (one-off edits included), read `.agents/skills/name-the-mechanism/SKILL.md` and follow it. It owns what a name means and when to extract a copy.
+- **Formatting** — Prettier (`.prettierrc.json`: double quotes, `(x) => x` arrow parens, LF line endings, width 100). `pnpm format`.
+- **Lint** — `eslint.config.js` (flat config, extends GTS; SSOT): `===`, no `var`, `prefer-const`; feature components can't import feature services and feature hooks can't import feature components (error); hardcoded `sx` colors/sizes (warn); `@tanstack/query/exhaustive-deps` (warn); complexity (warn, below). `pnpm lint` / `pnpm lint:fix`.
+- **Types** — TypeScript `strict` plus `noUnusedLocals` / `noUnusedParameters` (prefix intentionally unused params with `_`). `pnpm type-check`.
+- **Layers, cycles, `@/` alias** — dependency-cruiser (`pnpm arch:check`) and `architecture/RULE.mdc`.
 
-## Naming Syntax
+Pre-commit runs these on staged files; CI runs them in full. Fix errors; warnings are acceptable but don't add new ones.
 
-Syntax for identifiers and file names in `src/`. Do not restate name-the-mechanism here.
+## Naming
 
-- camelCase variables/functions, UPPER_SNAKE_CASE constants, PascalCase types and interfaces. Interfaces for objects, types for unions. Prefix interfaces with `I` only if it adds clarity.
-- Files (case and suffix only, not destinations): components `ItemList.tsx`, hooks `useItems.ts`, services `itemService.ts`, types `item.types.ts`.
-- **Generic core, contextual edge:** do not add plugin registries, unused ports, or other extension machinery until a second consumer exists (that limit does not waive name-the-mechanism). Context stays in props, the caller, or a thin wrapper (`label`, validation, data binding). `TextInput` and `ItemDescriptionField` illustrate the split; they are not required file names.
+What a name means, and when a copy must be extracted, is `.agents/skills/name-the-mechanism/SKILL.md` — read it before adding or copying any symbol, one-off edits included. Syntax:
 
-## Code Reuse and Extraction
-
-- Before adding functionality, search for existing components/hooks/utilities to reuse; when explaining changes, say which were checked. Prefer small, reusable pieces. Copy counts: name-the-mechanism.
-- **When extracting code** (hooks, components, utilities): search the original file for every usage of each extracted state, setter, or function. Each usage must move with it or be exposed in the return interface/props (watch error-clearing callbacks, reset functions, setters used in event handlers). Then verify the consumer still compiles.
-- **External imports:** confirm the package is in `package.json`. Types often come from a wrapper (e.g. TipTap via `mui-tiptap`), not the original package; when in doubt, define types locally.
-
-## Imports and Exports
-
-- Group external libraries first, then internal modules; alphabetical within groups (`import/order` enforces); remove unused imports; `import type {...}` after regular imports in each group. Unused variables warn; prefix intentionally unused ones with `_`.
-- Prefer direct hook imports over direct service imports from components.
-- Named exports over default exports; export types and interfaces explicitly.
-- Document exported functions and classes with JSDoc/TSDoc; comments explain "why", not "what".
+- camelCase variables/functions, UPPER_SNAKE_CASE constants, PascalCase types/interfaces (no `I` prefix unless it adds clarity). Interfaces for objects, types for unions.
+- Files: components `ItemList.tsx`, hooks `useItems.ts`, services `itemService.ts`, types `item.types.ts` (case and suffix only — not destinations).
+- **Generic core, contextual edge:** a reusable control takes its role name from the skill (e.g. `TextInput`); context (`label`, validation, data binding) stays in props, the caller, or a thin wrapper (e.g. `ItemDescriptionField`). No plugin registries or unused ports until a second consumer exists.
 
 ## TypeScript
 
-- Explicit return types on async functions and exported functions; `readonly` for props that must not change.
-- Services are pure functions (no React hooks).
-- Catch errors as `unknown` and narrow; handle loading and error states explicitly; `void` marks intentionally unawaited promises.
+- No `any`: use a narrow type, `unknown`, or a local interface. Last resort for third-party gaps: `// eslint-disable-next-line @typescript-eslint/no-explicit-any` with a one-line justification.
+- Explicit return types on exported and async functions; JSDoc on exported functions and types (explain *why*, not *what*).
+- Catch errors as `unknown` and narrow; mark intentionally un-awaited promises with `void`.
+- Services are pure functions — no React hooks.
+- Imports: external first, then `@/` internal; `import type` for types; prefer named exports. Before importing a package, confirm it is in `package.json` — types for wrapped libraries often come from the wrapper (e.g. TipTap via `mui-tiptap`).
 
-## Styling Scope
+## Reuse and extraction
 
-Before implementing any styling change, **ask the user which scope applies** and wait for confirmation. Without a stated scope, assume global theme and still confirm. This avoids applying a change at the wrong level.
+- Search for an existing component/hook/utility before adding one, and say which ones you checked.
+- When extracting to a new file, trace **every** usage of each moved state, setter, and function (watch error-clearing callbacks, resets, and setters used in handlers): each either moves with the extraction or is exposed in its return value/props. Then confirm every reference in the original file still resolves.
 
-| Level | Location | Use for | Avoid |
-|-------|----------|---------|-------|
-| **Instance** | `sx` prop on one usage | Layout/spacing (margins, padding, positioning) | Colors, typography, visual styling |
-| **Component** | Inside a custom component's file | Unique styling not in the theme | Standard MUI components that should stay consistent |
-| **Global theme** | `src/shared/theme/defaultTheme.ts` | Colors, typography, component overrides, design tokens (spacing, shadows, borders) | One-off layout tweaks |
+## Styling scope
 
-Design token → global theme. Variant of all buttons of type X → theme `components.MuiButton.styleOverrides`. Layout for this instance → `sx`. Unique custom component → its own file. Otherwise ask.
+Before implementing a styling change, **ask which scope** the user wants, recommending global theme (the usual intent), and wait for the answer:
 
-Ask: "At what level should this styling change be applied? **Instance** (only this usage), **Component** (all usages of this custom component), or **Global theme** (all instances, recommended for consistency)."
+| Scope | Where | Use for |
+|-------|-------|---------|
+| Global theme | `src/shared/theme/defaultTheme.ts` (SSOT for palette, typography, tokens, component overrides) | Design tokens; variants of a standard MUI component (`components.MuiButton.styleOverrides`) |
+| Component | Inside a custom component's file | Unique styling of a custom component |
+| Instance | `sx` prop | Layout and spacing only (margins, padding, position) — never colors or typography |
 
-`defaultTheme.ts` is the SSOT for palette, typography, component overrides, and design tokens. Never use `sx` or inline `style` for colors or visual styling.
+## Complexity
 
-## Linting
+Thresholds (SSOT `eslint.config.js`, warnings in `pnpm lint`):
 
-`pnpm lint` (ESLint, config in `.eslintrc.json`) is what the pre-commit hook and CI run; `pnpm type-check` for types. Fix all errors; warnings are acceptable. Use `eslint-disable` only with a justification. Reducing complexity: `.agents/skills/optimize2/SKILL.md`.
+| Metric | Limit |
+|--------|-------|
+| Cyclomatic complexity | ≤ 10 |
+| Cognitive complexity | ≤ 15 |
+| Nesting depth | ≤ 4 |
+| Function length | ≤ 100 lines (excluding blanks and comments) |
+| Parameters | ≤ 3 (use an options object) |
+| Statements | ≤ 15 |
+
+Reduce with early returns/guard clauses, helper extraction, and options objects; full workflow in `.agents/skills/optimize2/SKILL.md`.
+
+## Related Rules
+
+When modifying this rule, check `architecture`, `testing`, `workflow`, `.agents/skills/optimize2/SKILL.md`, and `.agents/skills/layer-consistency-check/SKILL.md`.

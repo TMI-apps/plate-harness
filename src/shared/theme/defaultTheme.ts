@@ -15,7 +15,7 @@
  * - Use sx prop in components only for layout/spacing, not colors/styling
  */
 
-import { createTheme, ThemeOptions, Theme, alpha } from "@mui/material/styles";
+import { ThemeOptions, Theme, alpha } from "@mui/material/styles";
 
 // Color constants - define once, reference everywhere
 const COLORS = {
@@ -263,5 +263,3 @@ export const defaultThemeOptions: ThemeOptions = {
     },
   },
 };
-
-export const defaultTheme = createTheme(defaultThemeOptions);

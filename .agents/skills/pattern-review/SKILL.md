@@ -34,7 +34,7 @@ Apply **without being asked** when you are about to propose or write a plan, RFC
 | Heavy DB/UI operation cost | `architecture/RULE.mdc` § Performance cost risk |
 | Repo rule compliance on plan or diff | [`validate`](../validate/SKILL.md) |
 
-**When both this skill and `layer-consistency-check` apply:** run **layer-consistency-check first** (router § tiebreak).
+**When both this skill and `layer-consistency-check` apply:** run **layer-consistency-check first** (`router/references/tiebreaks.md` § `pattern-review` vs `layer-consistency-check`).
 
 ## Where everything lives
 

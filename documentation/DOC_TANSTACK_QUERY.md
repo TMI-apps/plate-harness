@@ -92,6 +92,51 @@ onError: (_err, _vars, context) => {
 },
 ```
 
+## Plain optimistic + server-canonical response (playbook)
+
+**SSOT** for mutation UX (summary + trigger: `.cursor/rules/architecture/RULE.mdc` § Plain optimistic + server-canonical response). Goal: one optimistic render, then one committed render that matches persisted data — no third render from a refetch that disagrees with the patch. Same model in other libraries: Apollo `optimisticResponse`, RTK Query `updateQueryData`, SWR `mutate` with `optimisticData` + `populateCache`.
+
+### Playbook steps (in order)
+
+1. **Canonical API contracts**  
+   Server mutation paths should return the **canonical projection** the UI renders (updated row(s), counts, or list slice), e.g. PostgREST `.select(...)` after `.update()` / `.insert()`. Avoid **204 No Content / void success + mandatory refetch** as the default contract for row-level edits when the UI already holds query cache for that entity.
+
+2. **Optimistic phase** (`onMutate`, before `await`)  
+   - `cancelQueries` for affected keys if needed to avoid races.  
+   - Snapshot previous cache via `getQueryData` (or equivalent).  
+   - Apply a cache **patch** that uses the **same field shape and normalizers** the server response will use.  
+   - Return rollback context (e.g. `{ previous }`) from `onMutate`.
+
+3. **Error phase** (`onError`)  
+   - Restore the snapshot with `setQueryData` using stored context.  
+   - Surface **one** non-blocking error (toast/snackbar); do not stack multiple error UIs from the same gesture.
+
+4. **Success phase** (`onSuccess` / `onSettled` when error-corrected)  
+   - Merge the **mutation result** into the cache with `setQueryData` (or targeted `setQueriesData`) so cache matches the server response **byte-for-byte** for that projection.  
+   - **Do not** call `invalidateQueries` or `refetch` on the **happy path** for the **same** list/detail keys you just reconciled—this is the main cause of an extra refetch render that does not match the optimistic patch and produces flashes.
+
+5. **Pending / “saving” chrome**  
+   Clear loading or “saving” indicators only after the cache holds **server-canonical** data for the relevant keys (e.g. after `setQueryData` from the response), not merely when the mutation `Promise` resolves if you still rely on a follow-up refetch.
+
+6. **React rendering**  
+   - Wrap non-urgent success-path updates in `startTransition` when they might defer heavy tree work.  
+   - Keep **stable list keys** (`id`-based; avoid array index keys) through optimistic → server merge so React does not remount rows unnecessarily.
+
+7. **When `invalidateQueries` / refetch *is* acceptable**  
+   - Unknown or large blast radius (bulk operations, admin actions touching many rows).  
+   - Cross-table aggregates or summaries where the mutation response does not carry the full derived state.  
+   - **Secondary staleness**: refresh other caches **after** the user-visible path has already merged canonical data for the focused query—optionally deferred (`queueMicrotask`, `setTimeout(0)`, or transition).
+
+8. **Hybrid escape hatch**  
+   Reconcile the **focused** query from the **response body** first. If other caches might be stale, **invalidate only secondary keys**, preferably **deferred**, never in the same tick as a redundant invalidation of the key you just `setQueryData`’d.
+
+### Anti-patterns (treat as bugs when fixing flashes)
+
+- Optimistic patch followed immediately by **`invalidateQueries` / `refetch` on the same list or detail key** on success.  
+- **Multiple concurrent refresh mechanisms** on one gesture (`refetch()` + `invalidateQueries()` + resetting local duplicated state) without a **single** canonical merge step into TanStack Query cache.  
+- **Divergent data shapes** between optimistic updates and server normalizers (different sort keys, computed fields, `null` vs. `[]`, missing timestamps).  
+- Clearing “saving” state before the cache reflects the server response while a refetch is still the planned source of truth.
+
 ## Auth Boundary
 
 On logout: `queryClient.clear()` in `authService.logout`, before `signOut()`. Prevents user A's data from being visible after user B logs in.

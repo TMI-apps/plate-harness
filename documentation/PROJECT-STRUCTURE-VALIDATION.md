@@ -8,7 +8,7 @@ This repo enforces a **whitelist** of allowed folders and files. Anything not de
 |---------|--------|-------------|
 | `pnpm validate:structure` | Full repository | Before large refactors, after editing `projectStructure.config.cjs`, or when troubleshooting CI structure failures |
 | `pnpm validate:structure:staged` | Staged paths only | Pre-commit (automatic); quick check while iterating on a few new files |
-| `pnpm validate:all` | Structure + architecture checks | Broader local gate before a big PR |
+| `pnpm arch:check` | Layer boundaries + cycles (dependency-cruiser) | Broader local gate before a big PR |
 | `pnpm validate:feature-size` | Per-feature file budgets | After adding many files under `src/features/*` |
 | `pnpm validate:feature-docs` | Feature `README.md` presence | After feature code changes; pre-commit runs staged variant |
 
@@ -58,7 +58,7 @@ Humans: pre-commit runs `validate:structure:staged` on relevant staged files; ru
 ## Related validation
 
 - **Doc references in rules/skills:** `pnpm validate:docs` (`scripts/validate-cursor-doc-references.js`)
-- **ESLint layer boundaries:** `pnpm lint:arch` / `pnpm arch:check`
+- **Layer boundaries:** `pnpm arch:check` (dependency-cruiser)
 - **Contributing workflow:** `documentation/DOC_CONTRIBUTING.md`
 
 ## See also

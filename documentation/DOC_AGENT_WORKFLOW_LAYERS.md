@@ -24,7 +24,7 @@ No separate `documentation/DOC_*` procedure for this workflow — invocable step
 | Audience | Start here |
 |----------|------------|
 | **Agents** | `.agents/skills/pattern-review/SKILL.md` |
-| **Humans** | Same skill + `references/` below; router § Situation → skill |
+| **Humans** | Same skill + `references/` below; router § Skill index |
 
 | Content | Path |
 |---------|------|
@@ -47,7 +47,7 @@ No separate `documentation/DOC_*` procedure — invocable steps live in the skil
 | Audience | Start here |
 |----------|------------|
 | **Agents** | `.agents/skills/dont-reinvent-the-wheel/SKILL.md` |
-| **Humans** | Same skill; router § `dont-reinvent-the-wheel` vs `pattern-review` vs `api-integrate` |
+| **Humans** | Same skill; router tiebreaks § `dont-reinvent-the-wheel` vs `pattern-review` vs `api-integrate` |
 
 | Content | Path |
 |---------|------|
@@ -68,7 +68,7 @@ No separate `documentation/DOC_*` procedure — invocable steps live in the skil
 | Audience | Start here |
 |----------|------------|
 | **Agents** | `.agents/skills/standards-align/SKILL.md` |
-| **Humans** | Same skill; router § `standards-align` vs `pattern-review` vs `challenge` |
+| **Humans** | Same skill; router tiebreaks § `standards-align` vs `pattern-review` vs `challenge` |
 
 | Content | Path |
 |---------|------|
@@ -88,7 +88,7 @@ No separate `documentation/DOC_*` procedure — invocable steps live in the skil
 | Audience | Start here |
 |----------|------------|
 | **Agents** | `.agents/skills/improve/SKILL.md` |
-| **Humans** | Same skill; router § `improve` vs specialized skills |
+| **Humans** | Same skill; router tiebreaks § `improve` vs specialized improve skills |
 
 | Content | Path |
 |---------|------|
@@ -108,7 +108,7 @@ No separate `documentation/DOC_*` procedure for this workflow — invocable step
 | Audience | Start here |
 |----------|------------|
 | **Agents** | `.agents/skills/layer-consistency-check/SKILL.md` |
-| **Humans** | Same skill + `references/` below; router § `pattern-review` vs `layer-consistency-check` |
+| **Humans** | Same skill + `references/` below; router tiebreaks § `pattern-review` vs `layer-consistency-check` |
 
 | Content | Path |
 |---------|------|
@@ -130,7 +130,7 @@ No separate `documentation/DOC_*` procedure for this workflow — invocable step
 | Audience | Start here |
 |----------|------------|
 | **Agents** | `.agents/skills/api-integrate/SKILL.md` |
-| **Humans** | Same skill + `references/` below; router § External API research vs stack plugin skills |
+| **Humans** | Same skill + `references/` below; router tiebreaks § External API research |
 
 | Content | Path |
 |---------|------|

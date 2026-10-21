@@ -114,7 +114,7 @@ If assistant cannot perform the fork UI step, instruct user exactly what to clic
 
 **Prerequisites:** GitHub CLI `gh` installed and authenticated (`gh auth login`) — the Claude Code desktop PR monitor and auto-merge need it.
 
-**Template repo (harness maintenance):** **`model-c`** (D5, `temp_job_git-workflow-model-c`).
+**Template repo (harness maintenance):** **`model-c`**.
 
 **Fork:** ask once:
 

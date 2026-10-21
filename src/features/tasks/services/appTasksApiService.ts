@@ -5,7 +5,7 @@ const ACTIVE_URL = "/__dev/tasks";
 const ARCHIVE_URL = "/__dev/tasks/archive";
 const RESTORE_URL = "/__dev/tasks/restore";
 
-export interface TaskListsSnapshot {
+interface TaskListsSnapshot {
   active: AppTask[];
   archive: AppTask[];
 }

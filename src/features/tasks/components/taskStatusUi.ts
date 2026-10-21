@@ -8,9 +8,6 @@ export const TASK_STATUS_LABEL: Record<AppTask["status"], string> = {
   done: "Done",
 };
 
-/** Widest status label in the active-task select (drives column + min-width). */
-export const TASK_STATUS_LONGEST_LABEL = "Active" as const satisfies string;
-
 /**
  * Min width for the small outlined status Select.
  * Fits "Active" without ellipsis (`.MuiSelect-select` scrollWidth ≈ 95px at 16px root).

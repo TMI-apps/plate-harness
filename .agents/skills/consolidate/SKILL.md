@@ -372,10 +372,9 @@ Skip this phase on audit-only invocations. For each **user-approved** consolidat
 
 #### 6.3 Post-flight
 
-- [ ] `pnpm validate:all` passes
-- [ ] `pnpm lint` passes
 - [ ] `pnpm validate:structure` passes
-- [ ] `pnpm lint:arch` passes (layer boundaries)
+- [ ] `pnpm lint` passes
+- [ ] `pnpm arch:check` passes (layer boundaries)
 - [ ] No new circular dependencies
 - [ ] All imports use `@/` path aliases
 - [ ] Feature traceability preserved (can trace any feature in <=5 files)
