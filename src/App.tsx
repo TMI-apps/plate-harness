@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
 import { QueryProvider } from "@/shared/context/QueryProvider";
 import { AuthProvider } from "@/shared/context/AuthContext";
-import { Topbar } from "@/components/common/Topbar";
+import { Topbar } from "@/layouts/Topbar";
 import { DevTasksFab } from "@/features/tasks/components/DevTasksFab/DevTasksFab";
 import { QueryDevtoolsGate } from "@/components/common/QueryDevtoolsGate";
 import { MainLayout } from "@/layouts/MainLayout/MainLayout";

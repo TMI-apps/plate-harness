@@ -1,5 +1,5 @@
 import { getSupabase } from "@/shared/services/supabaseService";
-import type { UserProfile, UserProfileUpdate } from "@/features/auth/types/auth.types";
+import type { UserProfile } from "@/features/auth/types/auth.types";
 
 const USER_PROFILE_FIELDS = `
   id,
@@ -43,25 +43,4 @@ export const fetchUserProfile = async (userId: string): Promise<UserProfile | nu
   }
 
   return data as UserProfile;
-};
-
-/**
- * Updates user profile in the users table and returns the canonical row.
- */
-export const updateUserProfile = async (
-  userId: string,
-  data: UserProfileUpdate
-): Promise<UserProfile | null> => {
-  const { data: updated, error } = await getSupabase()
-    .from("users")
-    .update(data)
-    .eq("id", userId)
-    .select(USER_PROFILE_FIELDS)
-    .single();
-
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  return updated as UserProfile;
 };

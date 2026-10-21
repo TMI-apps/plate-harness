@@ -5,6 +5,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.41.0] - 2026-10-21
+
+Model C cutover, harness tightening and dead-code cleanup, plus generic improvements ported from bronze-plate-harness (audit: `documentation/jobs/temp_job_plate-bronze-diff/`).
+
+### Added
+
+- **Node 22 guard:** `engines: >=22` and a `preinstall` check (`scripts/check-node-version.cjs`, with test) that fails fast when Node is older than `.node-version`.
+- **Staging Supabase project for previews:** docs and rules (`DOC_CLOUDFLARE_WORKERS.md` § Staging backend, `cloud-functions`, `database`, `git-workflow`) describe a separate staging project; previews never touch production data, and migrations/Edge Functions go to staging first.
+- **`## Preview` section in every PR** (`git-workflow` rule, all modes).
+- **Automatic release bootstrap:** `release-please.yml` `bootstrap` job creates the baseline `v<version>` release under model-c.
+- **React hooks lint:** `react-hooks/rules-of-hooks` (error) and `react-hooks/exhaustive-deps` (warn).
+
+### Changed
+
+- **Git workflow mode is now `model-c`** (`src/config/git-workflow.json`): per-task branch → squash PR → `main`; release-please owns versions.
+- **Node 22** (`.node-version`, CI): wrangler 4 needs Node 22+. Docs say never to set a dashboard `NODE_VERSION`.
+- **dependency-cruiser excludes anchored** (`^dist/`, `^build/`, `^coverage/`); unanchored ones hid every vendor import. Supabase types now come from `supabaseService` (the only `@supabase/*` import site); baselines regenerated.
+- **`test-staged`:** falls back to the full suite when Vitest 4 exits 1 because no related tests exist (no longer blocks such commits).
+- **`ProfileMenu` and `Topbar` moved to `src/layouts/`** (app shell); the `components/common` no-feature-imports lint block now targets the right path (`src/components/common/**`).
+- **Lint SSOT is `eslint.config.js`:** rules, skills, husky hook and settings no longer point at `.eslintrc.json`; layer enforcement is documented as dependency-cruiser plus `no-restricted-imports`.
+- Airtable is labeled an optional module (kept in plate, not imported by the app).
+- Worker renamed to `plate-harness` (`wrangler.jsonc`).
+
+### Removed
+
+- `.eslintrc.json` (ignored by ESLint 10) and the broken `pnpm lint:arch` script.
+- Unused ESLint devDependencies: `@eslint/js`, `eslint-config-prettier`, `eslint-import-resolver-typescript`, `eslint-plugin-boundaries`, `eslint-plugin-import`, `eslint-plugin-react`, `eslint-plugin-react-refresh`, `eslint-plugin-unused-imports`, `globals`, `typescript-eslint`.
+- Unused hooks `useUserProfile` and `useUpdateUserProfile` (plus the orphaned `updateUserProfile` and `UserProfileUpdate`).
+- `documentation/Authentication-main-app/`, `documentation/claude_outputs/`, `DOC_ARCHITECTURE_MIGRATION_INSTRUCTIONS.md` and completed job plans.
+- Dead app code found with knip: `Card`, `Modal`, `themeLoader` (custom-theme localStorage API), duplicate Supabase init path and unused exports/types.
+- Always-loaded rules and skills tightened (router tiebreaks moved to `router/references/tiebreaks.md`).
+
 ## [0.40.0] - 2026-10-16
 
 ### Added

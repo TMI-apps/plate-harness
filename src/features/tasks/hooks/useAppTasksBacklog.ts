@@ -22,7 +22,7 @@ import type {
 const TEXT_SAVE_DEBOUNCE_MS = 1000;
 const AUTOSAVE_SAVED_MS = 2000;
 
-export type TasksView = "active" | "archive";
+type TasksView = "active" | "archive";
 
 type PersistOptions = {
   successFeedback?: SaveFeedback;

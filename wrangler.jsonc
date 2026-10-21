@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   // Rename before first deploy. Forks: use your own unique Worker name.
-  "name": "vite-mui-supabase-starter",
+  "name": "plate-harness",
   "compatibility_date": "2026-06-23",
   "workers_dev": true,
   "preview_urls": true,

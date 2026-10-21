@@ -1,3 +1,7 @@
+/**
+ * Optional Airtable module: not imported by the app by default. Use it only when a
+ * project reads Airtable (setup: README § Airtable, .agents/skills/api-integrate/).
+ */
 import Airtable from "airtable";
 
 const airtableApiKey = import.meta.env.VITE_AIRTABLE_API_KEY;

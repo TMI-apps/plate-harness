@@ -125,6 +125,32 @@ describe('test-staged executor', () => {
       assert.deepEqual(order, ['test:classify', 'test:run']);
     });
 
+    test('should fall back to full suite when related exits 1 with no test files', () => {
+      let fullCalls = 0;
+      const code = executePlan(
+        {
+          mode: 'related',
+          reason: 'staged src files',
+          relatedPaths: ['src/shared/utils/userUtils.ts'],
+        },
+        {
+          dryRun: false,
+          runners: {
+            runVitestRelated: () => ({
+              status: 1,
+              output: 'No test files found, exiting with code 1',
+            }),
+            runFullSuite: () => {
+              fullCalls += 1;
+              return 0;
+            },
+          },
+        },
+      );
+      assert.equal(code, 0);
+      assert.equal(fullCalls, 1);
+    });
+
     test('should fall back to full suite when related finds no test files', () => {
       let fullCalls = 0;
       const code = executePlan(

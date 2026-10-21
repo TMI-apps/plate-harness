@@ -68,7 +68,7 @@ No automated migrator. Manual steps:
 4. `git switch develop && git pull origin develop` (or create a fresh `feature/*` if switching to Model A).
 5. Confirm agents read the new mode (`pnpm validate:git-workflow`).
 
-**From A/B to C** (the checklist plate-harness itself uses — `documentation/jobs/temp_job_git-workflow-model-c/DEVELOPMENT_PLAN.md` Phase 8):
+**From A/B to C** (the checklist plate-harness itself uses):
 
 1. Sweep stranded work: commit or shelve local changes on `develop`; retarget or close PRs based on `develop` (`gh pr list --base develop`); list unmerged `feature/*` branches.
 2. Promote `develop` to `main` one last time (A/B flow).

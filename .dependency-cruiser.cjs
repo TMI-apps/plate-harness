@@ -11,7 +11,7 @@ module.exports = {
     },
 
     // === LAYER VIOLATION RULES ===
-    // Aligned with ESLint boundaries/element-types rules
+    // Aligned with the no-restricted-imports layer blocks in eslint.config.js
 
     // Pages cannot be imported by components or routes (downward-only)
     {
@@ -313,9 +313,10 @@ module.exports = {
     },
     exclude: {
       path: [
-        "dist",
-        "build",
-        "coverage",
+        // Anchored: unanchored "dist" also matched node_modules/**/dist/* and hid vendor edges.
+        "^dist/",
+        "^build/",
+        "^coverage/",
         "\\.test\\.[jt]sx?$",
         "\\.spec\\.[jt]sx?$",
         "__tests__",

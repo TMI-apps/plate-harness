@@ -18,9 +18,9 @@ User authentication and session management via Supabase.
 | Hooks | `hooks/` | `useAuth`, `useAuthSession`, `useAuthRedirect`, `useAuthCallbackHandler`, `useUserProfileQuery`, `useUpdateUserProfile` |
 | Services | `services/` | `authService`, `authCallbackService`, `authErrorMessages`, `authValidation`, `userProfileService`, `authHandlerUtils` |
 | Components | `components/` | `SignInPanel`, `EmailAuthForm` |
-| Types | `types/` | `User`, `UserProfile`, `AuthContextValue`, credentials types |
+| Types | `types/` | `User`, `UserProfile`, `AuthContextValue`, credentials types, `authMessages` (user-facing copy SSOT) |
 
-**Cross-layout UI:** `ProfileMenu` lives in `@/components/common/ProfileMenu` (shell widget used by Topbar). Shared viewport/form layout tokens live in `@/shared/theme/appViewLayout`.
+**Cross-layout UI:** `ProfileMenu` lives in `@/layouts/ProfileMenu` (app-shell account menu used by Topbar). Shared viewport/form layout tokens live in `@/shared/theme/appViewLayout`.
 
 ## Main API
 
@@ -39,7 +39,7 @@ Returns:
 
 - **Form-blocking errors:** inline MUI `Alert` (sign-in panel, email form).
 - **OAuth/callback errors:** `setAuthError` on auth context; shown on Home via single Alert.
-- **Profile mutations:** TanStack `useUpdateUserProfile` merges server response via `setQueryData` (no happy-path invalidation).
+- **Profile mutations:** none shipped; follow `documentation/DOC_TANSTACK_QUERY.md` § Example mutation (merge server response via `setQueryData`, no happy-path invalidation).
 
 ### Routes
 
@@ -50,9 +50,9 @@ Returns:
 
 ## Dependencies
 
-- `@/shared/services/supabaseService` – Supabase client, `isSupabaseConfigured`
+- `@/shared/services/supabaseService` – `getSupabase` (lazy client, created on load when configured), `isSupabaseConfigured`, and the `SupabaseUser` / `AuthError` types (only file allowed to import `@supabase/*`)
 - `@/shared/utils/appOrigin` – absolute app URLs (basename-aware)
-- `@/config/legal` – placeholder Privacy/Terms URLs (`LEGAL_ORIGIN`)
+- `@/config/legal` – placeholder Privacy/Terms URLs (`PRIVACY_URL`, `TERMS_URL`)
 - `@/shared/hooks/useAuthBackendConfigured` – auth backend readiness for UI
 - `@/shared/utils/userUtils` – `mapProviderUserToAppUser`
 - `@/shared/utils/redirectUtils` – safe post-login redirect paths

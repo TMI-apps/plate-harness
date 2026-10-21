@@ -82,19 +82,10 @@ command 2>&1; if ($LASTEXITCODE -ne 0) { exit 1 }
 - `VITE_SUPABASE_PUBLISHABLE_KEY` - Your Supabase anonymous/public key (legacy name: `VITE_SUPABASE_ANON_KEY`)
 - Access in code: `import { getSupabase, isSupabaseConfigured } from "@/shared/services/supabaseService"`
 
-**For Edge Functions (set in Supabase Dashboard):**
-- `GAMMA_API_KEY` - Gamma API key for presentation generation
-- Other secrets configured via Supabase Dashboard → Project Settings → Edge Functions → Secrets
+**Airtable (optional; read by `scripts/airtable-*.js`, not the app):**
+- `VITE_AIRTABLE_API_KEY`, `VITE_AIRTABLE_BASE_ID`, `VITE_AIRTABLE_TABLE_ID` (see `.env.example`)
 
-**Other Environment Variables:**
-- `VITE_OPENROUTER_API_KEY` - OpenRouter API key for chat completion
-- `VITE_ELEVENLABS_API_KEY` - ElevenLabs API key for TTS/STT
-
-**Legacy Firebase Variables (may still be needed for hosting/deployment):**
-- `VITE_FIREBASE_API_KEY` - Firebase API key (for hosting deployment)
-- `VITE_FIREBASE_PROJECT_ID` - Firebase project ID (for hosting)
-- `VITE_FIREBASE_APP_ID` - Firebase app ID (for hosting deployment)
-- Note: Firebase variables are primarily used for Firebase Hosting deployment configuration. The app now uses Supabase for database, auth, and storage.
+**Server-side secrets:** never as `VITE_*` (those are compiled into the browser bundle). Edge Function secrets: Supabase Dashboard → Project Settings → Edge Functions → Secrets.
 
 **Hidden Files:**
 - Some files are not visible to the AI (for example `.env`)

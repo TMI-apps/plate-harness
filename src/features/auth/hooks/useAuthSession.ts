@@ -3,7 +3,7 @@ import * as authService from "@/features/auth/services/authService";
 import { mapProviderUserToAppUser } from "@/shared/utils/userUtils";
 import { isOAuthRedirectInProgress } from "@/shared/utils/oauthUtils";
 import type { User } from "@/features/auth/types/auth.types";
-import type { User as SupabaseUser } from "@supabase/supabase-js";
+import type { SupabaseUser } from "@/shared/services/supabaseService";
 
 /**
  * Initialize authentication session

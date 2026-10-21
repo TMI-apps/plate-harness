@@ -1,35 +1,6 @@
 [
   {
     "type": "dependency",
-    "from": "src/shared/theme/appViewLayout.ts",
-    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/styles/index.mjs",
-    "unresolvedTo": "@mui/material/styles",
-    "dependencyTypes": [
-      "npm",
-      "type-only",
-      "import"
-    ],
-    "rule": {
-      "severity": "error",
-      "name": "stack-port-mui"
-    }
-  },
-  {
-    "type": "dependency",
-    "from": "src/features/tasks/components/DevTasksFab/DevTasksFab.tsx",
-    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Fab/index.mjs",
-    "unresolvedTo": "@mui/material/Fab",
-    "dependencyTypes": [
-      "npm",
-      "import"
-    ],
-    "rule": {
-      "severity": "error",
-      "name": "stack-port-mui"
-    }
-  },
-  {
-    "type": "dependency",
     "from": "src/features/auth/components/EmailAuthForm.tsx",
     "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Alert/index.mjs",
     "unresolvedTo": "@mui/material/Alert",
@@ -465,6 +436,20 @@
   },
   {
     "type": "dependency",
+    "from": "src/features/tasks/components/DevTasksFab/DevTasksFab.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Fab/index.mjs",
+    "unresolvedTo": "@mui/material/Fab",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
     "from": "src/features/tasks/components/TasksAutosaveIndicator.tsx",
     "to": "node_modules/.pnpm/@mui+icons-material@9.0.1_@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_rea_q6j66kvuasnxr7ebgsorkeqypy/node_modules/@mui/icons-material/CheckCircleOutlined.js",
     "unresolvedTo": "@mui/icons-material/CheckCircleOutlined",
@@ -692,6 +677,413 @@
     "from": "src/layouts/MainLayout/MainLayout.tsx",
     "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Container/index.mjs",
     "unresolvedTo": "@mui/material/Container",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/layouts/ProfileMenu/anchorMenuProps.ts",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Menu/index.mjs",
+    "unresolvedTo": "@mui/material/Menu",
+    "dependencyTypes": [
+      "npm",
+      "type-only",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/layouts/ProfileMenu/ProfileChips.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Box/index.mjs",
+    "unresolvedTo": "@mui/material/Box",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/layouts/ProfileMenu/ProfileChips.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Chip/index.mjs",
+    "unresolvedTo": "@mui/material/Chip",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/layouts/ProfileMenu/ProfileEmail.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Typography/index.mjs",
+    "unresolvedTo": "@mui/material/Typography",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/layouts/ProfileMenu/ProfileInfo.tsx",
+    "to": "node_modules/.pnpm/@mui+icons-material@9.0.1_@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_rea_q6j66kvuasnxr7ebgsorkeqypy/node_modules/@mui/icons-material/Person.js",
+    "unresolvedTo": "@mui/icons-material/Person",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/layouts/ProfileMenu/ProfileInfo.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Avatar/index.mjs",
+    "unresolvedTo": "@mui/material/Avatar",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/layouts/ProfileMenu/ProfileInfo.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Box/index.mjs",
+    "unresolvedTo": "@mui/material/Box",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/layouts/ProfileMenu/ProfileInfo.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/CircularProgress/index.mjs",
+    "unresolvedTo": "@mui/material/CircularProgress",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/layouts/ProfileMenu/ProfileInfo.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Typography/index.mjs",
+    "unresolvedTo": "@mui/material/Typography",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/layouts/ProfileMenu/ProfileMenu.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Menu/index.mjs",
+    "unresolvedTo": "@mui/material/Menu",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/layouts/ProfileMenu/ProfileMenuContent.tsx",
+    "to": "node_modules/.pnpm/@mui+icons-material@9.0.1_@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_rea_q6j66kvuasnxr7ebgsorkeqypy/node_modules/@mui/icons-material/Login.js",
+    "unresolvedTo": "@mui/icons-material/Login",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/layouts/ProfileMenu/ProfileMenuContent.tsx",
+    "to": "node_modules/.pnpm/@mui+icons-material@9.0.1_@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_rea_q6j66kvuasnxr7ebgsorkeqypy/node_modules/@mui/icons-material/Logout.js",
+    "unresolvedTo": "@mui/icons-material/Logout",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/layouts/ProfileMenu/ProfileMenuContent.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Box/index.mjs",
+    "unresolvedTo": "@mui/material/Box",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/layouts/ProfileMenu/ProfileMenuContent.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Divider/index.mjs",
+    "unresolvedTo": "@mui/material/Divider",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/layouts/ProfileMenu/ProfileMenuContent.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/MenuItem/index.mjs",
+    "unresolvedTo": "@mui/material/MenuItem",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/layouts/ProfileMenu/ProfileMenuTrigger.tsx",
+    "to": "node_modules/.pnpm/@mui+icons-material@9.0.1_@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_rea_q6j66kvuasnxr7ebgsorkeqypy/node_modules/@mui/icons-material/Person.js",
+    "unresolvedTo": "@mui/icons-material/Person",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/layouts/ProfileMenu/ProfileMenuTrigger.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Avatar/index.mjs",
+    "unresolvedTo": "@mui/material/Avatar",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/layouts/ProfileMenu/ProfileMenuTrigger.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/IconButton/index.mjs",
+    "unresolvedTo": "@mui/material/IconButton",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/layouts/ProfileMenu/ProfileMenuTrigger.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Tooltip/index.mjs",
+    "unresolvedTo": "@mui/material/Tooltip",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/layouts/ProfileMenu/ProfileName.tsx",
+    "to": "node_modules/.pnpm/@mui+icons-material@9.0.1_@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_rea_q6j66kvuasnxr7ebgsorkeqypy/node_modules/@mui/icons-material/Verified.js",
+    "unresolvedTo": "@mui/icons-material/Verified",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/layouts/ProfileMenu/ProfileName.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Box/index.mjs",
+    "unresolvedTo": "@mui/material/Box",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/layouts/ProfileMenu/ProfileName.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Typography/index.mjs",
+    "unresolvedTo": "@mui/material/Typography",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/layouts/ProfileMenu/SignInMenuItems.tsx",
+    "to": "node_modules/.pnpm/@mui+icons-material@9.0.1_@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_rea_q6j66kvuasnxr7ebgsorkeqypy/node_modules/@mui/icons-material/Login.js",
+    "unresolvedTo": "@mui/icons-material/Login",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/layouts/ProfileMenu/SignInMenuItems.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Box/index.mjs",
+    "unresolvedTo": "@mui/material/Box",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/layouts/ProfileMenu/SignInMenuItems.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/MenuItem/index.mjs",
+    "unresolvedTo": "@mui/material/MenuItem",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/layouts/Topbar/Topbar.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/AppBar/index.mjs",
+    "unresolvedTo": "@mui/material/AppBar",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/layouts/Topbar/Topbar.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Box/index.mjs",
+    "unresolvedTo": "@mui/material/Box",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/layouts/Topbar/Topbar.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Toolbar/index.mjs",
+    "unresolvedTo": "@mui/material/Toolbar",
+    "dependencyTypes": [
+      "npm",
+      "import"
+    ],
+    "rule": {
+      "severity": "error",
+      "name": "stack-port-mui"
+    }
+  },
+  {
+    "type": "dependency",
+    "from": "src/layouts/Topbar/Topbar.tsx",
+    "to": "node_modules/.pnpm/@mui+material@9.0.1_@emotion+react@11.14.0_@types+react@19.2.15_react@19.2.6__@emotion+styled_ypji7z4esaeifngvnubxmitsma/node_modules/@mui/material/Typography/index.mjs",
+    "unresolvedTo": "@mui/material/Typography",
     "dependencyTypes": [
       "npm",
       "import"

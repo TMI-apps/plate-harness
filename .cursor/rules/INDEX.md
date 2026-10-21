@@ -9,31 +9,22 @@ Quick reference guide to all rules and their relationships.
 - Formatting standards
 - Documentation requirements
 - Code organization
-- **Import ordering** (external first, then internal) - style concerns only
-- **Styling scope standards** (always ask scope before implementing styling changes)
-- **GTS linting** (default, with override option)
-- **TypeScript strict mode** (required)
-- **Complexity standards** (functions ≤ 10 cyclomatic, ≤ 15 cognitive, ≤ 100 lines)
-- **Note:** Path aliases, import direction, and layer boundaries are defined in `architecture/RULE.mdc` (SSOT)
+- **What tooling enforces** (Prettier, `eslint.config.js`, tsc, dependency-cruiser) — run the command
+- **Styling scope** (always ask scope before implementing styling changes)
+- **Complexity thresholds** (SSOT `eslint.config.js`)
+- Reuse and extraction checks
 
 **Related to:** All other rules
 
 ---
 
 ### Architecture (`architecture/RULE.mdc`)
-- Design principles
-- **Project structure** (SSOT for folder organization)
-- **Path aliases** (SSOT for `@/hooks/*`, `@/components/*`, etc. mappings)
-- Patterns and practices
-- **TanStack Query: plain optimistic + server-canonical response** (SSOT playbook—cache merge on success; avoid happy-path `invalidateQueries` for the same keys)
-- Module organization
-- Layer boundaries and import direction
-- **Feature granularity / bounded context** (size budgets, cross-feature imports — `featureBudgets.config.cjs`)
-- **Architecture documentation** (minimal contract-doc maintenance)
-- **Pattern risk (industry precedent)** — pointer to `.agents/skills/pattern-review/` (plans/proposals; not repo lint)
-- **Don't reinvent the wheel (package / pattern reuse)** — pointer to `.agents/skills/dont-reinvent-the-wheel/` (before custom generic subsystems; not pattern-review)
-- **Performance cost risk (heavy DB/UI ops)** — detect heavy operations, propose leaner alternatives, ask user before implementing
-- **Layer consistency (workaround guard)** — pointer to `.agents/skills/layer-consistency-check/` (verify assumptions; catch workarounds including instance-encoded names). Naming and copy counts: `.agents/skills/name-the-mechanism/SKILL.md`
+- **Proactive design checks:** pattern risk (`pattern-review`), don't reinvent the wheel, performance cost risk, layer consistency (workaround guard; naming via `name-the-mechanism`)
+- **Code placement**, edge-case placement, import direction
+- **Folder structure** and **path aliases** (SSOT: `@/*` → `src/*` only)
+- **Feature granularity / bounded context** (budgets in `featureBudgets.config.cjs`, cross-feature imports)
+- **TanStack Query optimistic + canonical merge** (summary; playbook SSOT `documentation/DOC_TANSTACK_QUERY.md`)
+- Changing architecture rules/configs; architecture docs
 
 **Related to:** code-style, testing, security, workflow
 

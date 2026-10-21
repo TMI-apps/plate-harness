@@ -2,15 +2,14 @@
   "features": [
     {
       "key": "auth",
-      "inboundCount": 13,
-      "wiringCount": 5,
+      "inboundCount": 12,
+      "wiringCount": 9,
       "inbound": [
-        "src/components/common/ProfileMenu.tsx",
-        "src/components/common/ProfileMenu/ProfileChips.tsx",
-        "src/components/common/ProfileMenu/ProfileInfo.tsx",
-        "src/components/common/ProfileMenu/ProfileMenuContent.tsx",
-        "src/components/common/ProfileMenu/ProfileMenuTrigger.tsx",
-        "src/layouts/MainLayout/MainLayout.tsx",
+        "src/layouts/ProfileMenu/ProfileChips.tsx",
+        "src/layouts/ProfileMenu/ProfileInfo.tsx",
+        "src/layouts/ProfileMenu/ProfileMenu.tsx",
+        "src/layouts/ProfileMenu/ProfileMenuContent.tsx",
+        "src/layouts/ProfileMenu/ProfileMenuTrigger.tsx",
         "src/pages/AuthCallbackPage.tsx",
         "src/pages/HomePage.tsx",
         "src/pages/LoginPage.tsx",
@@ -20,7 +19,11 @@
         "src/shared/utils/userUtils.ts"
       ],
       "wiring": [
-        "src/layouts/MainLayout/MainLayout.tsx",
+        "src/layouts/ProfileMenu/ProfileChips.tsx",
+        "src/layouts/ProfileMenu/ProfileInfo.tsx",
+        "src/layouts/ProfileMenu/ProfileMenu.tsx",
+        "src/layouts/ProfileMenu/ProfileMenuContent.tsx",
+        "src/layouts/ProfileMenu/ProfileMenuTrigger.tsx",
         "src/pages/AuthCallbackPage.tsx",
         "src/pages/HomePage.tsx",
         "src/pages/LoginPage.tsx",
@@ -33,9 +36,10 @@
     },
     {
       "key": "tasks",
-      "inboundCount": 1,
+      "inboundCount": 2,
       "wiringCount": 1,
       "inbound": [
+        "src/App.tsx",
         "src/pages/tasks/TasksPage.tsx"
       ],
       "wiring": [
@@ -50,54 +54,54 @@
   "stack": [
     {
       "id": "MUI",
-      "fileCount": 38,
+      "fileCount": 36,
       "busywork": "high",
       "files": [
         "src/App.tsx",
         "src/components/common/Button/Button.tsx",
-        "src/components/common/Card/Card.tsx",
-        "src/features/tasks/components/DevTasksFab/DevTasksFab.tsx",
         "src/components/common/Input/Input.tsx",
-        "src/components/common/Modal/Modal.tsx",
         "src/components/common/PageLoadingState/PageLoadingState.tsx",
-        "src/components/common/ProfileMenu.tsx",
-        "src/components/common/ProfileMenu/ProfileChips.tsx",
-        "src/components/common/ProfileMenu/ProfileEmail.tsx",
-        "src/components/common/ProfileMenu/ProfileInfo.tsx",
-        "src/components/common/ProfileMenu/ProfileMenuContent.tsx",
-        "src/components/common/ProfileMenu/ProfileMenuTrigger.tsx",
-        "src/components/common/ProfileMenu/ProfileName.tsx",
-        "src/components/common/ProfileMenu/SignInMenuItems.tsx",
         "src/components/common/QueryErrorBoundary/QueryErrorBoundary.tsx",
-        "src/components/common/Topbar/Topbar.tsx",
         "src/features/auth/components/EmailAuthForm.tsx",
         "src/features/auth/components/GoogleIcon.tsx",
         "src/features/auth/components/SignInPanel.tsx",
-        "src/shared/theme/appViewLayout.ts",
         "src/features/tasks/components/ActiveTaskList.tsx",
         "src/features/tasks/components/ActiveTaskRow.tsx",
         "src/features/tasks/components/ArchiveTaskList.tsx",
         "src/features/tasks/components/ArchiveTaskRow.tsx",
+        "src/features/tasks/components/DevTasksFab/DevTasksFab.tsx",
         "src/features/tasks/components/TasksAutosaveIndicator.tsx",
         "src/features/tasks/components/TasksBacklogPanel.tsx",
         "src/features/tasks/components/TasksFeedback.tsx",
         "src/features/tasks/components/TasksListEmptyState.tsx",
         "src/layouts/MainLayout/MainLayout.tsx",
+        "src/layouts/ProfileMenu/ProfileChips.tsx",
+        "src/layouts/ProfileMenu/ProfileEmail.tsx",
+        "src/layouts/ProfileMenu/ProfileInfo.tsx",
+        "src/layouts/ProfileMenu/ProfileMenu.tsx",
+        "src/layouts/ProfileMenu/ProfileMenuContent.tsx",
+        "src/layouts/ProfileMenu/ProfileMenuTrigger.tsx",
+        "src/layouts/ProfileMenu/ProfileName.tsx",
+        "src/layouts/ProfileMenu/SignInMenuItems.tsx",
+        "src/layouts/ProfileMenu/anchorMenuProps.ts",
+        "src/layouts/Topbar/Topbar.tsx",
         "src/main.tsx",
         "src/pages/HomePage.tsx",
         "src/pages/LoginPage.tsx",
         "src/pages/ResetPasswordPage.tsx",
         "src/pages/tasks/TasksPage.tsx",
+        "src/shared/theme/appViewLayout.ts",
         "src/shared/theme/defaultTheme.ts",
-        "src/shared/theme/themeLoader.ts",
-        "src/components/common/ProfileMenu/anchorMenuProps.ts"
+        "src/shared/theme/theme.ts"
       ]
     },
     {
       "id": "Supabase",
-      "fileCount": 0,
-      "busywork": "none",
-      "files": []
+      "fileCount": 1,
+      "busywork": "low",
+      "files": [
+        "src/shared/services/supabaseService.ts"
+      ]
     },
     {
       "id": "Airtable",

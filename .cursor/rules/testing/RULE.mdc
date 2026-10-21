@@ -5,10 +5,6 @@ alwaysApply: true
 
 # Testing Standards
 
-## Purpose
-
-This rule defines testing requirements, patterns, and quality standards for ensuring code reliability.
-
 ## Test Authority — a failing test is a claim, not ground truth
 
 A failing test proves only that code and test disagree. Decide which one is wrong **before** touching production code.
@@ -47,7 +43,7 @@ SSOT: `documentation/DOC_AGENT_WORKFLOW_LAYERS.md` § Local git; classifier `scr
 
 ## When to use TDD
 
-This repo is **not** test-first by default. Default: add meaningful automated tests **alongside** implementation when the plan or § What to Test applies.
+This repo is **not** test-first by default. Default: add meaningful automated tests **alongside** implementation when the plan or § What to test and how applies.
 
 **Use TDD (red → green → refactor)** when:
 
@@ -63,165 +59,23 @@ This repo is **not** test-first by default. Default: add meaningful automated te
 
 Even in TDD, § Test Authority applies: expected values must trace to a cited ground-truth source, not an ad-hoc re-derivation.
 
-Cross-link: `workflow/RULE.mdc` § During Development.
+Cross-link: `workflow/RULE.mdc` § During development.
 
-## Test Coverage
+## What to test and how
 
-### Minimum Requirements
-- Aim for 80%+ code coverage on critical paths
-- Test all public APIs and exported functions
-- Cover edge cases and error conditions
+- Test behavior through public APIs (business logic, user flows, error paths, edge cases), not implementation details, third-party code, or trivial getters.
+- **Colocate** unit tests: `Module.ts` → `Module.test.ts(x)` in the same folder. `tests/` holds shared setup only (`setup.ts`, `test-utils.tsx`, future `integration/`, `e2e/`) — not a mirror of `src/`.
+- **Mandatory name pattern:** `"should [expected behavior] when [condition]"` for Vitest `it()` and `scripts/*.test.cjs` `test()` names.
+- Shared helpers from `tests/test-utils`: `renderWithProviders`, `renderHookWithProviders`, `createDefaultAuthContextValue` (`documentation/DOC_TESTING.md` § Shared utilities).
 
-### What to Test
-- Business logic and calculations
-- User interactions and workflows
-- Error handling and edge cases
-- Integration points between modules
+## Edge Functions testing
 
-### What Not to Test
-- Third-party library functionality
-- Trivial getters/setters without logic
-- Implementation details (test behavior, not implementation)
+Edge Functions have **no staging** in any mode: one `supabase functions deploy <name>` affects production and every preview at once, with no automated tests or rollback. So prefer frontend logic where possible (it gets a preview per § Mode behavior table → **staging** in `.cursor/rules/git-workflow/RULE.mdc`), test functions manually before deploying, and document each function's test procedure. Architecture: `cloud-functions/RULE.mdc`.
 
-## Test Organization
+### Release validation gate
 
-### File Structure
-- **Colocate** unit tests beside source: `Module.ts` → `Module.test.ts` (or `.test.tsx`) in the same folder.
-- **`tests/` folder** — shared setup only: `setup.ts`, `test-utils.tsx`, future `integration/` and `e2e/`; not a mirrored copy of `src/`.
-- Use descriptive test file names: `[component].test.ts` or `[component].spec.ts`.
-- Group related tests using `describe` blocks.
-
-### Test Naming
-- Use descriptive test names that explain what is being tested.
-- **Mandatory pattern:** `"should [expected behavior] when [condition]"` for Vitest `it()` names.
-- `scripts/*.test.cjs` may use `test()` but the quoted name follows the same pattern.
-- Avoid generic names like "test1" or "works".
-
-### Shared utilities
-- Import from `tests/test-utils` (Vitest alias): `renderWithProviders`, `renderHookWithProviders`, `createDefaultAuthContextValue`.
-- See `documentation/DOC_TESTING.md` § Shared utilities.
-
-## Testing Patterns
-
-### Unit Tests
-- Test individual functions/components in isolation
-- Mock external dependencies
-- Use test doubles (mocks, stubs, spies) appropriately
-
-### Integration Tests
-- Test interactions between modules
-- Use real implementations where possible
-- Test data flow through the system
-
-### Test Data
-- Use factories or builders for test data
-- Keep test data minimal and focused
-- Avoid hardcoded values that may change
-
-## Examples
-
-### ✅ Good Example
-
-```typescript
-describe("calculateTotalPrice", () => {
-  it("should return price with tax when given valid inputs", () => {
-    const result = calculateTotalPrice(100, 0.20);
-    expect(result).toBe(120);
-  });
-  
-  it("should throw error when price is negative", () => {
-    expect(() => calculateTotalPrice(-10, 0.20)).toThrow(
-      "Price cannot be negative"
-    );
-  });
-  
-  it("should handle zero tax rate", () => {
-    const result = calculateTotalPrice(100, 0);
-    expect(result).toBe(100);
-  });
-});
-```
-
-### ❌ Bad Example
-
-```typescript
-// Bad: unclear test names, no edge cases, poor organization
-describe("test", () => {
-  it("works", () => {
-    expect(calculateTotalPrice(100, 0.20)).toBe(120);
-  });
-});
-```
-
-## Test Quality
-
-### Readability
-- Tests should read like documentation
-- Use clear setup, execution, and assertion phases
-- Avoid complex test logic
-
-### Maintainability
-- Keep tests independent (no shared state)
-- Use beforeEach/afterEach for common setup
-- Refactor test code like production code
-
-### Performance
-- Keep tests fast (unit tests should run in milliseconds)
-- Use appropriate test types for different scenarios
-- Avoid unnecessary async operations
-
-## Edge Functions Testing
-
-### Special Considerations
-
-**Edge Functions have unique testing constraints** (branch model SSOT: `.cursor/rules/git-workflow/RULE.mdc` § Mode behavior table; mode: `src/config/git-workflow.json`):
-
-- **No staging environment** (any mode): Edge Functions deploy once and affect production and every preview at the same time
-- **Manual testing only**: No automated testing or rollback for functions
-- **High impact**: Bugs in Edge Functions impact the entire app across all branches
-- **Deployment**: Deploy via `supabase functions deploy <function-name>`
-
-**Testing Strategy:**
-
-- Consider impact before adding new functions
-- Test thoroughly in development before deployment
-- Use manual testing workflows
-- Document test procedures for each function
-- Include explicit release validation before production (table → **production**: A/B promote, C merging the PR) when Edge Function behavior changed
-
-**Frontend Logic Testing** (preferred when possible):
-
-- Test on staging first (table → **staging**: `develop` for A/B, the PR preview for C)
-- User testing before production (table → **production**)
-- Easy rollback if issues found
-- Better isolation and testability
-
-### Release Validation Gate
-
-Before production (§ Mode behavior table → **production**: A/B Promote to production; C merging the PR to `main`), verify:
-- Required CI checks are green
-- Manual happy-path and key error-path tests are completed
-- Any Edge Function-related behavior in scope has been re-tested against the currently deployed function version
-
-For Edge Functions architecture and when to use them, see `cloud-functions/RULE.mdc`.
-
----
+Before production (§ Mode behavior table → **production**: A/B promote; C merging the PR), verify required CI checks are green, manual happy-path and key error-path tests are done, and any in-scope Edge Function behavior was re-tested against the currently deployed function version.
 
 ## Related Rules
 
-**When modifying this rule, check these rules for consistency:**
-
-- `code-style/RULE.mdc` - Code style standards for test files
-- `architecture/RULE.mdc` - Testing patterns that depend on architecture
-- `workflow/RULE.mdc` - Code review standards for tests
-- `cloud-functions/RULE.mdc` - Edge Functions testing considerations
-
-**SSOT Status:**
-- This rule is the **SSOT** for testing standards, patterns, and quality requirements
-- **Onboarding guide:** `documentation/DOC_TESTING.md`
-- Other rules reference this rule for testing guidelines (e.g., `cloud-functions/RULE.mdc` references testing strategy)
-
-**Rules that reference this rule:**
-- `architecture/RULE.mdc` - May reference testability requirements
-- `cloud-functions/RULE.mdc` - References this rule as SSOT for testing standards
-
+When modifying this rule, check `code-style`, `architecture`, `workflow`, `debugging`, and `cloud-functions` (Edge Function testing).

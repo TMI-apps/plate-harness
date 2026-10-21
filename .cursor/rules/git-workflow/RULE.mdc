@@ -25,12 +25,12 @@ Where the version and changelog come from: § Mode behavior table → **version 
 | **commit timing** | only via `finish` | only via `finish` | when the user asks — directly or via `finish` |
 | **version source** | `finish` bumps `package.json` + `CHANGELOG.md` per landing | same as A | release-please release PR built from conventional PR titles; no per-PR bump |
 | **CI watcher** | babysit the PR checks | report the commit URL and stop (no `gh run watch`) | Claude Code desktop PR monitor / Auto-fix (no `gh run watch`) |
-| **staging** | `develop` stable preview (+ per-PR previews) | `develop` preview (may deploy before `test` is green) | per-PR preview URL (frontend only; previews share the production Supabase project) |
+| **staging** | `develop` stable preview (+ per-PR previews) | `develop` preview (may deploy before `test` is green) | per-PR preview URL on a separate **staging Supabase project** (previews never touch production data; see `documentation/DOC_CLOUDFLARE_WORKERS.md` § Staging backend) |
 | **production** | Promote to production (ff `main` ← `develop`) | same as A | the user merges the PR (manually or with the app's per-PR auto-merge toggle) |
 | **"land on main / promote / release" means** | run § Promote to production | same as A | merge the PR — **never** dispatch promote |
 | **`main` ruleset** | `deletion` + `non_fast_forward` only | same as A | `pull_request` (squash only) + required `test` and `pr-title` (source: GitHub Actions) + `non_fast_forward` + `deletion`; no bypass actors; no required approvals; branches need not be up to date |
 | **`develop` ruleset** | `pull_request` + required `test` + `non_fast_forward` + `deletion` | no `pull_request`; required `test` + `non_fast_forward` + `deletion` (not a pre-land gate: a bad push can exist and deploy staging before CI finishes) | none (`develop` does not exist) |
-| **fork setup** | create `develop` from `main`; rulesets; § First promotion bootstrap | same as A | rulesets; squash-only + PR title as commit message; allow auto-merge; Cloudflare production branch `main` with previews on all branches; baseline `vX.Y.Z` tag + GitHub release |
+| **fork setup** | create `develop` from `main`; rulesets; § First promotion bootstrap | same as A | rulesets; squash-only + PR title as commit message; allow auto-merge; Cloudflare production branch `main` with previews on all branches; baseline release is automatic (`release-please.yml` `bootstrap` job) |
 
 **Invariants in every mode:** agents never commit or push to `main` (a Claude Code hook enforces it); no force-push to protected branches; **under C, never relax the `main` ruleset**.
 
@@ -104,6 +104,8 @@ Then the agent prepares the change on a branch and hands the user the exact comm
 
 **A/B:** Model A only for daily work (Model B lands by direct push). **C:** PRs target `main` and are created the Claude Code default way; the A-specific steps below do not apply.
 
+**Preview link (every PR, all modes):** the PR body carries a `## Preview` section with the live preview URL of the PR's branch. Workers Builds posts that URL on the PR (Cloudflare comment / check) once the branch build finishes; take it from there rather than guessing the hostname. Until it exists, write `Preview: pending (Workers Builds)` and edit the PR body to the real link when it appears. Also give the link in the chat handoff next to the PR link.
+
 Model A:
 
 - Keep PRs focused and reasonably sized; include a clear description.
@@ -119,6 +121,9 @@ Model A:
 ```markdown
 ## Summary
 - <1–3 bullets: why / what landed>
+
+## Preview
+- <Workers Builds preview URL for this branch>
 
 ## Test plan
 - [ ] Confirm PR base is `develop` (not `main`)

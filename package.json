@@ -1,10 +1,14 @@
 {
   "name": "plate-harness",
   "private": true,
-  "version": "0.40.0",
+  "version": "0.41.0",
   "type": "module",
   "packageManager": "pnpm@9.15.4",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
+    "preinstall": "node scripts/check-node-version.cjs",
     "dev": "vite",
     "build": "tsc --project tsconfig.app.json && vite build",
     "preview": "vite preview",
@@ -17,7 +21,7 @@
     "type-check": "tsc --noEmit --project tsconfig.app.json",
     "test": "vitest",
     "test:run": "vitest run",
-    "test:classify": "node --test scripts/change-classify.test.cjs scripts/test-staged.test.cjs scripts/harness_scan.test.cjs scripts/validate-git-workflow.test.cjs scripts/validate-version-sync.test.cjs scripts/ensure-deps-installed.test.cjs scripts/deny-git-write-on-main.test.cjs scripts/project-structure-validator.test.cjs scripts/modularity-report.test.cjs",
+    "test:classify": "node --test scripts/change-classify.test.cjs scripts/check-node-version.test.cjs scripts/test-staged.test.cjs scripts/harness_scan.test.cjs scripts/validate-git-workflow.test.cjs scripts/validate-version-sync.test.cjs scripts/ensure-deps-installed.test.cjs scripts/deny-git-write-on-main.test.cjs scripts/project-structure-validator.test.cjs scripts/modularity-report.test.cjs",
     "test:staged": "node scripts/test-staged.cjs --dry-run",
     "test:staged:live": "node scripts/test-staged.cjs",
     "test:ui": "vitest --ui",
@@ -33,7 +37,6 @@
     "arch:graph:html": "depcruise --config .dependency-cruiser.cjs --output-type html src > architecture-report.html",
     "arch:validate": "pnpm lint && pnpm arch:check",
     "arch:baseline": "depcruise --config .dependency-cruiser.cjs --output-type baseline src > .dependency-cruiser-baseline.json",
-    "lint:arch": "eslint src --rule 'boundaries/element-types: error'",
     "validate:structure": "node scripts/project-structure-validator.js && node scripts/validate-git-workflow.cjs",
     "validate:structure:json": "node scripts/project-structure-validator.js --format=json",
     "validate:git-workflow": "node scripts/validate-git-workflow.cjs",
@@ -70,7 +73,6 @@
     "react-router-dom": "^7.16.0"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
     "@tanstack/eslint-plugin-query": "^5.100.14",
     "@tanstack/react-query-devtools": "^5.100.14",
     "@testing-library/jest-dom": "^6.9.1",
@@ -84,16 +86,8 @@
     "@vitest/ui": "^4.1.7",
     "dependency-cruiser": "^17.4.2",
     "eslint": "^10.4.0",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-import-resolver-typescript": "^4.4.4",
-    "eslint-plugin-boundaries": "^6.0.2",
-    "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.1.1",
-    "eslint-plugin-react-refresh": "^0.5.2",
     "eslint-plugin-sonarjs": "^4.0.3",
-    "eslint-plugin-unused-imports": "^4.4.1",
-    "globals": "^17.6.0",
     "gts": "^7.0.0",
     "husky": "^9.1.7",
     "jsdom": "^29.1.1",
@@ -101,7 +95,6 @@
     "minimatch": "^10.2.5",
     "prettier": "^3.8.3",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.60.0",
     "vite": "^8.0.14",
     "vitest": "^4.1.7",
     "wrangler": "4.102.0"
