@@ -39,7 +39,7 @@ Returns:
 
 - **Form-blocking errors:** inline MUI `Alert` (sign-in panel, email form).
 - **OAuth/callback errors:** `setAuthError` on auth context; shown on Home via single Alert.
-- **Profile mutations:** TanStack `useUpdateUserProfile` merges server response via `setQueryData` (no happy-path invalidation).
+- **Profile mutations:** none shipped; follow `documentation/DOC_TANSTACK_QUERY.md` § Example mutation (merge server response via `setQueryData`, no happy-path invalidation).
 
 ### Routes
 

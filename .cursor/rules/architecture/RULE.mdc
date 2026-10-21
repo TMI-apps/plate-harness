@@ -459,7 +459,7 @@ This repo uses **TanStack Query** for server state (`@tanstack/react-query`). Th
 
 #### Related implementation in this repo
 
-- `src/features/auth/hooks/useUpdateUserProfile.ts` — one shipped instance (profile update), not a template prefix. Other mutations get their own category name in the owning feature. Prefer `setQueryData` from the mutation result over invalidation for the same key.  
+- Mutation pattern: `documentation/DOC_TANSTACK_QUERY.md` § Example mutation (not shipped; mutations get their own category name in the owning feature). Prefer `setQueryData` from the mutation result over invalidation for the same key.  
 - `src/shared/utils/queryClient.ts` — shared `QueryClient` defaults (`createQueryClient`, app singleton).  
 - `src/shared/utils/queryKeys.ts` — shared key helpers; per-feature keys follow the factory pattern in `documentation/DOC_TANSTACK_QUERY.md` (e.g. `features/<feature>/api/keys.ts` when a feature adds queries).  
 - `src/features/auth/services/userProfileService.ts` — example of a **canonical return**: `updateUserProfile` uses `.select(...)` so the caller can patch cache without an extra round-trip.  

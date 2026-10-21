@@ -46,9 +46,6 @@ export interface SignUpCredentials {
   // Add any additional signup fields here
 }
 
-/** Partial profile data for updates (excludes id) */
-export type UserProfileUpdate = Partial<Omit<UserProfile, "id">>;
-
 /** Auth context and useAuth return shape */
 export interface AuthContextValue {
   user: User | null;

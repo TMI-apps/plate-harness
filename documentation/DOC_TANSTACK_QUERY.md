@@ -56,10 +56,14 @@ Only invalidate directly related keys. Avoid broad `invalidateQueries({ queryKey
 | Delete project      | `projectKeys.detail(id)`, `projectKeys.lists()` | User, config              |
 | Update user profile | Merge via `setQueryData` on mutation result | Same profile key on happy path |
 
-### Example: useUpdateUserProfile
+### Example mutation
+
+Pattern only (not shipped). Add a service function such as `updateUserProfile(userId, data)` that returns the canonical row.
 
 ```typescript
-// features/auth/hooks/useUpdateUserProfile.ts
+// features/auth/hooks/useUpdateUserProfile.ts (example)
+type UserProfileUpdate = Partial<Omit<UserProfile, "id">>;
+
 export const useUpdateUserProfile = (userId: string | null) => {
   const queryClient = useQueryClient();
 
