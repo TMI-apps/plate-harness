@@ -61,3 +61,9 @@ Tip: neem de generieke punten uit tabel 1 en 2 eerst over (los van de UI-kit), d
 - Bronze heeft in `package.json` enkele ESLint-dependencies verwijderd (`@eslint/js`, `eslint-config-prettier`, `eslint-plugin-react*`, `globals`, `typescript-eslint`). Niet gecontroleerd of lint nog volledig werkt zonder deze.
 - Niet gedraaid: `pnpm lint:arch`, lint of tests in een van beide repo's.
 - `src/`-verschillen (auth, tasks, pages, layouts) zijn buiten scope en niet beoordeeld.
+
+## Uitkomst (2026-10-21)
+
+- Geverifieerd: `pnpm lint:arch` faalt in plate (`could not find plugin "boundaries"`); `pnpm lint` in bronze geeft 0 errors zonder de verwijderde ESLint-dependencies.
+- Bronze verwijderde 10 ESLint-dependencies (lijst hierboven was onvolledig): ook `eslint-plugin-boundaries`, `eslint-plugin-import`, `eslint-import-resolver-typescript`, `eslint-plugin-unused-imports`, `eslint-plugin-react-refresh`.
+- Per punt beslist in `DECISIONS.md` (D6–D24) en doorgevoerd in plate 0.41.0; zie `CHANGELOG.md`.
