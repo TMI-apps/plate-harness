@@ -159,14 +159,12 @@ function executePlan(plan, options) {
   }
   if (plan.mode === 'related' && plan.relatedPaths?.length) {
     const related = runners.runVitestRelated(plan.relatedPaths);
-    if (related.status !== 0) {
-      return related.status;
-    }
+    // Vitest 4 exits 1 when no related tests exist, so check this before the status.
     if (NO_TEST_FILES_RE.test(related.output)) {
       logMode('pre-commit: no related tests found — falling back to full suite');
       return runners.runFullSuite();
     }
-    return 0;
+    return related.status;
   }
   return runners.runFullSuite();
 }
