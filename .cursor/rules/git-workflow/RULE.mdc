@@ -104,7 +104,7 @@ Then the agent prepares the change on a branch and hands the user the exact comm
 
 **A/B:** Model A only for daily work (Model B lands by direct push). **C:** PRs target `main` and are created the Claude Code default way; the A-specific steps below do not apply.
 
-**Preview link (every PR, all modes):** the PR body carries a `## Preview` section with the live preview URL of the PR's branch. Workers Builds posts that URL on the PR (Cloudflare comment / check) once the branch build finishes; take it from there rather than guessing the hostname. Until it exists, write `Preview: pending (Workers Builds)` and edit the PR body to the real link when it appears. Also give the link in the chat handoff next to the PR link.
+**Preview link (every PR, all modes):** the PR body carries a `## Preview` section with the live preview URL of the PR's branch. Workers Builds does **not** post the URL on the PR; its check (`Workers Builds: <worker>`) only links the dashboard build, whose path names the branch alias (`…/previews/<alias>/builds/…`). Once that check is green, the URL is `https://<alias>-<worker name>.<workers.dev subdomain>.workers.dev` (alias = branch name lowercased, `/` and other non-alphanumerics → `-`; this repo: `https://<alias>-plate-harness.tom-fab.workers.dev`). Verify it before writing it (HTTP 200, page loads `/assets/*.js`). Until then, write `Preview: pending (Workers Builds)` and edit the PR body to the real link when it appears. Also give the link in the chat handoff next to the PR link.
 
 Model A:
 

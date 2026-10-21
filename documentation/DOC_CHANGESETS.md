@@ -21,6 +21,7 @@ Mode: `src/config/git-workflow.json`. Behavior: `.cursor/rules/git-workflow/RULE
 - No per-PR bump: `finish` does **not** edit `package.json` or `CHANGELOG.md`, and commits carry no `[VERSION]` prefix.
 - The squash PR title (`type: subject`, enforced by the `pr-title` CI check) becomes the commit on `main`.
 - `.github/workflows/release-please.yml` keeps a release PR open that bumps `package.json` and writes `CHANGELOG.md` from those titles; the user merges it to tag the release. It dispatches `ci.yml` on the release branch so the required `test` check runs there.
+- Config: `release-please-config.json` + `.release-please-manifest.json` (manifest holds the last released version; tags are `v<version>`). Before 1.0, `bump-minor-pre-major` makes a breaking change (`feat!:`) bump the minor version instead of jumping to 1.0.0; remove it when the project is ready for 1.0.
 - No `.changeset/` files.
 
 ## On `develop` (Model A/B)

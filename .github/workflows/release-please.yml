@@ -77,7 +77,9 @@ jobs:
       - uses: googleapis/release-please-action@v4
         id: release
         with:
-          release-type: node
+          # Pre-1.0: breaking changes bump minor, not major (bump-minor-pre-major).
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
 
   dispatch-ci:
     needs: release
