@@ -334,7 +334,7 @@ To connect a fork:
 
 1. Rename `name` in [`wrangler.jsonc`](./wrangler.jsonc).
 2. In the Cloudflare dashboard, connect the repo (Build `pnpm install && pnpm run build`, Deploy `npx wrangler deploy`, Root directory **empty**).
-3. Add build variables: `NODE_VERSION=22`, `CLOUDFLARE_ACCOUNT_ID`, and your `VITE_*` keys.
+3. Add build variables: `CLOUDFLARE_ACCOUNT_ID` and your `VITE_*` keys. Do **not** add `NODE_VERSION` — `.node-version` pins Node, and a dashboard `NODE_VERSION` silently overrides it (delete it if it exists).
 4. Add the deployed origin to Supabase Auth URLs.
 
 The template is **fork-safe**: no account id or custom domain is committed. Full checklist, Pages migration mapping, OAuth URLs, and troubleshooting: **[documentation/DOC_CLOUDFLARE_WORKERS.md](./documentation/DOC_CLOUDFLARE_WORKERS.md)**.
