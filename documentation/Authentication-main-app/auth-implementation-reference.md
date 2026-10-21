@@ -2,6 +2,8 @@
 
 This document answers questions about the authentication implementation in this codebase.
 
+**Scope in plate-harness:** reference only. The snippets below are from the chat.tmi.one app; its `src/` paths are not in this repo. `entreefederatie.ts` is kept next to this file; the other full-file copies (AuthContext, ProfileMenu, routes, supabase, errorHandling) were removed and remain in git history (plate-harness v0.40.0).
+
 **Dashboard setup (Google + Supabase):** Step-by-step Google Cloud and Supabase provider configuration is **not** duplicated here. Use **[`documentation/DOC_SUPABASE_GOOGLE_OAUTH.md`](../DOC_SUPABASE_GOOGLE_OAUTH.md)** as the SSOT; this file focuses on **code** behavior.
 
 ---
