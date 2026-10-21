@@ -746,7 +746,6 @@ module.exports = {
     // Root config files - specific files only (no wildcards to prevent temporary/corrupted files)
     // JSON config files
     { name: ".dependency-cruiser-baseline.json" },
-    { name: ".eslintrc.json" },
     { name: "cors.json" },
     { name: "database.rules.json" },
     { name: "firebase.json" },
@@ -759,7 +758,6 @@ module.exports = {
     { name: "tsconfig.lib.json" },
     { name: "tsconfig.node.json" },
     // JavaScript config files (specific only, no wildcard)
-    { name: ".eslintrc.js" },
     { name: "eslint.config.js" },
     { name: "eslint.ignores.js" },
     { name: ".dependency-cruiser.cjs" },
