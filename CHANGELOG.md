@@ -5,6 +5,41 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.42.0](https://github.com/TMI-apps/plate-harness/compare/v0.41.0...v0.42.0) (2026-10-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* model-c cutover, harness cleanup and bronze improvements (0.41.0) ([#56](https://github.com/TMI-apps/plate-harness/issues/56))
+
+### Features
+
+* Add Airtable integration with data provider pattern ([262c40d](https://github.com/TMI-apps/plate-harness/commit/262c40d5207b2d0b252934e14647506d98de8eac))
+* add app configuration file for Cursor agent access ([0d15da0](https://github.com/TMI-apps/plate-harness/commit/0d15da06a46ee5f578558de050ef5e2bcf82432a))
+* Add automatic .env writing and publishable key support ([d5735bd](https://github.com/TMI-apps/plate-harness/commit/d5735bde9fac9d7593e608b55646838e946d6e47))
+* add boilerplate extraction system and optimize code complexity ([e9fc8bd](https://github.com/TMI-apps/plate-harness/commit/e9fc8bdae4d9911ba7eb51b303ceb3b287638be0))
+* Add ESLint rules to detect hardcoded styling values in sx props ([2a2b977](https://github.com/TMI-apps/plate-harness/commit/2a2b977a07a1515710b84f51483a17feb94e8dac))
+* Add OAuth/SAML authentication with ProfileMenu pattern ([2ef51b6](https://github.com/TMI-apps/plate-harness/commit/2ef51b6d97c830f97fd7239fe110f5f823544314))
+* Add permanent Topbar component and improve setup card descriptions ([80c8369](https://github.com/TMI-apps/plate-harness/commit/80c8369174b54a60740c2769b0a93d4eadd45537))
+* Add redirect after sign-in feature ([88f1ecb](https://github.com/TMI-apps/plate-harness/commit/88f1ecb008ec36b7202f1ff340f41319ffba1563))
+* Enhanced Airtable setup with multi-step wizard and table structure validation ([8cad208](https://github.com/TMI-apps/plate-harness/commit/8cad208e8960fbad8a2a6b8cacf820bc4e093512))
+* make authentication optional when Supabase is not configured ([0f8876c](https://github.com/TMI-apps/plate-harness/commit/0f8876caee3ab1c3dcb776fef602f714e57fef89))
+* Make Supabase configuration optional with browser storage fallback ([8780f3d](https://github.com/TMI-apps/plate-harness/commit/8780f3df959c221d1ade60d7167101065026c227))
+* model-c cutover, harness cleanup and bronze improvements (0.41.0) ([#56](https://github.com/TMI-apps/plate-harness/issues/56)) ([1e12709](https://github.com/TMI-apps/plate-harness/commit/1e12709c8998be77e521fb4c58b37a7f07179260))
+* Redesign setup page to card-based dashboard with dynamic grid layout ([4f5624e](https://github.com/TMI-apps/plate-harness/commit/4f5624e3902666bd62b2489eec790bafb90540a1))
+* simplify scrollbar styling with transparent track and subtle theme-based colors ([170b688](https://github.com/TMI-apps/plate-harness/commit/170b688086377cf702fba7337653ff0a03897a45))
+
+
+### Bug Fixes
+
+* Add build check to pre-commit hook ([97cd291](https://github.com/TMI-apps/plate-harness/commit/97cd2911236d88de88914a7f48e951e929fc9800))
+* CI pnpm version mismatch causing frozen-lockfile failure ([85b2ec8](https://github.com/TMI-apps/plate-harness/commit/85b2ec86e19570177f7ce063d245dc40ddfd4eda))
+* harness structural fixes and develop Model B merge ([#52](https://github.com/TMI-apps/plate-harness/issues/52)) ([380afa0](https://github.com/TMI-apps/plate-harness/commit/380afa0c834862c0a630d64eeac9122267155b32))
+* Prettier formatting in .dependency-cruiser.cjs (CI lint) ([53c708d](https://github.com/TMI-apps/plate-harness/commit/53c708dbc87af42bc72c4ee2adfe7225b1f24162))
+* promote via built-in GITHUB_TOKEN, drop PAT requirement ([#41](https://github.com/TMI-apps/plate-harness/issues/41)) ([9c3a0ff](https://github.com/TMI-apps/plate-harness/commit/9c3a0ff7a3ec85246d644898de02b85e58fb2f5d))
+* promote workflow checks GitHub Actions check runs ([#44](https://github.com/TMI-apps/plate-harness/issues/44)) ([b149cb9](https://github.com/TMI-apps/plate-harness/commit/b149cb9ab1b40752657f5836a16687cd5571aa4c))
+* promote workflow uses PROMOTE_GH_TOKEN, not Actions bypass ([#40](https://github.com/TMI-apps/plate-harness/issues/40)) ([6ab0e0d](https://github.com/TMI-apps/plate-harness/commit/6ab0e0d30792c0be6c13c8a436e5605490dc81e0))
+
 ## [0.41.0] - 2026-10-21
 
 Model C cutover, harness tightening and dead-code cleanup, plus generic improvements ported from bronze-plate-harness (audit: `documentation/jobs/temp_job_plate-bronze-diff/`).
@@ -1550,5 +1585,3 @@ Model C cutover, harness tightening and dead-code cleanup, plus generic improvem
   - Custom theme loader with localStorage persistence
   - Theme validation utilities
   - Default theme fallback mechanism
-
-
