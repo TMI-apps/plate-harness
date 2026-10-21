@@ -158,7 +158,7 @@ At the end, sum the points and compute a percentage.
 - Shared logic is extracted (to hooks/helpers) when it appears in multiple places
 
 **F4. Complexity metrics (0–5)**
-- Meets complexity standards (see `.cursor/rules/code-style/RULE.mdc` for SSOT - complexity thresholds defined in `.eslintrc.json` lines 65-70)
+- Meets complexity standards (see `.cursor/rules/code-style/RULE.mdc` for SSOT - complexity thresholds defined in `eslint.config.js` (complexity rules))
 - Cyclomatic complexity ≤ 10, cognitive complexity ≤ 15, nesting ≤ 4, function length ≤ 100 lines, parameters ≤ 5
 
 ---

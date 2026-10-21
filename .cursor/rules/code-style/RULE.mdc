@@ -238,29 +238,25 @@ See the theme file header for detailed principles.
 
 ### ESLint Configuration (SSOT)
 
-**CRITICAL:** `.eslintrc.json` is the **Single Source of Truth** for all linting rules enforced by the pre-commit hook.
+**CRITICAL:** `eslint.config.js` (flat config) is the **Single Source of Truth** for all linting rules enforced by the pre-commit hook.
 
 ESLint enforces the following rules (in addition to complexity):
 
 - **Unused Variables/Imports**: 
-  - Unused imports are **errors** (`unused-imports/no-unused-imports: error`)
-  - Unused variables are **warnings** (`unused-imports/no-unused-vars: warn`)
+  - Unused imports and variables are **errors** (`@typescript-eslint/no-unused-vars`, via GTS)
   - Prefix unused variables/parameters with `_` to suppress warnings (e.g., `_messageId`, `_isLoadingLimit`)
   - **Always remove unused imports** - they add no value and clutter the code
 
-- **Import Order**:
-  - Enforced by `import/order` rule (error level)
+- **Import Order** (convention, not lint-enforced):
   - Groups: builtin → external → internal → parent → sibling → index → type
   - React imports first, then `@/**` path aliases
-  - Alphabetical within groups
 
 - **Architecture Boundaries**:
-  - Enforced by `boundaries/element-types` rule (error level)
+  - Enforced by dependency-cruiser (`pnpm arch:check`) and the `no-restricted-imports` blocks in `eslint.config.js`
   - Prevents importing from forbidden layers (see `architecture/RULE.mdc`)
-  - Use `eslint-disable` comments with justification for legitimate exceptions
 
 - **React Hooks**:
-  - Enforced by `react-hooks/exhaustive-deps` rule (warning level)
+  - `react-hooks/rules-of-hooks` (error) and `react-hooks/exhaustive-deps` (warning)
   - All dependencies must be included in dependency arrays
   - Use `user` not `user?.uid` if accessing `user` properties
 
@@ -283,7 +279,7 @@ ESLint enforces the following rules (in addition to complexity):
 
 ### Complexity Standards
 
-**SSOT:** `.eslintrc.json` lines 65-70 (enforced by ESLint during `pnpm lint`)
+**SSOT:** `eslint.config.js` (complexity rules) (enforced by ESLint during `pnpm lint`)
 
 When writing code, adhere to these complexity limits to ensure maintainability:
 
@@ -362,4 +358,4 @@ When working with TypeScript and React:
 - All other rules may reference code style standards
 
 **SSOT:**
-- Complexity thresholds: `.eslintrc.json` lines 65-70
+- Complexity thresholds: `eslint.config.js` (complexity rules)

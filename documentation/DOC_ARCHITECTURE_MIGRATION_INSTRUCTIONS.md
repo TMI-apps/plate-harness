@@ -62,11 +62,8 @@ Copy these files from source to target repository:
 ```json
 {
   "devDependencies": {
-    "eslint-plugin-boundaries": "^5.3.1",
-    "eslint-plugin-project-structure": "^3.14.1",
-    "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-unused-imports": "^4.3.0",
-    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-sonarjs": "^4.0.3",
     "dependency-cruiser": "^17.3.6"
   }
 }
@@ -75,7 +72,7 @@ Copy these files from source to target repository:
 **Command:**
 ```powershell
 cd [PROJECT_ROOT][TARGET_REPO_NAME]
-pnpm add -D eslint-plugin-boundaries eslint-plugin-import eslint-plugin-unused-imports eslint-import-resolver-typescript dependency-cruiser
+pnpm add -D eslint-plugin-react-hooks eslint-plugin-sonarjs dependency-cruiser
 ```
 
 **Note:** If using npm or yarn, adjust the command accordingly.
@@ -209,7 +206,7 @@ module.exports = {
 
 **File:** `eslint.config.js` (flat config)
 
-**Action:** Update layer element patterns to match target repository structure. This harness uses ESLint flat config; adjust boundaries and import resolver to match target paths.
+**Action:** Update the `no-restricted-imports` layer blocks (`files` globs) to match target repository paths. This harness uses ESLint flat config.
 
 ---
 
@@ -227,8 +224,7 @@ module.exports = {
     "arch:graph": "depcruise --config .dependency-cruiser.cjs --output-type dot src | dot -T svg > architecture-graph.svg",
     "arch:graph:html": "depcruise --config .dependency-cruiser.cjs --output-type html src > architecture-report.html",
     "arch:validate": "pnpm lint && pnpm arch:check",
-    "arch:baseline": "depcruise --config .dependency-cruiser.cjs --output-type baseline src > .dependency-cruiser-baseline.json",
-    "lint:arch": "eslint src --rule 'boundaries/element-types: error'"
+    "arch:baseline": "depcruise --config .dependency-cruiser.cjs --output-type baseline src > .dependency-cruiser-baseline.json"
   }
 }
 ```
@@ -281,12 +277,12 @@ Run these commands to verify the setup:
 ### 11.1 Verify Dependencies Installed
 ```powershell
 cd [PROJECT_ROOT][TARGET_REPO_NAME]
-pnpm list eslint-plugin-boundaries dependency-cruiser
+pnpm list eslint-plugin-react-hooks dependency-cruiser
 ```
 
-### 11.2 Test ESLint Architecture Rules
+### 11.2 Test ESLint Rules
 ```powershell
-pnpm lint:arch
+pnpm lint
 ```
 
 **Expected:** Should run without errors (or show existing violations if baseline created).
@@ -329,7 +325,7 @@ If target repo uses `app/` instead of `src/`:
 If target repo uses `features/` instead of `pages/`:
 
 **Updates Needed:**
-- `eslint.config.js`: Add `features` as a new element type in boundaries
+- `eslint.config.js`: Add `no-restricted-imports` blocks for the `features` layer
 - `.dependency-cruiser.cjs`: Add rules for `features` layer
 - `projectStructure.config.cjs`: Add `features` folder structure
 - Update layer rules to include `features` in import hierarchy
@@ -382,7 +378,7 @@ Before considering migration complete:
 - [ ] `eslint.config.js` layer patterns updated
 - [ ] Package.json scripts added
 - [ ] Baseline created (if needed)
-- [ ] `pnpm lint:arch` runs successfully
+- [ ] `pnpm lint` runs successfully
 - [ ] `pnpm arch:check` runs successfully
 - [ ] IDE shows ESLint errors for violations
 - [ ] Documentation files copied (optional)

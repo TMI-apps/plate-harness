@@ -58,7 +58,7 @@ Humans: pre-commit runs `validate:structure:staged` on relevant staged files; ru
 ## Related validation
 
 - **Doc references in rules/skills:** `pnpm validate:docs` (`scripts/validate-cursor-doc-references.js`)
-- **ESLint layer boundaries:** `pnpm lint:arch` / `pnpm arch:check`
+- **Layer boundaries:** `pnpm arch:check` (dependency-cruiser) and the `no-restricted-imports` blocks in `eslint.config.js`
 - **Contributing workflow:** `documentation/DOC_CONTRIBUTING.md`
 
 ## See also

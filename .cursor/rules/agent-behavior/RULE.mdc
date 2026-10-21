@@ -39,7 +39,7 @@ The agent must STOP and ASK the user before modifying any of the following file 
 **Configuration Files:**
 - `.gitignore`, `.gitattributes`
 - `projectStructure.config.cjs`
-- `.eslintrc.json`, `eslint.config.js`, `eslint.ignores.js`
+- `eslint.config.js`, `eslint.ignores.js`
 - `.dependency-cruiser.cjs`, `.dependency-cruiser-baseline.json`
 - `.prettierrc.json`, `.prettierrc.js`
 - `.editorconfig`
@@ -78,7 +78,7 @@ When `.agents/skills/name-the-mechanism/SKILL.md` requires a rename or extractio
 
 3. **Examples of required behavior:**
    - Pre-commit finds `temp-file.json` → Ask: "Should I add this to .gitignore, or update projectStructure.config.cjs?"
-   - Linting fails on new pattern → Ask: "Should I update .eslintrc.json to allow this?"
+   - Linting fails on new pattern → Ask: "Should I update eslint.config.js to allow this?"
    - Architecture check fails → Ask: "Should I update the baseline or fix the violation?"
 
 **Reductive strategy:** See `debugging/RULE.mdc` § Reductive Strategy.

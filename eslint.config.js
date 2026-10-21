@@ -3,6 +3,7 @@ import ignores from './eslint.ignores.js';
 import {defineConfig} from 'eslint/config';
 import tanstackQuery from '@tanstack/eslint-plugin-query';
 import sonarjs from 'eslint-plugin-sonarjs';
+import reactHooks from 'eslint-plugin-react-hooks';
 
 export default defineConfig([
   {
@@ -17,6 +18,7 @@ export default defineConfig([
     plugins: {
       "@tanstack/query": tanstackQuery,
       sonarjs,
+      "react-hooks": reactHooks,
     },
     languageOptions: {
       parserOptions: {
@@ -42,6 +44,9 @@ export default defineConfig([
       'sonarjs/cognitive-complexity': ['warn', 15],
       // TanStack Query: enforce exhaustive deps in query keys
       '@tanstack/query/exhaustive-deps': 'warn',
+      // React hooks (classic rules only; React Compiler rules are opt-in)
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
     },
   },
   // Prevent feature components from importing hooks or services
@@ -81,7 +86,7 @@ export default defineConfig([
   },
   // Prevent common components from importing features
   {
-    files: ['src/common/**'],
+    files: ['src/components/common/**'],
     rules: {
       'no-restricted-imports': [
         'error',

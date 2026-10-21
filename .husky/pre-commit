@@ -8,7 +8,7 @@
 # pnpm run copy-changelog
 
 # Linting (includes complexity checks via ESLint)
-# Complexity SSOT: .eslintrc.json lines 65-70
+# Complexity SSOT: eslint.config.js (complexity rules)
 pnpm lint-staged || exit 1
 
 # Enforce feature-local README updates when feature code changes

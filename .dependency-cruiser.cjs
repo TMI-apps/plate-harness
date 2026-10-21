@@ -11,7 +11,7 @@ module.exports = {
     },
 
     // === LAYER VIOLATION RULES ===
-    // Aligned with ESLint boundaries/element-types rules
+    // Aligned with the no-restricted-imports layer blocks in eslint.config.js
 
     // Pages cannot be imported by components or routes (downward-only)
     {
