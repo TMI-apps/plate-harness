@@ -750,6 +750,8 @@ module.exports = {
     { name: "database.rules.json" },
     { name: "firebase.json" },
     { name: "package.json" },
+    { name: "release-please-config.json" },
+    { name: ".release-please-manifest.json" },
     { name: "skills-lock.json" },
     { name: "projectStructure.cache.json" },
     { name: "saml-attribute-mapping.json" },
