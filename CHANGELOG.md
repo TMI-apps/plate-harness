@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.42.1](https://github.com/TMI-apps/plate-harness/compare/v0.42.0...v0.42.1) (2026-10-22)
+
+
+### Bug Fixes
+
+* **deploy:** point the Node-version hint at the Previews build tab too ([#63](https://github.com/TMI-apps/plate-harness/issues/63)) ([8aa54f7](https://github.com/TMI-apps/plate-harness/commit/8aa54f7b052c7916bd5fdac0e57139095dd659df))
+
 ## [0.42.0](https://github.com/TMI-apps/plate-harness/compare/v0.40.0...v0.42.0) (2026-10-21)
 
 First release cut by release-please (Model C). It ships the work described under 0.41.0 below; 0.41.0 itself was never tagged, so the generated notes for this release listed unrelated older commits and were replaced by this entry.
