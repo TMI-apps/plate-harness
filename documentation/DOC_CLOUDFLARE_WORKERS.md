@@ -91,7 +91,7 @@ In the Cloudflare dashboard → **Workers & Pages → Create → Workers → Con
 | Build command | `pnpm install && pnpm run build` |
 | Deploy command | `npx wrangler deploy` |
 | **Root directory** | **EMPTY (repo root)** — a stale root directory causes `Failed: root directory not found` |
-| Build variables | `CLOUDFLARE_ACCOUNT_ID=<your account id>`, plus build-time `VITE_*` (e.g. `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`). **Never `NODE_VERSION`** — it overrides `.node-version`; delete it if present |
+| Build variables | `CLOUDFLARE_ACCOUNT_ID=<your account id>`, plus build-time `VITE_*` (e.g. `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`). **Never `NODE_VERSION`** — it overrides `.node-version`; delete it if present, on both the **Production** and the **Previews** tab (each tab has its own build variables; preview builds use Previews) |
 
 Then enable **non-production branch builds**: Model C — **all branches** (each PR's preview is its staging; worktree branch names vary, so do not filter by prefix); Model A/B — `develop` (stable staging URL), optionally per-`feature/*` previews. Check the Workers Builds plan's build minutes and concurrency: every pushed branch costs a build.
 

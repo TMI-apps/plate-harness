@@ -22,7 +22,8 @@ describe("check-node-version", () => {
     });
     assert.match(error, /Node\.js 22\+ is required/);
     assert.match(error, /NODE_VERSION environment variable is set to "20"/);
-    assert.match(error, /Settings → Build → Variables and secrets/);
+    assert.match(error, /Settings → Builds → Variables and secrets/);
+    assert.match(error, /Production and the Previews tab/);
   });
 
   test("should point Workers Builds at the dashboard when no override is visible", () => {
