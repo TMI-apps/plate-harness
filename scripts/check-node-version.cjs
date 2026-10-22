@@ -34,12 +34,12 @@ function checkNodeVersion({ required, current, env }) {
   if (env.NODE_VERSION) {
     lines.push(
       `The NODE_VERSION environment variable is set to "${env.NODE_VERSION}" and overrides .node-version.`,
-      "Cloudflare Workers Builds: delete NODE_VERSION in Workers & Pages → <worker> → Settings → Build → Variables and secrets, then retry the build.",
+      "Cloudflare Workers Builds: delete NODE_VERSION in Workers & Pages → <worker> → Settings → Builds → Variables and secrets, on both the Production and the Previews tab (preview builds use the Previews tab), then retry the build.",
       ".node-version is the only place the Node version should be set."
     );
   } else if (env.WORKERS_CI) {
     lines.push(
-      "Cloudflare Workers Builds did not pick up .node-version; check Settings → Build → Variables and secrets for a NODE_VERSION override."
+      "Cloudflare Workers Builds did not pick up .node-version; check Settings → Builds → Variables and secrets (Production and Previews tabs) for a NODE_VERSION override."
     );
   } else {
     lines.push("Switch to the version in .node-version (e.g. `nvm use` / `fnm use`).");
